@@ -44,26 +44,22 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero Section con Título y ASCII Profile a la derecha */}
-      <section id="hero" className="min-h-screen flex flex-col justify-center reveal px-6">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 w-full">
-
-          {/* Izquierda: Texto */}
-          <div className="space-y-4">
-            <div className="text-lime-400 uppercase tracking-[0.3em] font-black text-xs md:text-sm hover-glitch cursor-default inline-block mb-2">
-              John Herrera _
-            </div>
-            <h1 className="text-6xl md:text-9xl font-headline italic leading-none text-zinc-200">
-              Chef by <span className="text-[#beee00] night-glow">Day</span>,
-            </h1>
-            <h2 className="text-6xl md:text-9xl font-bold text-[#cafd00] uppercase tracking-tighter leading-[0.85] night-glow">
-              Vibe-Coder <br />by Night
-            </h2>
-            <p className="max-w-md border-l border-[#cafd00]/30 pt-10 pl-6 font-mono text-sm leading-relaxed text-zinc-500">
-              Dos disciplinas, un mismo estándar: precisión, producto y ejecución sin ruido.
-              {' '}Desde <MonoToken kind="location">Medellín</MonoToken> para marcas con ambición global.
-            </p>
+      {/* Hero Section — Puro impacto tipográfico */}
+      <section id="hero" className="flex flex-col justify-end min-h-[85vh] pb-20 reveal px-6">
+        <div className="space-y-6">
+          <div className="text-lime-400 uppercase tracking-[0.3em] font-black text-xs md:text-sm hover-glitch cursor-default inline-block">
+            John Herrera _
           </div>
+          <h1 className="text-7xl md:text-9xl lg:text-[10rem] font-headline italic leading-[0.85] text-zinc-200">
+            Chef by <span className="text-[#beee00] night-glow">Day</span>,
+          </h1>
+          <h2 className="text-7xl md:text-9xl lg:text-[10rem] font-bold text-[#cafd00] uppercase tracking-tighter leading-[0.78] night-glow">
+            Vibe-Coder<br />by Night
+          </h2>
+          <p className="max-w-lg border-l border-[#cafd00]/30 pt-8 pl-6 font-mono text-sm leading-relaxed text-zinc-500">
+            Dos disciplinas, un mismo estándar: precisión, producto y ejecución sin ruido.
+            {' '}Desde <MonoToken kind="location">Medellín</MonoToken> para marcas con ambición global.
+          </p>
         </div>
       </section>
 
@@ -105,7 +101,7 @@ export default function Home() {
           <div className="flex items-center">
             <div className="w-full space-y-4 rounded-[2rem] border border-zinc-800/60 bg-black/50 p-6 backdrop-blur-xl md:p-8">
               <p className="font-mono text-[9px] uppercase tracking-[0.42em] text-zinc-600">
-                // spec_sheet.yml
+                {'// spec_sheet.yml'}
               </p>
 
               {[
