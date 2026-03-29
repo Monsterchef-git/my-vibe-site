@@ -379,11 +379,118 @@ body {
   animation: culinary-scan 1.8s linear infinite;
 }
 
+/* Disable background terminal on small viewports to save GPU */
+@media (max-width: 767px) {
+  .background-terminal-shell {
+    display: none;
+  }
+}
+
+/* ═══ 404 Page: CRT No-Signal ═══ */
+
+@keyframes not-found-static {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
+}
+
+@keyframes not-found-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes not-found-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes not-found-glitch-1 {
+  0%, 100% { clip-path: inset(0 0 96% 0); transform: translate(0); }
+  20% { clip-path: inset(20% 0 60% 0); transform: translate(-4px, -2px); }
+  40% { clip-path: inset(50% 0 30% 0); transform: translate(4px, 2px); }
+  60% { clip-path: inset(70% 0 10% 0); transform: translate(-2px, 1px); }
+  80% { clip-path: inset(10% 0 80% 0); transform: translate(3px, -1px); }
+}
+
+@keyframes not-found-glitch-2 {
+  0%, 100% { clip-path: inset(96% 0 0 0); transform: translate(0); }
+  20% { clip-path: inset(60% 0 20% 0); transform: translate(4px, 2px); }
+  40% { clip-path: inset(30% 0 50% 0); transform: translate(-4px, -2px); }
+  60% { clip-path: inset(10% 0 70% 0); transform: translate(2px, -1px); }
+  80% { clip-path: inset(80% 0 10% 0); transform: translate(-3px, 1px); }
+}
+
+@keyframes not-found-line-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.not-found-static {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  animation: not-found-static 0.4s steps(8) infinite;
+}
+
+.not-found-scanlines {
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+}
+
+.not-found-blink {
+  animation: not-found-blink 1.2s steps(1) infinite;
+}
+
+.not-found-cursor {
+  animation: not-found-cursor-blink 0.8s steps(1) infinite;
+}
+
+.not-found-line-in {
+  animation: not-found-line-in 0.2s ease-out both;
+}
+
+.not-found-glitch-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.not-found-glitch {
+  position: relative;
+  color: #cafd00;
+  text-shadow: 0 0 30px rgba(202, 253, 0, 0.3);
+}
+
+.not-found-glitch::before,
+.not-found-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+}
+
+.not-found-glitch::before {
+  color: #ff00c1;
+  animation: not-found-glitch-1 3s steps(2) infinite;
+}
+
+.not-found-glitch::after {
+  color: #00fff9;
+  animation: not-found-glitch-2 3s steps(2) infinite reverse;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal.active,
   .background-terminal-track,
-  .grain-overlay-animate {
+  .grain-overlay-animate,
+  .not-found-static,
+  .not-found-blink,
+  .not-found-cursor,
+  .not-found-glitch::before,
+  .not-found-glitch::after,
+  .not-found-line-in {
     animation: none !important;
     transition: none !important;
     transform: none !important;

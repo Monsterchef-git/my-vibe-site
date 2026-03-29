@@ -1,8 +1,8 @@
-'use client';
-import { useEffect } from 'react';
 import Image from 'next/image';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import MonoToken from '@/components/MonoToken';
 import FloatingNav from '@/components/FloatingNav';
+import ScrollReveal from '@/components/ScrollReveal';
 import { Primitive, cx } from '@/components/primitive';
 import StitchCardStack from '@/components/StitchCardStack';
 import TypewriterTerminal from '@/components/TypewriterTerminal';
@@ -20,23 +20,12 @@ const culinaryScanMetrics = [
 ] as const;
 
 export default function Home() {
-  // Script para el efecto de "Reveal" al hacer scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <main className="min-h-screen grainy-bg bg-[#0a0a0a] text-white px-6 md:px-24 pb-40 relative z-0">
+      <ErrorBoundary>
+        <ScrollReveal />
+      </ErrorBoundary>
 
       {/* Global Header Limpio - Solo Identidad y Disponibilidad */}
       <header className="fixed top-0 left-0 w-full p-6 md:p-12 flex justify-between items-start z-[150] pointer-events-none">
@@ -71,21 +60,95 @@ export default function Home() {
               Vibe-Coder <br />by Night
             </h2>
             <p className="max-w-md border-l border-[#cafd00]/30 pt-10 pl-6 font-mono text-sm leading-relaxed text-zinc-500">
-              Fusiono la disciplina de la alta cocina con la arquitectura de sistemas.
-              {' '}Trabajo desde <MonoToken kind="location">Medellín</MonoToken> para marcas y productos con ambición global.
+              Dos disciplinas, un mismo estándar: precisión, producto y ejecución sin ruido.
+              {' '}Desde <MonoToken kind="location">Medellín</MonoToken> para marcas con ambición global.
             </p>
           </div>
-
-          {/* Derecha: Espacio Limpio (Look Brutalista) */}
-          <div className="flex-shrink-0 lg:mr-10">
-            {/* Componente ASCII eliminado por petición */}
-          </div>
-
         </div>
       </section>
 
+      {/* SECCIÓN 0: ABOUT — Dossier Personal */}
+      <Primitive.Section id="about" className="mt-32 pt-20 md:pt-8 reveal bg-zinc-950/70">
+        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
+
+          {/* Columna izquierda: Bio narrativa */}
+          <div className="space-y-8">
+            <div className={sectionIntroClassName}>
+              <p className={sectionEyebrowClassName}>
+                Medellín, Colombia • +10 años en cocina • vibe-coder
+              </p>
+              <h2 className={cx(sectionTitleClassName, 'text-white')}>
+                Sobre <span className="text-[#cafd00] night-glow">mí</span>
+              </h2>
+            </div>
+
+            <div className="space-y-5 border-l border-zinc-800/80 pl-6">
+              <p className="font-mono text-sm leading-relaxed text-zinc-400">
+                Soy John Herrera — chef con más de una década en cocinas de hoteles, restaurantes
+                y clubes de <MonoToken kind="location">Medellín</MonoToken>. Mi cocina es contemporánea
+                con esencia tropical: técnica de alta cocina, producto local y orgánico, y una obsesión
+                por que cada plato cuente una historia.
+              </p>
+              <p className="font-mono text-sm leading-relaxed text-zinc-400">
+                En paralelo, construyo experiencias digitales con el mismo rigor que aplico en un
+                servicio. Desarrollo landings de alto impacto, optimizo SEO y despliegue, y diseño
+                sistemas visuales para marcas que necesitan presencia real en internet.
+              </p>
+              <p className="font-mono text-sm leading-relaxed text-zinc-500">
+                Actualmente soy chef creativo en <MonoToken kind="project">Wink Eventos</MonoToken> y
+                lidero el producto digital de <MonoToken kind="project">TecnicalApp</MonoToken>.
+              </p>
+            </div>
+          </div>
+
+          {/* Columna derecha: Spec Sheet estilo terminal */}
+          <div className="flex items-center">
+            <div className="w-full space-y-4 rounded-[2rem] border border-zinc-800/60 bg-black/50 p-6 backdrop-blur-xl md:p-8">
+              <p className="font-mono text-[9px] uppercase tracking-[0.42em] text-zinc-600">
+                // spec_sheet.yml
+              </p>
+
+              {[
+                { key: 'NOMBRE', value: 'John Herrera' },
+                { key: 'BASE', value: 'Medellín, Antioquia' },
+                { key: 'COCINA', value: 'Contemporánea tropical' },
+                { key: 'STACK', value: 'Next.js • Tailwind • IA aplicada' },
+                { key: 'EXPERTISE', value: 'Landings • SEO • Diseño • Deploy' },
+                { key: 'FILOSOFÍA', value: 'Precisión, producto local, alma' },
+                { key: 'STATUS', value: 'Disponible para proyectos' },
+              ].map((item, index) => (
+                <div
+                  key={item.key}
+                  className={cx(
+                    'flex items-start justify-between gap-6 pb-3 font-mono text-[11px] uppercase tracking-[0.18em]',
+                    index < 6 && 'border-b border-zinc-800/50',
+                  )}
+                >
+                  <span className="shrink-0 text-zinc-600">{item.key}</span>
+                  <span className={cx(
+                    'text-right',
+                    item.key === 'STATUS' ? 'text-lime-400' : 'text-zinc-300',
+                  )}>
+                    {item.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Primitive.Section>
+
+      {/* Bridge: About → Gastronomy */}
+      <div className="my-24 flex items-center gap-6 reveal">
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-lime-400/20 to-transparent" />
+        <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.5em] text-zinc-600">
+          Lo que cocino _
+        </p>
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-lime-400/20 to-transparent" />
+      </div>
+
       {/* SECCIÓN 1: GASTRONOMÍA (Wink Eventos) */}
-      <Primitive.Section id="gastronomy" className="mt-32 space-y-10 reveal bg-zinc-950/70">
+      <Primitive.Section id="gastronomy" className="space-y-10 reveal bg-zinc-950/70">
         <div className={sectionIntroClassName}>
           <p className={sectionEyebrowClassName}>
             Chef creativo • eventos • cenas privadas • <MonoToken kind="location">Medellín</MonoToken>
@@ -108,6 +171,7 @@ export default function Home() {
                 alt="Platos de carne emplatados para servicio premium"
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
+                priority
                 className="object-cover object-center opacity-55 transition-[transform,filter,opacity] duration-700 ease-out grayscale group-hover:scale-[1.04] group-hover:opacity-85 group-hover:grayscale-0"
               />
               <Image
@@ -115,7 +179,8 @@ export default function Home() {
                 alt=""
                 aria-hidden="true"
                 fill
-                sizes="(min-width: 768px) 50vw, 100vw"
+                sizes="1px"
+                loading="lazy"
                 className="pointer-events-none object-cover object-center opacity-0 mix-blend-screen transition-all duration-300 ease-out group-hover:-translate-x-1.5 group-hover:translate-y-0.5 group-hover:opacity-25"
                 style={{ filter: 'sepia(1) saturate(8) hue-rotate(24deg) brightness(1.15)' }}
               />
@@ -124,7 +189,8 @@ export default function Home() {
                 alt=""
                 aria-hidden="true"
                 fill
-                sizes="(min-width: 768px) 50vw, 100vw"
+                sizes="1px"
+                loading="lazy"
                 className="pointer-events-none object-cover object-center opacity-0 mix-blend-screen transition-all duration-300 ease-out group-hover:translate-x-1.5 group-hover:-translate-y-0.5 group-hover:opacity-20"
                 style={{ filter: 'sepia(1) saturate(8) hue-rotate(164deg) brightness(1.1)' }}
               />
@@ -191,6 +257,7 @@ export default function Home() {
               alt="Chef emplatando durante un servicio gastronómico"
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
+              loading="lazy"
               className="object-cover opacity-40 grayscale group-hover:grayscale-0 transition-all"
             />
             <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
@@ -206,6 +273,7 @@ export default function Home() {
               alt="Bowl de atún sellado con vegetales frescos y microgreens"
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
+              loading="lazy"
               className="object-cover opacity-50 grayscale transition-all duration-700 group-hover:opacity-85 group-hover:grayscale-0 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
@@ -222,6 +290,7 @@ export default function Home() {
               alt="Servicio gastronómico con sopa cremosa y crostini emplatado"
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
+              loading="lazy"
               className="object-cover opacity-45 grayscale transition-all duration-700 group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
@@ -232,10 +301,32 @@ export default function Home() {
             </div>
           </Primitive.Card>
         </div>
+
+        {/* CTA Gastronomy */}
+        <a
+          href="#contact"
+          className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]"
+        >
+          <span className="font-mono text-[11px] leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-300">
+            Buscas un chef creativo para tu próximo evento?
+          </span>
+          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors group-hover:text-white">
+            Hablemos _
+          </span>
+        </a>
       </Primitive.Section>
 
+      {/* Bridge: Gastronomy → Development */}
+      <div className="my-24 flex items-center gap-6 reveal">
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+        <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.5em] text-zinc-600">
+          Lo que construyo _
+        </p>
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+      </div>
+
       {/* SECCIÓN 2: DEVELOPMENT (Vibe Coding) */}
-      <Primitive.Section id="development" className="mt-32 space-y-10 reveal">
+      <Primitive.Section id="development" className="space-y-10 reveal">
         <div className={sectionIntroClassName}>
           <p className={sectionEyebrowClassName}>Next.js • IA aplicada • landings de conversión</p>
           <h2 className={cx(sectionTitleClassName, 'text-cyan-400')}>
@@ -250,7 +341,9 @@ export default function Home() {
 
         <div className="mx-auto grid w-full max-w-7xl gap-8 xl:grid-cols-[minmax(0,1.28fr)_minmax(420px,1fr)] xl:items-start">
           <div className="xl:pt-2">
-            <StitchCardStack />
+            <ErrorBoundary>
+              <StitchCardStack />
+            </ErrorBoundary>
           </div>
 
           {/* TecnicalApp - Panel técnico lateral */}
@@ -298,7 +391,9 @@ export default function Home() {
 
                 <div className="mt-auto pt-16 xl:pt-20">
                   <div className="rounded-[2rem] border border-zinc-800/80 bg-black/60 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] backdrop-blur-md xl:p-6">
-                    <TypewriterTerminal className="h-[320px] text-[9px] sm:text-[10px] md:text-[11px] xl:h-[360px]" />
+                    <ErrorBoundary>
+                      <TypewriterTerminal className="h-[320px] text-[9px] sm:text-[10px] md:text-[11px] xl:h-[360px]" />
+                    </ErrorBoundary>
                   </div>
 
                   <div className="mt-6 border-t border-zinc-800/80 pt-5">
@@ -316,10 +411,32 @@ export default function Home() {
             </Primitive.Card>
           </a>
         </div>
+
+        {/* CTA Development */}
+        <a
+          href="#contact"
+          className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-cyan-400/30 hover:shadow-[0_0_24px_rgba(34,211,238,0.06)]"
+        >
+          <span className="font-mono text-[11px] leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-300">
+            Necesitas una landing que convierta de verdad?
+          </span>
+          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-cyan-400 transition-colors group-hover:text-white">
+            Conversemos _
+          </span>
+        </a>
       </Primitive.Section>
 
-      {/* 2. FOOTER: LA DECLARACIÓN FINAL */}
-      <footer id="contact" className="pt-60 pb-20 px-6 reveal overflow-hidden">
+      {/* Bridge: Development → Contact */}
+      <div className="mt-32 mb-16 flex flex-col items-center gap-4 reveal">
+        <div className="h-16 w-px bg-gradient-to-b from-transparent via-zinc-700/50 to-zinc-700/20" />
+        <p className="max-w-md text-center font-mono text-[11px] leading-relaxed text-zinc-600">
+          Si tu proyecto necesita la misma precisión que un plato bien ejecutado — hablemos.
+        </p>
+        <div className="h-8 w-px bg-gradient-to-b from-zinc-700/20 to-transparent" />
+      </div>
+
+      {/* FOOTER: LA DECLARACIÓN FINAL */}
+      <footer id="contact" className="pb-20 px-6 reveal overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="space-y-6 mb-32">
             <p className="pl-2 font-mono text-[10px] md:text-xs uppercase tracking-[0.8em] text-zinc-600">
@@ -358,7 +475,9 @@ export default function Home() {
         </div>
       </footer>
 
-      <FloatingNav />
+      <ErrorBoundary>
+        <FloatingNav />
+      </ErrorBoundary>
     </main>
   );
 }

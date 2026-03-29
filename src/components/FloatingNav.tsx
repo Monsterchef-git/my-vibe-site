@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { AtSign, LayoutGrid, Terminal, Utensils } from 'lucide-react';
+import { AtSign, LayoutGrid, Terminal, User, Utensils } from 'lucide-react';
 import { cx } from '@/components/primitive';
 
 export default function FloatingNav() {
@@ -29,6 +29,7 @@ export default function FloatingNav() {
         }
 
         switch (id) {
+            case 'about': return 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] -translate-y-0.5 scale-[1.08]';
             case 'gastronomy': return 'bg-lime-400 text-black shadow-[0_0_20px_rgba(202,253,0,0.5)] -translate-y-0.5 scale-[1.08]';
             case 'development': return 'bg-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.5)] -translate-y-0.5 scale-[1.08]';
             case 'contact': return 'bg-blue-400 text-black shadow-[0_0_20px_rgba(96,165,250,0.5)] -translate-y-0.5 scale-[1.08]';
@@ -37,9 +38,16 @@ export default function FloatingNav() {
     };
 
     return (
-        // El z-[100] asegura que siempre esté por encima de todo
-        <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-xs z-[100] pointer-events-auto">
+        <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-[100] pointer-events-auto">
             <div className="bg-zinc-900/90 backdrop-blur-2xl border border-white/10 rounded-full px-2 py-2 flex justify-around items-center shadow-2xl">
+
+                <a href="#about"
+                    className={cx(
+                        'relative z-[110] flex items-center justify-center rounded-full p-4 transition-[transform,color,background-color,box-shadow] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
+                        getActiveStyles('about'),
+                    )}>
+                    <User size={20} strokeWidth={2.5} />
+                </a>
 
                 <a href="#gastronomy"
                     className={cx(
