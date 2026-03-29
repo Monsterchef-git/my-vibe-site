@@ -1,26 +1,391 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0a0a;
+  --primary: #cafd00;
+  --apple-accent: #0066cc;
+  --apple-success: #34c759;
+  --apple-bg-card: rgba(28, 28, 30, 0.5);
+  --apple-shadow: 0 28px 48px -16px rgba(0, 0, 0, 0.5);
+  --sf-display: "SF Pro Display", "Inter", system-ui, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: #ffffff;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.mono-token {
+  transition:
+    color 0.24s ease,
+    text-shadow 0.24s ease,
+    opacity 0.24s ease;
+}
+
+.token-project {
+  color: rgb(34 211 238);
+  text-shadow: 0 0 14px rgb(34 211 238 / 0.12);
+}
+
+.token-location,
+.token-comment {
+  color: rgb(113 113 122);
+}
+
+.token-status {
+  color: rgb(163 230 53);
+  text-shadow: 0 0 18px rgb(202 253 0 / 0.18);
+}
+
+/* Efecto Grainy de Stitch */
+.grainy-bg {
+  /* position removed to avoid overriding absolute in components */
+}
+
+.grainy-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Resplandor Night Vision */
+.night-glow {
+  text-shadow: 0 0 15px rgba(202, 253, 0, 0.5);
+}
+
+/* Iconos de Google */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 42px, 0) scale(0.985);
+    transform-origin: center top;
+    transition:
+      opacity 0.28s linear,
+      transform 0.56s cubic-bezier(0.16, 1.18, 0.32, 1);
+    will-change: transform, opacity;
+  }
+
+  .reveal.active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .tight-headline {
+    letter-spacing: -0.06em;
+    line-height: 0.8;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, 2px);
+  }
+
+  80% {
+    transform: translate(2px, -2px);
+  }
+
+  100% {
+    transform: translate(0);
+  }
+}
+
+.hover-glitch:hover {
+  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+  color: #cafd00;
+  text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9;
+}
+
+.tight-headline {
+  letter-spacing: -0.05em;
+  /* El toque suizo */
+  line-height: 0.85;
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.tight-headline:hover {
+  letter-spacing: -0.07em;
+  /* Se aprieta más al tocarlo */
+  color: #cafd00;
+  font-style: italic;
+}
+
+/* Animación de entrada para el indicador de disponibilidad */
+@keyframes status-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.status-dot {
+  animation: status-pulse 2s infinite ease-in-out;
+}
+
+/* Capa de Grano Cinematográfico */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 200;
+  /* Por encima de todo */
+  opacity: 0.04;
+  /* Ajusta esto para más o menos intensidad */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Opcional: Una animación muy sutil para que el grano "viva" */
+@keyframes grain-shift {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-1%, -1%);
+  }
+
+  30% {
+    transform: translate(1%, 1%);
+  }
+
+  50% {
+    transform: translate(-0.5%, 1.5%);
+  }
+
+  70% {
+    transform: translate(1.5%, -0.5%);
+  }
+
+  90% {
+    transform: translate(-1%, 0.5%);
+  }
+}
+
+.grain-overlay-animate {
+  animation: grain-shift 0.8s steps(10) infinite;
+}
+
+.background-terminal-shell {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.02;
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+}
+
+.background-terminal-column {
+  position: absolute;
+  overflow: hidden;
+  color: rgb(244 244 245 / 0.9);
+  filter: blur(0.3px);
+}
+
+.background-terminal-track {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  animation-name: background-terminal-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.background-terminal-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  white-space: nowrap;
+}
+
+@keyframes background-terminal-scroll {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.isolution-card {
+  background: var(--apple-bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 40px;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--apple-shadow);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.isolution-card:hover {
+  border-color: rgba(0, 102, 204, 0.3);
+  transform: translateY(-4px);
+}
+
+.isolution-card .bg-image {
+  transition:
+    filter 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.6s ease;
+}
+
+.isolution-card:hover .bg-image {
+  filter: grayscale(0%) brightness(0.9) !important;
+  transform: scale(1.08);
+  opacity: 0.7 !important;
+}
+
+.isolution-card:hover {
+  border-color: rgba(0, 102, 204, 0.4) !important;
+  box-shadow: 0 0 40px rgba(0, 102, 204, 0.15), var(--apple-shadow) !important;
+}
+
+.btn-apple {
+  background: white;
+  color: black;
+  font-family: var(--sf-display);
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.btn-apple:hover {
+  background: var(--apple-accent);
+  color: white;
+}
+
+@keyframes culinary-scan {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 0.9;
+  }
+
+  52% {
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: translateY(420%);
+    opacity: 0;
+  }
+}
+
+@keyframes culinary-jitter {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  20% {
+    transform: translate3d(-1px, 1px, 0);
+  }
+
+  40% {
+    transform: translate3d(1px, -1px, 0);
+  }
+
+  60% {
+    transform: translate3d(-0.5px, 0.5px, 0);
+  }
+
+  80% {
+    transform: translate3d(1px, 1px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.culinary-glitch-card:hover {
+  box-shadow: 0 0 40px rgba(202, 253, 0, 0.08), 0 30px 120px rgba(0, 0, 0, 0.58);
+}
+
+.culinary-glitch-card:hover img[aria-hidden="true"] {
+  animation: culinary-jitter 240ms steps(2) 3;
+}
+
+.culinary-glitch-noise {
+  background-image:
+    linear-gradient(90deg, rgba(202, 253, 0, 0.08), transparent 28%, transparent 72%, rgba(202, 253, 0, 0.06)),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06) 0,
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+}
+
+.culinary-scanline {
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(202, 253, 0, 0.08) 0,
+    rgba(202, 253, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 6px
+  );
+}
+
+.group:hover .culinary-scanbar {
+  animation: culinary-scan 1.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.active,
+  .background-terminal-track,
+  .grain-overlay-animate {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }
