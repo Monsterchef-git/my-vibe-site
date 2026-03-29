@@ -16,8 +16,8 @@ export default function FloatingNav() {
             { threshold: 0.5 }
         );
 
-        document.querySelectorAll('section[id]').forEach((section) => {
-            observer.observe(section);
+        document.querySelectorAll('section[id], footer[id]').forEach((element) => {
+            observer.observe(element);
         });
 
         return () => observer.disconnect();
