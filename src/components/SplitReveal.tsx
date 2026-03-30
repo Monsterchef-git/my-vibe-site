@@ -1,25 +1,28 @@
 'use client';
 
-import { useEffect, useRef, ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
+import type { ElementType, HTMLAttributes, Ref } from 'react';
 
-interface SplitRevealProps {
+type SplitRevealProps = HTMLAttributes<HTMLElement> & {
   children: string;
   className?: string;
   as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div';
   by?: 'word' | 'char';
   delay?: number; // base delay in ms
   stagger?: number; // ms between each word/char
-}
+};
 
 export default function SplitReveal({
   children,
   className = '',
-  as: Tag = 'div',
+  as = 'div',
   by = 'word',
   delay = 0,
   stagger = 60,
+  ...props
 }: SplitRevealProps) {
   const containerRef = useRef<HTMLElement>(null);
+  const Component = as as ElementType;
 
   const units = by === 'char'
     ? children.split('')
@@ -51,8 +54,12 @@ export default function SplitReveal({
   }, [delay, stagger]);
 
   return (
-    // @ts-expect-error dynamic tag
-    <Tag ref={containerRef} className={className} aria-label={children}>
+    <Component
+      ref={containerRef as Ref<HTMLElement>}
+      className={className}
+      aria-label={children}
+      {...props}
+    >
       {units.map((unit, i) => (
         <span
           key={i}
@@ -64,6 +71,6 @@ export default function SplitReveal({
           {by === 'word' && i < units.length - 1 ? '\u00A0' : ''}
         </span>
       ))}
-    </Tag>
+    </Component>
   );
 }

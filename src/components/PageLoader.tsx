@@ -19,7 +19,11 @@ export default function PageLoader() {
   useEffect(() => {
     // Solo en primera visita de la sesión
     if (sessionStorage.getItem('jh-loaded')) {
-      setVisible(false);
+      const frame = window.requestAnimationFrame(() => setVisible(false));
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    if (!visible) {
       return;
     }
 
@@ -36,7 +40,7 @@ export default function PageLoader() {
     }, TOTAL_MS + 600));
 
     return () => timers.forEach(clearTimeout);
-  }, []);
+  }, [visible]);
 
   if (!visible) return null;
 
