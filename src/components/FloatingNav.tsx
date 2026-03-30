@@ -41,7 +41,7 @@ export default function FloatingNav() {
         <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-[100] pointer-events-auto">
             <div className="bg-zinc-900/90 backdrop-blur-2xl border border-white/10 rounded-full px-2 py-2 flex justify-around items-center shadow-2xl">
 
-                <a href="#about"
+                <a href="#about" aria-label="Sobre mí"
                     className={cx(
                         'relative z-[110] flex items-center justify-center rounded-full p-4 transition-[transform,color,background-color,box-shadow] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
                         getActiveStyles('about'),
@@ -49,7 +49,7 @@ export default function FloatingNav() {
                     <User size={20} strokeWidth={2.5} />
                 </a>
 
-                <a href="#gastronomy"
+                <a href="#gastronomy" aria-label="Gastronomía"
                     className={cx(
                         'relative z-[110] flex items-center justify-center rounded-full p-4 transition-[transform,color,background-color,box-shadow] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
                         getActiveStyles('gastronomy'),
@@ -57,7 +57,7 @@ export default function FloatingNav() {
                     <Utensils size={20} strokeWidth={2.5} />
                 </a>
 
-                <a href="#development"
+                <a href="#development" aria-label="Desarrollo"
                     className={cx(
                         'relative z-[110] flex items-center justify-center rounded-full p-4 transition-[transform,color,background-color,box-shadow] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
                         getActiveStyles('development'),
@@ -65,7 +65,7 @@ export default function FloatingNav() {
                     <Terminal size={20} strokeWidth={2.5} />
                 </a>
 
-                <a href="#contact"
+                <a href="#contact" aria-label="Contacto"
                     className={cx(
                         'relative z-[110] flex items-center justify-center rounded-full p-4 transition-[transform,color,background-color,box-shadow] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
                         getActiveStyles('contact'),
@@ -73,7 +73,7 @@ export default function FloatingNav() {
                     <AtSign size={20} strokeWidth={2.5} />
                 </a>
 
-                <a href="#hero"
+                <a href="#hero" aria-label="Inicio"
                     className="relative z-[110] flex items-center justify-center p-4 text-zinc-500 transition-[transform,color] duration-[220ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] hover:-translate-y-0.5 hover:scale-[1.04] hover:text-white">
                     <LayoutGrid size={20} strokeWidth={2.5} />
                 </a>

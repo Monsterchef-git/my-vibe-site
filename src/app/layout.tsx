@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import BackgroundTerminal from "@/components/BackgroundTerminal";
+import LenisProvider from "@/components/LenisProvider";
+import PageLoader from "@/components/PageLoader";
 import "./globals.css";
 
 const siteUrl = "https://johnherrerachef.com";
@@ -117,6 +119,15 @@ export default function RootLayout({
         />
       </head>
       <body className="relative antialiased bg-black selection:bg-lime-400 selection:text-black" suppressHydrationWarning>
+        {/* Skip-to-content para navegación por teclado */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:rounded-full focus:bg-lime-400 focus:px-4 focus:py-2 focus:font-mono focus:text-[11px] focus:uppercase focus:tracking-widest focus:text-black focus:outline-none"
+        >
+          Ir al contenido
+        </a>
+        <PageLoader />
+        <LenisProvider />
         <BackgroundTerminal />
         <div className="grain-overlay grain-overlay-animate" />
         <div className="relative z-10">

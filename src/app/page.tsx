@@ -3,6 +3,8 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import MonoToken from '@/components/MonoToken';
 import FloatingNav from '@/components/FloatingNav';
 import ScrollReveal from '@/components/ScrollReveal';
+import SplitReveal from '@/components/SplitReveal';
+import MagneticButton from '@/components/MagneticButton';
 import { Primitive, cx } from '@/components/primitive';
 import StitchCardStack from '@/components/StitchCardStack';
 import TypewriterTerminal from '@/components/TypewriterTerminal';
@@ -22,41 +24,60 @@ const culinaryScanMetrics = [
 export default function Home() {
 
   return (
-    <main className="min-h-screen grainy-bg bg-[#0a0a0a] text-white px-6 md:px-24 pb-40 relative z-0">
+    <main id="main-content" className="min-h-screen grainy-bg bg-[#0a0a0a] text-white px-6 md:px-24 pb-40 relative z-0">
       <ErrorBoundary>
         <ScrollReveal />
       </ErrorBoundary>
 
       {/* Global Header Limpio - Solo Identidad y Disponibilidad */}
       <header className="fixed top-0 left-0 w-full p-6 md:p-12 flex justify-between items-start z-[150] pointer-events-none">
-        <div className="pointer-events-auto">
+        <MagneticButton as="div" className="pointer-events-auto" strength={0.4}>
           <span className="font-black text-2xl tracking-tighter hover-glitch cursor-pointer">JH.</span>
-        </div>
+        </MagneticButton>
 
-        <div className="pointer-events-auto flex items-center gap-3 bg-zinc-900/80 backdrop-blur-2xl px-5 py-2.5 rounded-full border border-white/10 shadow-2xl transition-all hover:border-lime-400/50">
-          <div className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-lime-400 shadow-[0_0_10px_#cafd00]"></span>
+        <MagneticButton as="div" className="pointer-events-auto" strength={0.3}>
+          <div className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-2xl px-5 py-2.5 rounded-full border border-white/10 shadow-2xl transition-all hover:border-lime-400/50">
+            <div className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-lime-400 shadow-[0_0_10px_#cafd00]"></span>
+            </div>
+            <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-lime-400">
+              <MonoToken kind="status">Disponible para proyectos</MonoToken>
+            </span>
           </div>
-          <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-lime-400">
-            <MonoToken kind="status">Disponible para proyectos</MonoToken>
-          </span>
-        </div>
+        </MagneticButton>
       </header>
 
       {/* Hero Section — Puro impacto tipográfico */}
-      <section id="hero" className="flex flex-col justify-end min-h-[85vh] pb-20 reveal px-6">
+      <section id="hero" className="flex flex-col justify-center min-h-screen pt-28 pb-16 px-6">
         <div className="space-y-6">
           <div className="text-lime-400 uppercase tracking-[0.3em] font-black text-xs md:text-sm hover-glitch cursor-default inline-block">
-            John Herrera _
+            <SplitReveal as="span" by="char" delay={100} stagger={35}>
+              John Herrera _
+            </SplitReveal>
           </div>
-          <h1 className="text-7xl md:text-9xl lg:text-[10rem] font-headline italic leading-[0.85] text-zinc-200">
-            Chef by <span className="text-[#beee00] night-glow">Day</span>,
-          </h1>
-          <h2 className="text-7xl md:text-9xl lg:text-[10rem] font-bold text-[#cafd00] uppercase tracking-tighter leading-[0.78] night-glow">
-            Vibe-Coder<br />by Night
-          </h2>
-          <p className="max-w-lg border-l border-[#cafd00]/30 pt-8 pl-6 font-mono text-sm leading-relaxed text-zinc-500">
+          <SplitReveal
+            as="h1"
+            by="word"
+            delay={300}
+            stagger={80}
+            className="text-7xl md:text-8xl lg:text-9xl font-headline italic leading-[0.9] text-zinc-200 pb-2"
+          >
+            Chef by Day,
+          </SplitReveal>
+          <SplitReveal
+            as="h2"
+            by="word"
+            delay={500}
+            stagger={80}
+            className="text-7xl md:text-8xl lg:text-9xl font-bold text-[#cafd00] uppercase tracking-tighter leading-[0.85] night-glow pb-2"
+          >
+            Vibe-Coder by Night
+          </SplitReveal>
+          <p
+            className="max-w-lg border-l border-[#cafd00]/30 pt-8 pl-6 font-mono text-sm leading-relaxed text-zinc-500 opacity-0 translate-y-4 transition-all duration-700 delay-[800ms]"
+            style={{ animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 0.8s forwards' }}
+          >
             Dos disciplinas, un mismo estándar: precisión, producto y ejecución sin ruido.
             {' '}Desde <MonoToken kind="location">Medellín</MonoToken> para marcas con ambición global.
           </p>

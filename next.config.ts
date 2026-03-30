@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: rootDir,
   },
+  // Lighthouse: compresión y headers de caché
+  compress: true,
+  poweredByHeader: false,
+  // Optimización de imágenes
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000, // 1 año
+  },
 };
 
 export default nextConfig;
