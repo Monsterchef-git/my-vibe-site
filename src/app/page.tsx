@@ -42,7 +42,7 @@ export default function Home() {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-lime-400 shadow-[0_0_10px_#cafd00]"></span>
             </div>
             <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-lime-400">
-              <MonoToken kind="status">Disponible para proyectos</MonoToken>
+              <MonoToken kind="status">Exploremos ideas</MonoToken>
             </span>
           </div>
         </MagneticButton>
@@ -132,7 +132,7 @@ export default function Home() {
                 { key: 'STACK', value: 'Next.js • Tailwind • IA aplicada' },
                 { key: 'EXPERTISE', value: 'Landings • SEO • Diseño • Deploy' },
                 { key: 'FILOSOFÍA', value: 'Precisión, producto local, alma' },
-                { key: 'STATUS', value: 'Disponible para proyectos' },
+                { key: 'STATUS', value: 'Exploremos ideas' },
               ].map((item, index) => (
                 <div
                   key={item.key}
