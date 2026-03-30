@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -33,6 +34,7 @@ export default async function LinkedInBannerPage() {
         />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 60 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={forkBase64} width={100} height={186} alt="" />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -132,7 +134,14 @@ export default async function LinkedInBannerPage() {
     <html lang="es">
       <body style={{ margin: 0, background: '#111', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', gap: 24 }}>
         <p style={{ color: '#666', fontFamily: 'monospace', fontSize: 12 }}>LinkedIn Banner — 1584×396 — Right-click → Save Image As</p>
-        <img src={dataUri} width={1584} height={396} alt="LinkedIn Banner" style={{ maxWidth: '90vw', border: '1px solid #333' }} />
+        <Image
+          src={dataUri}
+          width={1584}
+          height={396}
+          alt="LinkedIn Banner"
+          unoptimized
+          style={{ maxWidth: '90vw', height: 'auto', border: '1px solid #333' }}
+        />
       </body>
     </html>
   );
