@@ -32,11 +32,11 @@ export default function Home() {
       {/* Global Header Limpio - Solo Identidad y Disponibilidad */}
       <header className="fixed top-0 left-0 w-full p-6 md:p-12 flex justify-between items-start z-[150] pointer-events-none">
         <MagneticButton as="div" className="pointer-events-auto" strength={0.4}>
-          <span className="font-black text-2xl tracking-tighter hover-glitch cursor-pointer">JH.</span>
+          <a href="#hero" className="font-black text-2xl tracking-tighter hover-glitch">JH.</a>
         </MagneticButton>
 
         <MagneticButton as="div" className="pointer-events-auto" strength={0.3}>
-          <div className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-2xl px-5 py-2.5 rounded-full border border-white/10 shadow-2xl transition-all hover:border-lime-400/50">
+          <a href="#contact" className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-2xl px-5 py-2.5 rounded-full border border-white/10 shadow-2xl transition-all hover:border-lime-400/50">
             <div className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-lime-400 shadow-[0_0_10px_#cafd00]"></span>
@@ -44,7 +44,7 @@ export default function Home() {
             <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-lime-400">
               <MonoToken kind="status">Exploremos ideas</MonoToken>
             </span>
-          </div>
+          </a>
         </MagneticButton>
       </header>
 
@@ -326,11 +326,8 @@ export default function Home() {
           href="#contact"
           className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]"
         >
-          <span className="font-mono text-[11px] leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-300">
-            Buscas un chef creativo para tu próximo evento?
-          </span>
           <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors group-hover:text-white">
-            Hablemos _
+            Contacto _
           </span>
         </a>
       </Primitive.Section>
@@ -436,9 +433,6 @@ export default function Home() {
           href="#contact"
           className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-cyan-400/30 hover:shadow-[0_0_24px_rgba(34,211,238,0.06)]"
         >
-          <span className="font-mono text-[11px] leading-relaxed text-zinc-500 transition-colors group-hover:text-zinc-300">
-            Necesitas una landing que convierta de verdad?
-          </span>
           <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-cyan-400 transition-colors group-hover:text-white">
             Conversemos _
           </span>
@@ -449,7 +443,7 @@ export default function Home() {
       <div className="mt-32 mb-16 flex flex-col items-center gap-4 reveal">
         <div className="h-16 w-px bg-gradient-to-b from-transparent via-zinc-700/50 to-zinc-700/20" />
         <p className="max-w-md text-center font-mono text-[11px] leading-relaxed text-zinc-600">
-          Si tu proyecto necesita la misma precisión que un plato bien ejecutado — hablemos.
+          Construyo en ambos frentes — si tienes algo en mente, escríbeme.
         </p>
         <div className="h-8 w-px bg-gradient-to-b from-zinc-700/20 to-transparent" />
       </div>
