@@ -101,19 +101,21 @@ export default function Home() {
 
             <div className="space-y-5 border-l border-zinc-800/80 pl-6">
               <p className="font-mono text-sm leading-relaxed text-zinc-400">
-                Soy John Herrera — chef con más de una década en cocinas de hoteles, restaurantes
-                y clubes de <MonoToken kind="location">Medellín</MonoToken>. Mi cocina es contemporánea
-                con esencia tropical: técnica de alta cocina, producto local y orgánico, y una obsesión
-                por que cada plato cuente una historia.
+                Entiendo la creación como un equilibrio entre técnica y narrativa. Más de una década
+                liderando cocinas en <MonoToken kind="location">Medellín</MonoToken> afinó esa
+                convicción: mi propuesta gastronómica es contemporánea, de esencia tropical, con el
+                producto local como punto de partida y el rigor técnico como lenguaje.
               </p>
               <p className="font-mono text-sm leading-relaxed text-zinc-400">
-                En paralelo, construyo experiencias digitales con el mismo rigor que aplico en un
-                servicio. Desarrollo landings de alto impacto, optimizo SEO y despliegue, y diseño
-                sistemas visuales para marcas que necesitan presencia real en internet.
+                Esa misma obsesión por el detalle la traslado al entorno digital. Desarrollo landing
+                pages de alto impacto, optimizo SEO y diseño sistemas visuales para marcas que buscan
+                presencia real en la web.
               </p>
               <p className="font-mono text-sm leading-relaxed text-zinc-500">
-                Actualmente soy chef creativo en <MonoToken kind="project">Wink Eventos</MonoToken> y
-                lidero el producto digital de <MonoToken kind="project">TecnicalApp</MonoToken>.
+                Hoy, elevo el estándar de las bodas en <MonoToken kind="location">Medellín</MonoToken> desde{' '}
+                <MonoToken kind="project">Wink Eventos</MonoToken> y digitalizo el flujo de trabajo
+                de talleres a través de la experiencia de usuario en{' '}
+                <MonoToken kind="project">TecnicalApp</MonoToken>.
               </p>
             </div>
           </div>
