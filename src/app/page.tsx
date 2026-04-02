@@ -8,23 +8,63 @@ import MagneticButton from '@/components/MagneticButton';
 import { Primitive, cx } from '@/components/primitive';
 import StitchCardStack from '@/components/StitchCardStack';
 import TypewriterTerminal from '@/components/TypewriterTerminal';
+import LiveScanMetrics from '@/components/LiveScanMetrics';
+import ProvenanceTokens from '@/components/ProvenanceTokens';
 
 const sectionIntroClassName = 'space-y-3';
 const sectionEyebrowClassName = 'font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-500';
 const sectionTitleClassName = 'text-5xl md:text-7xl font-headline italic leading-none';
 const sectionBodyClassName = 'max-w-4xl font-mono text-sm leading-relaxed text-zinc-500';
 
-const culinaryScanMetrics = [
-  { label: 'GRASA', value: 'RENDER_RATIO...88%' },
-  { label: 'CALOR', value: 'BRASAS_ACTIVAS' },
-  { label: 'TEXTURA', value: 'CORTEZA_ESTABLE' },
-  { label: 'SERVICIO', value: 'VENTANA_DE_PASE...42S' },
-] as const;
+
 
 export default function Home() {
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': ['FoodEstablishment', 'LocalBusiness'],
+    name: 'John Herrera Chef',
+    description:
+      'Chef creativo especializado en cocina contemporánea tropical. Servicios de cenas privadas, eventos corporativos y bodas en Medellín, Colombia.',
+    url: 'https://johnherrerachef.com',
+    email: 'chef@johnherrerachef.com',
+    image: 'https://johnherrerachef.com/images/culinary-plating.jpeg',
+    priceRange: '$$$$',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Medellín',
+      addressRegion: 'Antioquia',
+      addressCountry: 'CO',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: '6.2442',
+      longitude: '-75.5812',
+    },
+    servesCuisine: 'Cocina Contemporánea Tropical',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Servicios Gastronómicos',
+      itemListElement: [
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Cenas Privadas' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Eventos Corporativos' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Bodas' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Chef Privado Medellín' } },
+      ],
+    },
+    sameAs: [
+      'https://www.instagram.com/johnherrerachef/',
+      'https://www.linkedin.com/in/john-herrera-chef/',
+      'https://github.com/Monsterchef-git',
+    ],
+  };
+
   return (
     <main id="main-content" className="min-h-screen grainy-bg bg-[#0a0a0a] text-white px-6 md:px-24 pb-40 relative z-0">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ErrorBoundary>
         <ScrollReveal />
       </ErrorBoundary>
@@ -183,6 +223,13 @@ export default function Home() {
             de menús para <MonoToken kind="project">Wink Eventos</MonoToken> hasta cenas privadas en <MonoToken kind="location">Medellín</MonoToken>, cada servicio combina ingredientes
             locales, técnica precisa y una puesta en escena pensada para quedarse en la memoria.
           </p>
+
+          {/* Provenance Tokens — origen de producto */}
+          <div className="pt-1">
+            <ErrorBoundary>
+              <ProvenanceTokens />
+            </ErrorBoundary>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 auto-rows-[250px] md:grid-cols-4 md:auto-rows-[300px]">
@@ -250,25 +297,9 @@ export default function Home() {
                     </p>
                   </div>
 
-                <div className="grid gap-2.5 rounded-[1.75rem] border border-lime-400/18 bg-black/58 p-3 sm:p-4 backdrop-blur-xl transition-all duration-500 group-hover:border-lime-400/38 group-hover:bg-black/72 sm:max-w-[28rem]">
-                  {culinaryScanMetrics.map((metric, index) => (
-                    <div
-                      key={metric.label}
-                      className={cx(
-                        'flex items-center justify-between gap-3 sm:gap-4 border-b border-lime-400/10 pb-2 font-mono text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.22em] text-zinc-400 transition-all duration-300 overflow-hidden',
-                        index === culinaryScanMetrics.length - 1 && 'border-b-0 pb-0',
-                        'group-hover:text-lime-200',
-                      )}
-                    >
-                      <span className="text-zinc-500 transition-colors duration-300 group-hover:text-lime-400 shrink-0">
-                        {metric.label}
-                      </span>
-                      <span className="text-right truncate min-w-0">
-                        {metric.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <ErrorBoundary>
+                  <LiveScanMetrics />
+                </ErrorBoundary>
               </div>
             </div>
           </Primitive.Card>
@@ -296,7 +327,7 @@ export default function Home() {
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
               loading="lazy"
-              className="object-cover opacity-50 md:grayscale transition-all duration-700 group-hover:opacity-85 group-hover:grayscale-0 group-hover:scale-105"
+              className="object-cover opacity-50 saturate-50 contrast-90 md:grayscale transition-all duration-500 group-hover:opacity-85 group-hover:grayscale-0 group-hover:scale-105 group-hover:saturate-[1.2] group-hover:contrast-[1.1]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
@@ -313,7 +344,7 @@ export default function Home() {
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
               loading="lazy"
-              className="object-cover opacity-45 md:grayscale transition-all duration-700 group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-105"
+              className="object-cover opacity-45 saturate-50 contrast-90 md:grayscale transition-all duration-500 group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-105 group-hover:saturate-[1.2] group-hover:contrast-[1.1]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
@@ -329,19 +360,32 @@ export default function Home() {
           href="#contact"
           className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]"
         >
-          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors group-hover:text-white">
+          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors duration-300 group-hover:text-white">
             Contacto _
+          </span>
+          <span className="shrink-0 font-mono text-sm text-zinc-700 transition-all duration-300 group-hover:translate-x-1 group-hover:text-lime-400">
+            →
           </span>
         </a>
       </Primitive.Section>
 
       {/* Bridge: Gastronomy → Development */}
-      <div className="my-24 flex items-center gap-6 reveal">
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
-        <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.5em] text-zinc-600">
-          Lo que construyo _
-        </p>
-        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+      <div className="my-24 flex flex-col items-center gap-3 reveal">
+        <div className="flex w-full items-center gap-6">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+          <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.5em] text-zinc-600">
+            Lo que construyo _
+          </p>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent" />
+        </div>
+        <a
+          href="https://github.com/Monsterchef-git"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-[9px] uppercase tracking-[0.38em] text-zinc-700 transition-colors duration-300 hover:text-lime-400"
+        >
+          // MONSTERCHEF_LAB → Documentación de procesos _
+        </a>
       </div>
 
       {/* SECCIÓN 2: DEVELOPMENT (Vibe Coding) */}
@@ -436,8 +480,11 @@ export default function Home() {
           href="#contact"
           className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-cyan-400/30 hover:shadow-[0_0_24px_rgba(34,211,238,0.06)]"
         >
-          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-cyan-400 transition-colors group-hover:text-white">
+          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-cyan-400 transition-colors duration-300 group-hover:text-white">
             Conversemos _
+          </span>
+          <span className="shrink-0 font-mono text-sm text-zinc-700 transition-all duration-300 group-hover:translate-x-1 group-hover:text-cyan-400">
+            →
           </span>
         </a>
       </Primitive.Section>
