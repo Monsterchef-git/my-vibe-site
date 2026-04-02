@@ -25,7 +25,7 @@ export default function Home() {
     '@type': ['FoodEstablishment', 'LocalBusiness'],
     name: 'John Herrera Chef',
     description:
-      'Chef creativo especializado en cocina contemporánea tropical. Servicios de cenas privadas, eventos corporativos y bodas en Medellín, Colombia.',
+      'Chef creativo especializado en cocina contemporánea tropical. Servicios de cenas privadas, mealprep y clases de cocina en Medellín, Colombia.',
     url: 'https://johnherrerachef.com',
     email: 'chef@johnherrerachef.com',
     image: 'https://johnherrerachef.com/images/culinary-plating.jpeg',
@@ -47,8 +47,8 @@ export default function Home() {
       name: 'Servicios Gastronómicos',
       itemListElement: [
         { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Cenas Privadas' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Eventos Corporativos' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Bodas' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Mealprep Services' } },
+        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Clases de Cocina' } },
         { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Chef Privado Medellín' } },
       ],
     },
