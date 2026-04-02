@@ -44,7 +44,7 @@ export default function LandingCard({ image, alt, title, link, stack }: LandingC
                 alt={alt ?? `Captura del proyecto ${title}`}
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
-                className={`absolute inset-0 object-cover ${hover ? 'grayscale-0 opacity-100 scale-105' : 'grayscale-0 opacity-80'} transition-all duration-1000 z-10`}
+                className={`absolute inset-0 object-cover ${hover ? 'grayscale-0 opacity-100 scale-105' : 'md:grayscale opacity-80'} transition-all duration-1000 z-10`}
             />
             <div className="absolute inset-0 grainy-bg opacity-30 pointer-events-none z-15" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent z-20" />

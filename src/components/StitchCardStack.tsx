@@ -152,8 +152,8 @@ export default function StitchCardStack() {
                       className={cx(
                         'object-cover transition-[filter,transform,opacity] duration-[420ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
                         isTopCard
-                          ? 'grayscale opacity-85 group-hover:grayscale-0 group-hover:scale-[1.04]'
-                          : 'grayscale opacity-40',
+                          ? 'md:grayscale opacity-85 group-hover:grayscale-0 group-hover:scale-[1.04]'
+                          : 'md:grayscale opacity-40',
                       )}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
