@@ -51,13 +51,15 @@ export default function Home() {
       {/* Hero Section — Puro impacto tipográfico */}
       <section id="hero" className="flex flex-col justify-center min-h-screen pt-28 pb-16 px-6">
         <div className="space-y-6">
-          <div className="text-lime-400 uppercase tracking-[0.3em] font-black text-xs md:text-sm hover-glitch cursor-default inline-block">
+          <h1 className="sr-only">John Herrera | Chef by Day, Vibe-Coder by Night</h1>
+          <div className="text-lime-400 uppercase tracking-[0.3em] font-black text-xs md:text-sm hover-glitch cursor-default inline-block" aria-hidden="true">
             <SplitReveal as="span" by="char" delay={100} stagger={35}>
               John Herrera _
             </SplitReveal>
           </div>
           <SplitReveal
-            as="h1"
+            as="div"
+            aria-hidden="true"
             by="word"
             delay={300}
             stagger={80}
@@ -66,7 +68,8 @@ export default function Home() {
             Chef by Day,
           </SplitReveal>
           <SplitReveal
-            as="h2"
+            as="div"
+            aria-hidden="true"
             by="word"
             delay={500}
             stagger={80}
