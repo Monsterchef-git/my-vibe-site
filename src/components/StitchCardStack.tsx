@@ -118,7 +118,7 @@ export default function StitchCardStack() {
 
           return (
             <Wrapper
-              key={`${project.id}-${offset}`}
+              key={project.id}
               type={isTopCard ? 'button' : undefined}
               onClick={isTopCard ? nextCard : undefined}
               className={cx(

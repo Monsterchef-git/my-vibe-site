@@ -225,17 +225,17 @@ export default function Home() {
             <div className="culinary-scanbar absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(202,253,0,0),rgba(202,253,0,0.16),rgba(202,253,0,0))] opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
 
             <div className="absolute inset-0 z-10 flex flex-col justify-between p-6 md:p-7">
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-3">
-                  <span className="inline-flex rounded-full border border-lime-400/30 bg-black/70 px-3 py-1 font-mono text-[9px] uppercase tracking-[0.36em] text-lime-400 backdrop-blur-xl">
+              <div className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
+                <div className="space-y-3 min-w-0 flex-1">
+                  <span className="inline-block max-w-full truncate rounded-full border border-lime-400/30 bg-black/70 px-2 sm:px-3 py-1 font-mono text-[7px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.36em] text-lime-400 backdrop-blur-xl">
                     SERVICIO: PREMIUM_EVENT_01
                   </span>
-                  <div className="max-w-[16rem] font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-500 transition-colors duration-300 group-hover:text-lime-300/80">
+                  <div className="max-w-[16rem] font-mono text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-zinc-500 transition-colors duration-300 group-hover:text-lime-300/80 line-clamp-2 sm:line-clamp-none">
                     Lectura sensorial / secuencia de emplatado premium
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-lime-400/20 bg-black/55 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-500 backdrop-blur-xl transition-colors duration-300 group-hover:border-lime-400/40 group-hover:text-lime-400">
+                <div className="shrink-0 rounded-2xl border border-lime-400/20 bg-black/55 px-2 sm:px-3 py-1.5 sm:py-2 font-mono text-[7px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-zinc-500 backdrop-blur-xl transition-colors duration-300 group-hover:border-lime-400/40 group-hover:text-lime-400">
                   LECTURA EN VIVO
                 </div>
               </div>
@@ -250,20 +250,20 @@ export default function Home() {
                     </p>
                   </div>
 
-                <div className="grid gap-2.5 rounded-[1.75rem] border border-lime-400/18 bg-black/58 p-4 backdrop-blur-xl transition-all duration-500 group-hover:border-lime-400/38 group-hover:bg-black/72 sm:max-w-[28rem]">
+                <div className="grid gap-2.5 rounded-[1.75rem] border border-lime-400/18 bg-black/58 p-3 sm:p-4 backdrop-blur-xl transition-all duration-500 group-hover:border-lime-400/38 group-hover:bg-black/72 sm:max-w-[28rem]">
                   {culinaryScanMetrics.map((metric, index) => (
                     <div
                       key={metric.label}
                       className={cx(
-                        'flex items-center justify-between gap-4 border-b border-lime-400/10 pb-2 font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400 transition-all duration-300',
+                        'flex items-center justify-between gap-3 sm:gap-4 border-b border-lime-400/10 pb-2 font-mono text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.22em] text-zinc-400 transition-all duration-300 overflow-hidden',
                         index === culinaryScanMetrics.length - 1 && 'border-b-0 pb-0',
                         'group-hover:text-lime-200',
                       )}
                     >
-                      <span className="text-zinc-500 transition-colors duration-300 group-hover:text-lime-400">
+                      <span className="text-zinc-500 transition-colors duration-300 group-hover:text-lime-400 shrink-0">
                         {metric.label}
                       </span>
-                      <span className="text-right">
+                      <span className="text-right truncate min-w-0">
                         {metric.value}
                       </span>
                     </div>
