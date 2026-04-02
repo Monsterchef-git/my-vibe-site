@@ -43,6 +43,9 @@ src/
 ├── app/
 │   ├── layout.tsx              # Root layout, metadata, OG config, BackgroundTerminal
 │   ├── page.tsx                # Main page (Server Component), all sections composed here
+│   ├── not-found.tsx           # Custom 404 error page
+│   ├── robots.ts               # Search engine robots configuration
+│   ├── sitemap.ts              # Search engine sitemap generator
 │   ├── globals.css             # Global styles, animations, grain, terminal scroll, culinary effects
 │   ├── opengraph-image.tsx     # Dynamic OG image generation (1200x630, fork logo + headline)
 │   └── twitter-image.tsx       # Re-exports opengraph-image for Twitter cards
@@ -51,7 +54,13 @@ src/
 │   ├── MonoToken.tsx           # Styled inline tokens (comment | location | project | status)
 │   ├── BackgroundTerminal.tsx  # Fixed backdrop with scrolling terminal logs (Server Component)
 │   ├── FloatingNav.tsx         # Bottom navigation with 5 section buttons
+│   ├── LenisProvider.tsx       # Smooth scrolling wrapper
+│   ├── LiveScanMetrics.tsx     # Culinary metrics scanning animation
+│   ├── MagneticButton.tsx      # Magnetic hover button physics
+│   ├── PageLoader.tsx          # Initial loading animation sequence
+│   ├── ProvenanceTokens.tsx    # Ingredient tags with hover image previews
 │   ├── ScrollReveal.tsx        # Scroll-triggered reveal animations
+│   ├── SplitReveal.tsx         # Text splitting scroll animation
 │   ├── StitchCardStack.tsx     # 3D card stack carousel for projects
 │   ├── TypewriterTerminal.tsx  # Terminal typewriter effect with infinite loop
 │   ├── LandingCard.tsx         # Individual project card used inside StitchCardStack
@@ -60,12 +69,8 @@ public/
 ├── images/
 │   ├── og-fork.png             # Fork-circuit brand icon (source for OG + favicons)
 │   ├── culinary-*.jpeg         # 4 gastronomy photos
-│   ├── isolution.png           # iSolution Lab project screenshot
-│   ├── meghans.png             # Meghan's Momentum project screenshot
-│   ├── medical.png             # Lleras Medical project screenshot
-│   ├── spa.png                 # Spa Lleras project screenshot
-│   ├── blue-moon-hero.png      # Blue Moon Cottage project screenshot
-│   └── tecnicalapp.png         # TecnicalApp project screenshot
+│   ├── *.png                   # Project screenshots
+│   └── [ingredient].png        # Provenance preview photos (cacao, maiz, mora, etc.)
 ├── apple-touch-icon.png        # 180x180 favicon
 ├── favicon-32x32.png           # 32x32 favicon
 └── favicon-16x16.png           # 16x16 favicon

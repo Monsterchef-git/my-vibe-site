@@ -384,7 +384,7 @@ export default function Home() {
           rel="noopener noreferrer"
           className="font-mono text-[9px] uppercase tracking-[0.38em] text-zinc-700 transition-colors duration-300 hover:text-lime-400"
         >
-          // MONSTERCHEF_LAB → Documentación de procesos _
+          {`// MONSTERCHEF_LAB → Documentación de procesos _`}
         </a>
       </div>
 

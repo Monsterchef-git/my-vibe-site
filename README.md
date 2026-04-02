@@ -36,6 +36,9 @@ src/
 ├── app/
 │   ├── layout.tsx              # Root layout, metadata, OG tags, BackgroundTerminal
 │   ├── page.tsx                # Home page (Server Component)
+│   ├── not-found.tsx           # Custom 404 error page
+│   ├── robots.ts               # Search engine robots configuration
+│   ├── sitemap.ts              # Search engine sitemap generator
 │   ├── globals.css             # Global styles, animations, visual effects
 │   ├── opengraph-image.tsx     # Dynamic OG image (1200x630)
 │   └── twitter-image.tsx       # Twitter card image (re-exports OG)
@@ -44,16 +47,22 @@ src/
 │   ├── MonoToken.tsx           # Styled inline code tokens
 │   ├── BackgroundTerminal.tsx  # Fixed scrolling terminal backdrop
 │   ├── FloatingNav.tsx         # Bottom navigation bar (5 sections)
+│   ├── LenisProvider.tsx       # Smooth scrolling wrapper
+│   ├── LiveScanMetrics.tsx     # Culinary metrics scanning animation
+│   ├── MagneticButton.tsx      # Magnetic hover button physics
+│   ├── PageLoader.tsx          # Initial loading animation sequence
+│   ├── ProvenanceTokens.tsx    # Ingredient tags with hover image previews
 │   ├── ScrollReveal.tsx        # Scroll-triggered reveal animations
+│   ├── SplitReveal.tsx         # Text splitting scroll animation
 │   ├── StitchCardStack.tsx     # 3D project carousel
 │   ├── LandingCard.tsx         # Project card component
 │   ├── TypewriterTerminal.tsx  # Terminal typewriter effect
 │   └── ErrorBoundary.tsx       # Fail-silent error boundary
 public/
-├── images/                     # Project screenshots, culinary photos, brand assets
+├── images/                     # Project screenshots, culinary photos, provenance images
 ├── apple-touch-icon.png        # 180x180 favicon
-├── favicon-32x32.png
-└── favicon-16x16.png
+├── favicon-32x32.png           # 32x32 favicon
+└── favicon-16x16.png           # 16x16 favicon
 ```
 
 ## Page Sections
