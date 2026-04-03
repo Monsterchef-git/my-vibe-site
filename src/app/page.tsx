@@ -277,25 +277,25 @@ export default function Home() {
                   <span className="inline-block max-w-full truncate rounded-full border border-lime-400/30 bg-black/70 px-2 sm:px-3 py-1 font-mono text-[7px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.36em] text-lime-400 backdrop-blur-xl">
                     SERVICIO: PREMIUM_EVENT_01
                   </span>
-                  <div className="max-w-[16rem] font-mono text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-zinc-500 transition-colors duration-300 group-hover:text-lime-300/80 line-clamp-2 sm:line-clamp-none">
+                  <div className="max-w-[16rem] font-mono text-[8px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-zinc-300 transition-colors duration-300 group-hover:text-lime-300/80 md:text-zinc-500 line-clamp-2 sm:line-clamp-none">
                     Lectura sensorial / secuencia de emplatado premium
                   </div>
                 </div>
 
-                <div className="shrink-0 rounded-2xl border border-lime-400/20 bg-black/55 px-2 sm:px-3 py-1.5 sm:py-2 font-mono text-[7px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-zinc-500 backdrop-blur-xl transition-colors duration-300 group-hover:border-lime-400/40 group-hover:text-lime-400">
+                <div className="shrink-0 rounded-2xl border border-lime-400/20 bg-black/55 px-2 sm:px-3 py-1.5 sm:py-2 font-mono text-[7px] sm:text-[9px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-zinc-300 backdrop-blur-xl transition-colors duration-300 group-hover:border-lime-400/40 group-hover:text-lime-400 md:text-zinc-500">
                   LECTURA EN VIVO
                 </div>
               </div>
 
-                <div className="flex flex-col gap-5">
-                  <div className="space-y-2">
-                    <h3 className="max-w-[14rem] text-3xl font-bold uppercase tracking-[-0.05em] text-white transition-all duration-500 group-hover:text-lime-100 md:text-4xl">
-                      Experiencias a Medida
-                    </h3>
-                    <p className="max-w-[22rem] font-mono text-[11px] uppercase tracking-[0.24em] text-zinc-400 transition-colors duration-300 group-hover:text-lime-300/90">
-                      Producto local / señal precisa / ejecución al fuego
-                    </p>
-                  </div>
+              <div className="flex flex-col gap-5">
+                <div className="w-fit max-w-[24rem] rounded-[1.75rem] border border-white/10 bg-black/58 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.28)] backdrop-blur-md md:bg-black/46">
+                  <h3 className="max-w-[14rem] text-3xl font-bold uppercase tracking-[-0.05em] text-white transition-all duration-500 group-hover:text-lime-100 md:text-4xl">
+                    Experiencias a Medida
+                  </h3>
+                  <p className="mt-2 max-w-[22rem] font-mono text-[11px] uppercase tracking-[0.24em] text-zinc-200 transition-colors duration-300 group-hover:text-lime-300/90 md:text-zinc-400">
+                    Producto local / señal precisa / ejecución al fuego
+                  </p>
+                </div>
 
                 <ErrorBoundary>
                   <LiveScanMetrics />
@@ -314,7 +314,7 @@ export default function Home() {
               className="object-cover opacity-80 md:opacity-40 md:grayscale group-hover:grayscale-0 transition-all"
             />
             <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
-              <p className="font-mono text-[10px] uppercase tracking-[0.3em] leading-relaxed text-zinc-200">
+              <p className="rounded-[1.5rem] border border-white/10 bg-black/60 px-5 py-4 font-mono text-[10px] uppercase tracking-[0.3em] leading-relaxed text-zinc-100 backdrop-blur-md">
                 Chef <br /> en <br /> servicio _
               </p>
             </div>
@@ -331,7 +331,7 @@ export default function Home() {
             />
             <div className="absolute inset-0 opacity-40 md:opacity-100 bg-gradient-to-t from-black via-black/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300 group-hover:text-lime-400">
+              <span className="rounded-full border border-white/10 bg-black/60 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-100 backdrop-blur-md group-hover:text-lime-400 md:text-zinc-300">
                 Composición fresca +
               </span>
             </div>
@@ -348,7 +348,7 @@ export default function Home() {
             />
             <div className="absolute inset-0 opacity-40 md:opacity-100 bg-gradient-to-t from-black via-black/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300 group-hover:text-lime-400">
+              <span className="rounded-full border border-white/10 bg-black/60 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-100 backdrop-blur-md group-hover:text-lime-400 md:text-zinc-300">
                 Servicio emplatado +
               </span>
             </div>
@@ -425,21 +425,22 @@ export default function Home() {
                   sizes="(min-width: 1280px) 420px, 100vw"
                   className="absolute inset-0 object-cover object-top opacity-82 transition-all duration-[1800ms] ease-out md:opacity-36 md:grayscale group-hover:scale-105 group-hover:opacity-72 group-hover:grayscale-0"
                 />
-                <div className="absolute inset-0 opacity-50 md:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(202,253,0,0.1),transparent_36%),linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.68)_30%,rgba(0,0,0,0.9)_100%)]" />
+                <div className="absolute inset-0 opacity-42 md:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(202,253,0,0.1),transparent_36%),linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.68)_30%,rgba(0,0,0,0.9)_100%)]" />
+                <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-black/78 via-black/42 to-transparent md:from-black/62 md:via-black/28" />
                 <div className="absolute inset-0 grainy-bg" />
               </div>
 
               <div className="relative z-10 flex h-full flex-col">
                 <div className="flex items-start justify-between gap-4">
-                  <div className="space-y-3">
-                    <p className="font-mono text-[9px] uppercase tracking-[0.42em] text-zinc-600">
+                  <div className="space-y-3 rounded-[1.75rem] border border-zinc-800/80 bg-black/62 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.26)] backdrop-blur-md md:bg-black/52">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.42em] text-zinc-300 md:text-zinc-600">
                       SaaS para talleres
                     </p>
                     <div>
                       <h4 className="text-3xl font-headline italic leading-none text-white night-glow">
                         <MonoToken kind="project">TecnicalApp</MonoToken>
                       </h4>
-                      <p className="mt-2 max-w-[20rem] font-mono text-[11px] leading-relaxed text-zinc-500">
+                      <p className="mt-2 max-w-[20rem] font-mono text-[11px] leading-relaxed text-zinc-200 md:text-zinc-500">
                         Sistema operativo para talleres con foco en procesos, infraestructura y autogestión.
                       </p>
                     </div>
@@ -461,7 +462,7 @@ export default function Home() {
 
                   <div className="mt-6 border-t border-zinc-800/80 pt-5">
                     <div className="flex items-center justify-between gap-4">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-600">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-300 md:text-zinc-600">
                         Operación & SaaS
                       </span>
                       <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors group-hover:text-white">

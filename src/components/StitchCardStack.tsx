@@ -134,22 +134,31 @@ export default function StitchCardStack() {
               ? `translate3d(0, ${translateY}px, 0) rotate(${targetRank * -1.4}deg) scale(${scale})`
               : `translate3d(0, ${translateY}px, ${targetRank * -84}px) rotate(${targetRank * -2.2}deg) scale(${scale})`;
 
-          const Wrapper = isTopCard ? 'button' : 'div';
-
           return (
-            <Wrapper
+            <div
               key={project.id}
-              type={isTopCard ? 'button' : undefined}
               onClick={isTopCard ? nextCard : undefined}
+              onKeyDown={
+                isTopCard
+                  ? (event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        nextCard();
+                      }
+                    }
+                  : undefined
+              }
               className={cx(
-                'group absolute inset-0 mx-auto block h-full w-full max-w-[560px] text-left transition-[transform,opacity] duration-[340ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] sm:max-w-[620px] lg:max-w-[680px]',
+                'group absolute inset-0 mx-auto block h-full w-full max-w-[560px] transform-gpu text-left transition-[transform,opacity] duration-[340ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] [will-change:transform,opacity] sm:max-w-[620px] lg:max-w-[680px]',
                 isTopCard
                   ? 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70'
                   : 'pointer-events-none',
               )}
+              role={isTopCard ? 'button' : undefined}
+              tabIndex={isTopCard ? 0 : -1}
               style={{
                 transform,
-                opacity: isTopCard && isAnimating ? (isMobile ? 0.18 : 0) : opacity,
+                opacity: isTopCard && isAnimating ? (isMobile ? 0.36 : 0) : opacity,
                 zIndex,
               }}
               aria-hidden={!isTopCard}
@@ -170,7 +179,7 @@ export default function StitchCardStack() {
                       fill
                       sizes="(min-width: 1024px) 680px, 100vw"
                       className={cx(
-                        'object-cover [backface-visibility:hidden] transition-[filter,transform,opacity] duration-[340ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] md:duration-[420ms]',
+                        'object-cover [backface-visibility:hidden] transition-[filter,transform,opacity] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] md:duration-[420ms]',
                         isPrimaryVisual
                           ? 'opacity-100 md:opacity-85 md:grayscale group-hover:grayscale-0 group-hover:scale-[1.04]'
                           : 'opacity-72 md:opacity-40 md:grayscale',
@@ -231,7 +240,7 @@ export default function StitchCardStack() {
                   </div>
                 </div>
               </CardPrimitive>
-            </Wrapper>
+            </div>
           );
         })}
       </div>
