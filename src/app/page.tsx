@@ -76,7 +76,7 @@ export default function Home() {
         </MagneticButton>
 
         <MagneticButton as="div" className="pointer-events-auto" strength={0.3}>
-          <a href="#contact" className="flex items-center gap-3 bg-zinc-900/80 backdrop-blur-2xl px-5 py-2.5 rounded-full border border-white/10 shadow-2xl transition-all hover:border-lime-400/50">
+          <a href="#contact" className="btn-exploremos flex items-center gap-3 bg-zinc-900/80 backdrop-blur-2xl px-5 py-2.5 rounded-full border border-white/10 shadow-2xl transition-all hover:border-lime-400/50">
             <div className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-lime-400 shadow-[0_0_10px_#cafd00]"></span>
@@ -190,7 +190,7 @@ export default function Home() {
                   {item.key === 'STATUS' ? (
                     <a
                       href="#contact"
-                      className="inline-flex rounded-full border border-lime-400/30 px-3 py-1 text-right text-lime-400 transition-colors hover:border-lime-400 hover:bg-lime-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
+                      className="btn-exploremos inline-flex rounded-full border border-lime-400/30 px-3 py-1 text-right text-lime-400 transition-colors hover:border-lime-400 hover:bg-lime-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
                     >
                       <MonoToken kind="status" className="text-[10px] tracking-[0.24em]">
                         {item.value}
