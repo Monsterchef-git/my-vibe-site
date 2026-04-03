@@ -241,7 +241,7 @@ export default function Home() {
                 fill
                 sizes="(min-width: 768px) 50vw, 100vw"
                 priority
-                className="object-cover object-center opacity-55 transition-[transform,filter,opacity] duration-700 ease-out md:grayscale group-hover:scale-[1.04] group-hover:opacity-85 group-hover:grayscale-0"
+                className="object-cover object-center opacity-95 transition-[transform,filter,opacity] duration-700 ease-out md:opacity-55 md:grayscale group-hover:scale-[1.04] group-hover:opacity-85 group-hover:grayscale-0"
               />
               <Image
                 src="/images/culinary-plating.jpeg"
@@ -265,8 +265,8 @@ export default function Home() {
               />
             </div>
 
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(202,253,0,0.16),transparent_30%),linear-gradient(180deg,rgba(0,0,0,0.12),rgba(0,0,0,0.52)_52%,rgba(0,0,0,0.9)_100%)] transition-opacity duration-500 group-hover:opacity-100" />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(202,253,0,0.05)_0,transparent_28%,transparent_72%,rgba(202,253,0,0.08)_100%)] opacity-30 transition-opacity duration-500 group-hover:opacity-60" />
+            <div className="absolute inset-0 opacity-55 transition-opacity duration-500 group-hover:opacity-100 md:opacity-100 bg-[radial-gradient(circle_at_78%_18%,rgba(202,253,0,0.16),transparent_30%),linear-gradient(180deg,rgba(0,0,0,0.12),rgba(0,0,0,0.52)_52%,rgba(0,0,0,0.9)_100%)]" />
+            <div className="absolute inset-0 opacity-18 transition-opacity duration-500 group-hover:opacity-60 md:opacity-30 bg-[linear-gradient(180deg,rgba(202,253,0,0.05)_0,transparent_28%,transparent_72%,rgba(202,253,0,0.08)_100%)]" />
             <div className="culinary-glitch-noise absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="culinary-scanline absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="culinary-scanbar absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(202,253,0,0),rgba(202,253,0,0.16),rgba(202,253,0,0))] opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
@@ -311,7 +311,7 @@ export default function Home() {
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
               loading="lazy"
-              className="object-cover opacity-40 md:grayscale group-hover:grayscale-0 transition-all"
+              className="object-cover opacity-80 md:opacity-40 md:grayscale group-hover:grayscale-0 transition-all"
             />
             <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
               <p className="font-mono text-[10px] uppercase tracking-[0.3em] leading-relaxed text-zinc-200">
@@ -327,9 +327,9 @@ export default function Home() {
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
               loading="lazy"
-              className="object-cover opacity-50 saturate-50 contrast-90 md:grayscale transition-all duration-500 group-hover:opacity-85 group-hover:grayscale-0 group-hover:scale-105 group-hover:saturate-[1.2] group-hover:contrast-[1.1]"
+              className="object-cover opacity-92 saturate-100 contrast-100 transition-all duration-500 md:opacity-50 md:saturate-50 md:contrast-90 md:grayscale group-hover:opacity-85 group-hover:grayscale-0 group-hover:scale-105 group-hover:saturate-[1.2] group-hover:contrast-[1.1]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
+            <div className="absolute inset-0 opacity-40 md:opacity-100 bg-gradient-to-t from-black via-black/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
               <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300 group-hover:text-lime-400">
                 Composición fresca +
@@ -344,9 +344,9 @@ export default function Home() {
               fill
               sizes="(min-width: 768px) 25vw, 50vw"
               loading="lazy"
-              className="object-cover opacity-45 saturate-50 contrast-90 md:grayscale transition-all duration-500 group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-105 group-hover:saturate-[1.2] group-hover:contrast-[1.1]"
+              className="object-cover opacity-92 saturate-100 contrast-100 transition-all duration-500 md:opacity-45 md:saturate-50 md:contrast-90 md:grayscale group-hover:opacity-80 group-hover:grayscale-0 group-hover:scale-105 group-hover:saturate-[1.2] group-hover:contrast-[1.1]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent" />
+            <div className="absolute inset-0 opacity-40 md:opacity-100 bg-gradient-to-t from-black via-black/25 to-transparent" />
             <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
               <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-300 group-hover:text-lime-400">
                 Servicio emplatado +
@@ -423,9 +423,9 @@ export default function Home() {
                   alt="Captura de la landing de TecnicalApp con propuesta para optimizar la operación de talleres."
                   fill
                   sizes="(min-width: 1280px) 420px, 100vw"
-                  className="absolute inset-0 object-cover object-top opacity-36 md:grayscale transition-all duration-[1800ms] ease-out group-hover:scale-105 group-hover:opacity-72 group-hover:grayscale-0"
+                  className="absolute inset-0 object-cover object-top opacity-82 transition-all duration-[1800ms] ease-out md:opacity-36 md:grayscale group-hover:scale-105 group-hover:opacity-72 group-hover:grayscale-0"
                 />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(202,253,0,0.1),transparent_36%),linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.68)_30%,rgba(0,0,0,0.9)_100%)]" />
+                <div className="absolute inset-0 opacity-50 md:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(202,253,0,0.1),transparent_36%),linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.68)_30%,rgba(0,0,0,0.9)_100%)]" />
                 <div className="absolute inset-0 grainy-bg" />
               </div>
 

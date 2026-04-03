@@ -60,10 +60,12 @@ const PROJECTS = [
 
 const STACK_DEPTH = 3;
 const ANIMATION_MS = 340;
+const MOBILE_MEDIA_QUERY = '(max-width: 767px)';
 
 export default function StitchCardStack() {
   const [index, setIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -71,6 +73,18 @@ export default function StitchCardStack() {
       if (timeoutRef.current !== null) {
         window.clearTimeout(timeoutRef.current);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY);
+    const syncViewport = () => setIsMobile(mediaQuery.matches);
+
+    syncViewport();
+    mediaQuery.addEventListener('change', syncViewport);
+
+    return () => {
+      mediaQuery.removeEventListener('change', syncViewport);
     };
   }, []);
 
@@ -110,9 +124,15 @@ export default function StitchCardStack() {
           const scale = 1 - targetRank * 0.06;
           const opacity = 1 - targetRank * 0.24;
           const zIndex = STACK_DEPTH - targetRank;
+          const isIncomingTopCard = isMobile && isAnimating && !isTopCard && targetRank === 0;
+          const isPrimaryVisual = isTopCard || isIncomingTopCard;
           const transform = isTopCard && isAnimating
-            ? 'translate3d(132px, 82px, 0) rotate(12deg) scale(0.94)'
-            : `translate3d(0, ${translateY}px, ${targetRank * -84}px) rotate(${targetRank * -2.2}deg) scale(${scale})`;
+            ? isMobile
+              ? 'translate3d(84px, 56px, 0) rotate(8deg) scale(0.96)'
+              : 'translate3d(132px, 82px, 0) rotate(12deg) scale(0.94)'
+            : isMobile
+              ? `translate3d(0, ${translateY}px, 0) rotate(${targetRank * -1.4}deg) scale(${scale})`
+              : `translate3d(0, ${translateY}px, ${targetRank * -84}px) rotate(${targetRank * -2.2}deg) scale(${scale})`;
 
           const Wrapper = isTopCard ? 'button' : 'div';
 
@@ -129,7 +149,7 @@ export default function StitchCardStack() {
               )}
               style={{
                 transform,
-                opacity: isTopCard && isAnimating ? 0 : opacity,
+                opacity: isTopCard && isAnimating ? (isMobile ? 0.18 : 0) : opacity,
                 zIndex,
               }}
               aria-hidden={!isTopCard}
@@ -150,13 +170,18 @@ export default function StitchCardStack() {
                       fill
                       sizes="(min-width: 1024px) 680px, 100vw"
                       className={cx(
-                        'object-cover transition-[filter,transform,opacity] duration-[420ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
-                        isTopCard
-                          ? 'md:grayscale opacity-85 group-hover:grayscale-0 group-hover:scale-[1.04]'
-                          : 'md:grayscale opacity-40',
+                        'object-cover [backface-visibility:hidden] transition-[filter,transform,opacity] duration-[340ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] md:duration-[420ms]',
+                        isPrimaryVisual
+                          ? 'opacity-100 md:opacity-85 md:grayscale group-hover:grayscale-0 group-hover:scale-[1.04]'
+                          : 'opacity-72 md:opacity-40 md:grayscale',
                       )}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+                    <div
+                      className={cx(
+                        'absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent',
+                        isPrimaryVisual ? 'opacity-32 md:opacity-100' : 'opacity-40 md:opacity-100',
+                      )}
+                    />
                   </div>
 
                   <div className="flex h-[38%] flex-col justify-between gap-5 p-6 sm:p-8">
