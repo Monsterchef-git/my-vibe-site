@@ -14,19 +14,55 @@ const provenanceIngredients = [
 export default function ProvenanceTokens() {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [canShowPreview, setCanShowPreview] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px) and (hover: hover) and (pointer: fine)');
+    const updatePreviewMode = () => {
+      const enabled = mediaQuery.matches;
+      setCanShowPreview(enabled);
+
+      if (!enabled) {
+        setHoveredImage(null);
+      }
+    };
+
+    updatePreviewMode();
+    mediaQuery.addEventListener('change', updatePreviewMode);
+
+    return () => {
+      mediaQuery.removeEventListener('change', updatePreviewMode);
+    };
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({ x: e.clientX, y: e.clientY });
     };
 
-    if (hoveredImage) {
+    if (hoveredImage && canShowPreview) {
       window.addEventListener('mousemove', handleMouseMove);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [hoveredImage]);
+  }, [canShowPreview, hoveredImage]);
+
+  const handlePreviewEnter = (image: string) => {
+    if (!canShowPreview) {
+      return;
+    }
+
+    setHoveredImage(image);
+  };
+
+  const handlePreviewLeave = () => {
+    if (!canShowPreview) {
+      return;
+    }
+
+    setHoveredImage(null);
+  };
 
   return (
     <>
@@ -34,8 +70,8 @@ export default function ProvenanceTokens() {
         {provenanceIngredients.map((item) => (
           <span
             key={item.label}
-            onMouseEnter={() => setHoveredImage(item.image)}
-            onMouseLeave={() => setHoveredImage(null)}
+            onMouseEnter={() => handlePreviewEnter(item.image)}
+            onMouseLeave={handlePreviewLeave}
             className="inline-flex cursor-crosshair items-center gap-1.5 rounded-full border border-lime-400/18 bg-black/60 px-3 py-1 font-mono text-[8px] uppercase tracking-[0.22em] text-zinc-500 backdrop-blur-sm transition-colors duration-300 hover:border-lime-400/40 hover:text-lime-300"
           >
             <span className="text-lime-400/80">{item.label}</span>
@@ -45,7 +81,7 @@ export default function ProvenanceTokens() {
         ))}
       </div>
 
-      {hoveredImage && (
+      {canShowPreview && hoveredImage && (
         <div
           className="pointer-events-none fixed z-[9999] overflow-hidden rounded-xl border border-lime-400/30 bg-black/80 shadow-[0_0_40px_rgba(202,253,0,0.15)] backdrop-blur-3xl transition-transform duration-75 ease-out"
           style={{
