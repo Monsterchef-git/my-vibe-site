@@ -156,8 +156,7 @@ export default function Home() {
               </p>
               <p className="font-mono text-sm leading-relaxed text-zinc-500">
                 Hoy, elevo el estándar de las bodas en <MonoToken kind="location">Medellín</MonoToken> desde{' '}
-                <MonoToken kind="project">Wink Eventos</MonoToken> y digitalizo el flujo de trabajo
-                de talleres a través de la experiencia de usuario en{' '}
+                <MonoToken kind="project">Wink Eventos</MonoToken> y estoy al frente de la landing de{' '}
                 <MonoToken kind="project">TecnicalApp</MonoToken>.
               </p>
             </div>
