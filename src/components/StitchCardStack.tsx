@@ -114,7 +114,7 @@ export default function StitchCardStack() {
   return (
     <div className="flex w-full flex-col items-center">
       <div
-        className="relative h-[520px] w-full max-w-[580px] sm:h-[580px] sm:max-w-[640px] lg:h-[640px] lg:max-w-[720px]"
+        className="relative h-[580px] w-full max-w-[580px] sm:h-[600px] sm:max-w-[640px] lg:h-[640px] lg:max-w-[720px]"
         style={{ perspective: '2000px' }}
       >
         {visibleProjects.map((project, offset) => {
@@ -172,7 +172,7 @@ export default function StitchCardStack() {
                 )}
               >
                 <div className="relative h-full w-full overflow-hidden rounded-[2rem] grainy-bg">
-                  <div className="relative h-[62%] w-full overflow-hidden">
+                  <div className="relative h-[50%] w-full overflow-hidden sm:h-[56%] lg:h-[62%]">
                     <Image
                       src={project.image}
                       alt={project.alt}
@@ -193,11 +193,11 @@ export default function StitchCardStack() {
                     />
                   </div>
 
-                  <div className="flex h-[38%] flex-col justify-between gap-5 p-6 sm:p-8">
+                  <div className="flex flex-1 flex-col justify-between gap-4 p-5 sm:gap-5 sm:p-8">
                     <div className="flex items-center justify-between gap-4">
                       <span
                         className={cx(
-                          'font-mono text-[9px] uppercase tracking-[0.42em]',
+                          'font-mono text-[9px] uppercase tracking-[0.28em] sm:tracking-[0.42em]',
                           project.tone === 'cyan'
                             ? 'text-cyan-400'
                             : project.tone === 'blue'
@@ -214,17 +214,17 @@ export default function StitchCardStack() {
                       </span>
                     </div>
 
-                    <div className="space-y-3">
-                      <h3 className="text-4xl font-headline italic leading-none text-white sm:text-5xl">
+                    <div className="space-y-2.5 sm:space-y-3">
+                      <h3 className="text-[2rem] font-headline italic leading-[0.92] text-white sm:text-5xl">
                         <MonoToken kind="project">{project.title}</MonoToken>
                       </h3>
-                      <p className="max-w-xl font-mono text-[11px] leading-relaxed text-zinc-500 sm:text-xs">
+                      <p className="max-w-xl font-mono text-[12px] leading-relaxed text-zinc-400 sm:text-xs sm:text-zinc-500">
                         {project.description}
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between gap-4 border-t border-zinc-800/80 pt-4">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-600">
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-zinc-800/80 pt-4">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-600 sm:tracking-[0.3em]">
                         Explora para revelar
                       </span>
                       <a
@@ -232,7 +232,7 @@ export default function StitchCardStack() {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(event) => event.stopPropagation()}
-                        className="pointer-events-auto font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-[color,transform] duration-[240ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] hover:-translate-y-0.5 hover:text-white"
+                        className="pointer-events-auto font-mono text-[10px] uppercase tracking-[0.24em] text-lime-400 transition-[color,transform] duration-[240ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] hover:-translate-y-0.5 hover:text-white sm:tracking-[0.32em]"
                       >
                         Ver proyecto _
                       </a>

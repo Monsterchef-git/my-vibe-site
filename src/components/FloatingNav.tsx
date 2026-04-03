@@ -3,24 +3,65 @@ import { useEffect, useState } from 'react';
 import { AtSign, LayoutGrid, Terminal, User, Utensils } from 'lucide-react';
 import { cx } from '@/components/primitive';
 
+const SECTION_IDS = ['hero', 'about', 'gastronomy', 'development', 'contact'] as const;
+
 export default function FloatingNav() {
-    const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState('hero');
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) setActiveSection(entry.target.id);
-                });
-            },
-            { threshold: 0.5 }
-        );
+        let frame = 0;
 
-        document.querySelectorAll('section[id], footer[id]').forEach((element) => {
-            observer.observe(element);
-        });
+        const updateActiveSection = () => {
+            const probeLine = window.innerHeight * 0.38;
+            let nextActiveSection = SECTION_IDS[0];
 
-        return () => observer.disconnect();
+            for (const id of SECTION_IDS) {
+                const element = document.getElementById(id);
+
+                if (!element) {
+                    continue;
+                }
+
+                const rect = element.getBoundingClientRect();
+
+                if (rect.top <= probeLine) {
+                    nextActiveSection = id;
+                }
+
+                if (rect.top <= probeLine && rect.bottom >= probeLine) {
+                    nextActiveSection = id;
+                    break;
+                }
+            }
+
+            setActiveSection((current) =>
+                current === nextActiveSection ? current : nextActiveSection,
+            );
+        };
+
+        const requestUpdate = () => {
+            if (frame) {
+                return;
+            }
+
+            frame = window.requestAnimationFrame(() => {
+                updateActiveSection();
+                frame = 0;
+            });
+        };
+
+        updateActiveSection();
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate);
+
+        return () => {
+            if (frame) {
+                window.cancelAnimationFrame(frame);
+            }
+
+            window.removeEventListener('scroll', requestUpdate);
+            window.removeEventListener('resize', requestUpdate);
+        };
     }, []);
 
     const getActiveStyles = (id: string) => {
@@ -29,6 +70,7 @@ export default function FloatingNav() {
         }
 
         switch (id) {
+            case 'hero': return 'bg-zinc-800 text-white shadow-[0_0_20px_rgba(255,255,255,0.12)] -translate-y-0.5 scale-[1.08]';
             case 'about': return 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] -translate-y-0.5 scale-[1.08]';
             case 'gastronomy': return 'bg-lime-400 text-black shadow-[0_0_20px_rgba(202,253,0,0.5)] -translate-y-0.5 scale-[1.08]';
             case 'development': return 'bg-cyan-400 text-black shadow-[0_0_20px_rgba(34,211,238,0.5)] -translate-y-0.5 scale-[1.08]';
@@ -74,7 +116,10 @@ export default function FloatingNav() {
                 </a>
 
                 <a href="#hero" aria-label="Inicio"
-                    className="relative z-[110] flex items-center justify-center p-4 text-zinc-500 transition-[transform,color] duration-[220ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] hover:-translate-y-0.5 hover:scale-[1.04] hover:text-white">
+                    className={cx(
+                        'relative z-[110] flex items-center justify-center rounded-full p-4 transition-[transform,color,background-color,box-shadow] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)]',
+                        getActiveStyles('hero'),
+                    )}>
                     <LayoutGrid size={20} strokeWidth={2.5} />
                 </a>
             </div>
