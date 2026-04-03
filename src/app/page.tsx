@@ -187,12 +187,20 @@ export default function Home() {
                   )}
                 >
                   <span className="shrink-0 text-zinc-600">{item.key}</span>
-                  <span className={cx(
-                    'text-right',
-                    item.key === 'STATUS' ? 'text-lime-400' : 'text-zinc-300',
-                  )}>
-                    {item.value}
-                  </span>
+                  {item.key === 'STATUS' ? (
+                    <a
+                      href="#contact"
+                      className="inline-flex rounded-full border border-lime-400/30 px-3 py-1 text-right text-lime-400 transition-colors hover:border-lime-400 hover:bg-lime-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
+                    >
+                      <MonoToken kind="status" className="text-[10px] tracking-[0.24em]">
+                        {item.value}
+                      </MonoToken>
+                    </a>
+                  ) : (
+                    <span className="text-right text-zinc-300">
+                      {item.value}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
