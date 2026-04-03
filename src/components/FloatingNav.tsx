@@ -4,16 +4,17 @@ import { AtSign, LayoutGrid, Terminal, User, Utensils } from 'lucide-react';
 import { cx } from '@/components/primitive';
 
 const SECTION_IDS = ['hero', 'about', 'gastronomy', 'development', 'contact'] as const;
+type SectionId = (typeof SECTION_IDS)[number];
 
 export default function FloatingNav() {
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState<SectionId>('hero');
 
     useEffect(() => {
         let frame = 0;
 
         const updateActiveSection = () => {
             const probeLine = window.innerHeight * 0.38;
-            let nextActiveSection = SECTION_IDS[0];
+            let nextActiveSection: SectionId = SECTION_IDS[0];
 
             for (const id of SECTION_IDS) {
                 const element = document.getElementById(id);
