@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import BackgroundTerminal from "@/components/BackgroundTerminal";
+import GoogleTracking from "@/components/GoogleTracking";
 import LenisProvider from "@/components/LenisProvider";
 import PageLoader from "@/components/PageLoader";
 import "./globals.css";
@@ -119,6 +120,7 @@ export default function RootLayout({
         />
       </head>
       <body className="relative antialiased bg-black selection:bg-lime-400 selection:text-black" suppressHydrationWarning>
+        <GoogleTracking />
         {/* Skip-to-content para navegación por teclado */}
         <a
           href="#main-content"

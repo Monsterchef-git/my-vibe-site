@@ -21,6 +21,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Analytics
+
+Set these optional environment variables to enable Google tracking globally:
+
+```bash
+NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+- `NEXT_PUBLIC_GTM_ID`: enables Google Tag Manager
+- `NEXT_PUBLIC_GA_ID`: enables direct GA4 installation
+- If your GA4 property is already firing through GTM, leave `NEXT_PUBLIC_GA_ID` empty to avoid duplicate page views.
+
 ## Production
 
 ```bash
@@ -99,5 +112,5 @@ See [CONTEXT.md](./CONTEXT.md) for a comprehensive AI-readable reference coverin
 ## Notes
 
 - This is a portfolio/marketing site, not a reusable package
-- No environment variables required
+- Analytics env vars are optional
 - Domain: johnherrerachef.com
