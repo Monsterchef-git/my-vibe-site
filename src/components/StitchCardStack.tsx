@@ -177,7 +177,8 @@ export default function StitchCardStack() {
                       src={project.image}
                       alt={project.alt}
                       fill
-                      sizes="(min-width: 1024px) 680px, 100vw"
+                      sizes="(min-width: 1024px) 680px, (min-width: 640px) 620px, calc(100vw - 3rem)"
+                      quality={72}
                       className={cx(
                         'object-cover [backface-visibility:hidden] transition-[filter,transform,opacity] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] md:duration-[420ms]',
                         isPrimaryVisual

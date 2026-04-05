@@ -429,7 +429,8 @@ export default function Home() {
                   src="/images/tecnicalapp.png"
                   alt="Captura de la landing de TecnicalApp con propuesta para optimizar la operación de talleres."
                   fill
-                  sizes="(min-width: 1280px) 420px, 100vw"
+                  sizes="(min-width: 1280px) 420px, calc(100vw - 3rem)"
+                  quality={72}
                   className="absolute inset-0 object-cover object-top opacity-82 transition-all duration-[1800ms] ease-out md:opacity-36 md:grayscale group-hover:scale-105 group-hover:opacity-72 group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 opacity-42 md:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(202,253,0,0.1),transparent_36%),linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.68)_30%,rgba(0,0,0,0.9)_100%)]" />
