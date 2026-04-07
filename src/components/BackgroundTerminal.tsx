@@ -19,7 +19,7 @@ const LOG_BLOCKS = [
   {
     command: 'pnpm run optimize:landing',
     status: 'OPTIMIZED',
-    detail: 'hero contrast locked for iSolution and TecnicalApp',
+    detail: 'hero contrast locked for iSolution and tecnical.app',
   },
   {
     command: 'git fetch origin main',
@@ -48,12 +48,12 @@ function TerminalBlock() {
           </p>
           <p className="pl-4">
             <span className="text-zinc-500">{'// '}</span>
-            <span>{log.detail.split(/(Medellin|Bogota|El Retiro|iSolution|TecnicalApp)/g).map((segment, index) => {
+            <span>{log.detail.split(/(Medellin|Bogota|El Retiro|iSolution|tecnical\.app)/g).map((segment, index) => {
               if (segment === 'Medellin' || segment === 'Bogota' || segment === 'El Retiro') {
                 return <MonoToken key={`${segment}-${index}`} kind="location">{segment}</MonoToken>;
               }
 
-              if (segment === 'iSolution' || segment === 'TecnicalApp') {
+              if (segment === 'iSolution' || segment === 'tecnical.app') {
                 return <MonoToken key={`${segment}-${index}`} kind="project">{segment}</MonoToken>;
               }
 

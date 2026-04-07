@@ -157,7 +157,7 @@ export default function Home() {
               <p className="font-mono text-sm leading-relaxed text-zinc-500">
                 Hoy, elevo el estándar de las bodas en <MonoToken kind="location">Medellín</MonoToken> desde{' '}
                 <MonoToken kind="project">Wink Eventos</MonoToken> y estoy al frente de la landing de{' '}
-                <MonoToken kind="project">TecnicalApp</MonoToken>.
+                <MonoToken kind="project">tecnical.app</MonoToken>.
               </p>
             </div>
           </div>
@@ -416,7 +416,7 @@ export default function Home() {
             </ErrorBoundary>
           </div>
 
-          {/* TecnicalApp - Panel técnico lateral */}
+          {/* tecnical.app - Panel técnico lateral */}
           <a
             href="https://www.tecnical.app"
             target="_blank"
@@ -427,7 +427,7 @@ export default function Home() {
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <Image
                   src="/images/tecnicalapp.png"
-                  alt="Captura de la landing de TecnicalApp con propuesta para optimizar la operación de talleres."
+                  alt="Captura de la landing de tecnical.app con propuesta para optimizar la operación de talleres."
                   fill
                   sizes="(min-width: 1280px) 420px, calc(100vw - 3rem)"
                   quality={72}
@@ -446,7 +446,7 @@ export default function Home() {
                     </p>
                     <div>
                       <h4 className="text-3xl font-headline italic leading-none text-white night-glow">
-                        <MonoToken kind="project">TecnicalApp</MonoToken>
+                        <MonoToken kind="project">tecnical.app</MonoToken>
                       </h4>
                       <p className="mt-2 max-w-[20rem] font-mono text-[11px] leading-relaxed text-zinc-200 md:text-zinc-500">
                         Sistema operativo para talleres con foco en procesos, infraestructura y autogestión.
@@ -540,7 +540,7 @@ export default function Home() {
               <p className="font-mono text-[9px] uppercase tracking-[0.3em] leading-loose text-zinc-800">
                 <MonoToken kind="location">Medellín</MonoToken>, Antioquia <br />
                 Chef creativo en <MonoToken kind="project">Wink Eventos</MonoToken> <br />
-                Producto digital para <MonoToken kind="project">TecnicalApp</MonoToken>
+                Producto digital para <MonoToken kind="project">tecnical.app</MonoToken>
               </p>
             </div>
           </div>

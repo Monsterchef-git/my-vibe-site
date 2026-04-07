@@ -83,7 +83,7 @@ public/
 1. **Hero** — Brand declaration with lime glow typography
 2. **About** — Bio + spec sheet terminal (two-column)
 3. **Gastronomy** — Culinary work: photo grid with glitch effects
-4. **Development** — Digital projects: 3D card stack + TecnicalApp terminal
+4. **Development** — Digital projects: 3D card stack + tecnical.app terminal
 5. **Contact** — Email CTA + social links
 
 Sections are connected by narrative bridge elements ("Lo que cocino _", "Lo que construyo _") with color-coded gradient lines.

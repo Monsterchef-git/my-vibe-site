@@ -108,7 +108,7 @@ export default function RootLayout({
                     },
                     {
                       '@type': 'Organization',
-                      name: 'TecnicalApp',
+                      name: 'tecnical.app',
                       url: 'https://www.tecnical.app',
                       description: 'Producto digital y landing para SaaS de talleres',
                     },

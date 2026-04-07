@@ -4,7 +4,7 @@ import MonoToken from '@/components/MonoToken';
 import { cx } from '@/components/primitive';
 
 const MESSAGES = [
-  "// Desplegando TecnicalApp Landing v1.2.0",
+  "// Desplegando tecnical.app Landing v1.2.0",
   "import { Primitive, cx } from '@/components/primitive';",
   "import { TypewriterTerminal } from '@/components/TypewriterTerminal';",
   "",
@@ -28,11 +28,11 @@ interface TypewriterTerminalProps {
 }
 
 function renderLine(line: string) {
-  if (line === "// Desplegando TecnicalApp Landing v1.2.0") {
+  if (line === "// Desplegando tecnical.app Landing v1.2.0") {
     return (
       <>
         <span>{'// Desplegando '}</span>
-        <MonoToken kind="project">TecnicalApp</MonoToken>
+        <MonoToken kind="project">tecnical.app</MonoToken>
         <span>{' Landing v1.2.0'}</span>
       </>
     );

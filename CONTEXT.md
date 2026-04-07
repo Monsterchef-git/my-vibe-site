@@ -107,7 +107,7 @@ The page follows a deliberate narrative arc:
 3. **Bridge** — `"Lo que cocino _"` with lime gradient lines.
 4. **Gastronomy** (`#gastronomy`) — "Culinaria Creativa". Photo grid (2x2 main + 3 side cards) with glitch/scanline effects. Wink Eventos, private dining, culinary metrics display.
 5. **Bridge** — `"Lo que construyo _"` with cyan gradient lines.
-6. **Development** (`#development`) — "Digital Craft". StitchCardStack (5 projects) + TecnicalApp panel with TypewriterTerminal.
+6. **Development** (`#development`) — "Digital Craft". StitchCardStack (5 projects) + tecnical.app panel with TypewriterTerminal.
 7. **Bridge** — Vertical line + closing phrase: "Si tu proyecto necesita la misma precision que un plato bien ejecutado — hablemos."
 8. **Contact** (`#contact`) — Giant email typography CTA + social links (Instagram, GitHub, LinkedIn) + footer info.
 
@@ -119,7 +119,7 @@ The page follows a deliberate narrative arc:
 5. **Blue Moon Cottage** — Hospitality booking + branding (bluemoonhopetown.com)
 
 ### Sidebar Project
-- **TecnicalApp** — SaaS landing for auto repair shops (tecnical.app). Includes live terminal animation.
+- **tecnical.app** — SaaS landing for auto repair shops (tecnical.app). Includes live terminal animation.
 
 ## SEO & Social
 
