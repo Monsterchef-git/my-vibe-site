@@ -113,6 +113,81 @@ body {
     letter-spacing: -0.06em;
     line-height: 0.8;
   }
+
+  [data-scroll-progress] {
+    position: relative;
+    --scroll-progress: 0;
+    --scroll-depth: 0;
+    --scroll-active: 0;
+    --scroll-accent-rgb: 161 161 170;
+  }
+
+  .scroll-progress-block {
+    will-change: transform, opacity;
+  }
+
+  .scroll-progress-surface,
+  .scroll-progress-hero,
+  .scroll-progress-footer {
+    transform: translate3d(0, calc((1 - var(--scroll-depth)) * 28px), 0)
+      scale(calc(0.985 + (var(--scroll-depth) * 0.015)));
+    opacity: calc(0.78 + (var(--scroll-depth) * 0.22));
+  }
+
+  .scroll-progress-surface > *,
+  .scroll-progress-hero > *,
+  .scroll-progress-footer > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .scroll-progress-surface::before,
+  .scroll-progress-hero::before,
+  .scroll-progress-footer::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        circle at 50% calc(14% + (var(--scroll-progress) * 58%)),
+        rgba(var(--scroll-accent-rgb), 0.14),
+        transparent 56%
+      );
+    mix-blend-mode: screen;
+    opacity: calc(0.08 + (var(--scroll-depth) * 0.4));
+  }
+
+  .scroll-progress-surface::after,
+  .scroll-progress-hero::after,
+  .scroll-progress-footer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+      inset 0 0 0 1px rgba(var(--scroll-accent-rgb), 0.16),
+      0 36px 120px rgba(0, 0, 0, 0.32);
+    opacity: calc(0.1 + (var(--scroll-depth) * 0.32));
+  }
+
+  .scroll-progress-bridge {
+    transform: translate3d(0, calc((1 - var(--scroll-depth)) * 18px), 0);
+    opacity: calc(0.42 + (var(--scroll-depth) * 0.58));
+  }
+
+  .scroll-progress-bridge-line {
+    transform: scaleX(calc(0.72 + (var(--scroll-depth) * 0.28)));
+    transform-origin: center;
+    opacity: calc(0.22 + (var(--scroll-depth) * 0.78));
+  }
+
+  .scroll-progress-bridge-label {
+    color: rgba(var(--scroll-accent-rgb), calc(0.3 + (var(--scroll-depth) * 0.58)));
+    text-shadow: 0 0 calc(18px * var(--scroll-depth)) rgba(var(--scroll-accent-rgb), 0.16);
+  }
 }
 
 @keyframes glitch {
@@ -649,6 +724,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal.active,
+  .scroll-progress-block,
   .background-terminal-track,
   .grain-overlay-animate,
   .signal-static-bg::before,
@@ -664,6 +740,20 @@ body {
   .hero-dot-blink {
     animation: none !important;
     transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .scroll-progress-surface::before,
+  .scroll-progress-surface::after,
+  .scroll-progress-hero::before,
+  .scroll-progress-hero::after,
+  .scroll-progress-footer::before,
+  .scroll-progress-footer::after {
+    opacity: 0.12 !important;
+  }
+
+  .scroll-progress-bridge-line {
     transform: none !important;
     opacity: 1 !important;
   }

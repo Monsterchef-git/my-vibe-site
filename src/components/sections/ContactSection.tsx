@@ -1,4 +1,5 @@
 import MonoToken from '@/components/MonoToken';
+import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import { cx } from '@/components/primitive';
 import ScrambleText from '@/components/ScrambleText';
 
@@ -12,9 +13,15 @@ export default function ContactSection({
   className,
 }: ContactSectionProps) {
   return (
-    <footer id={id} className={cx('overflow-hidden px-6 pb-20', className)}>
+    <ScrollProgressBlock
+      as="footer"
+      id={id}
+      variant="footer"
+      scrollTone="blue"
+      className={cx('overflow-hidden px-6 pb-20', className)}
+    >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-32 space-y-9">
+        <div className="mb-32 space-y-11">
           <ScrambleText
             text="Conversemos"
             className="relative z-[1] pl-2 font-mono text-[10px] uppercase tracking-[0.46em] text-zinc-600 transition-colors duration-200 hover:text-zinc-400 cursor-default select-none md:text-xs"
@@ -84,6 +91,6 @@ export default function ContactSection({
           </div>
         </div>
       </div>
-    </footer>
+    </ScrollProgressBlock>
   );
 }

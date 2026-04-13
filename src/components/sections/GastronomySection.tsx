@@ -4,6 +4,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import LiveScanMetrics from '@/components/LiveScanMetrics';
 import MonoToken from '@/components/MonoToken';
 import ProvenanceTokens from '@/components/ProvenanceTokens';
+import ScrollSectionPrimitive from '@/components/ScrollSectionPrimitive';
 import { Primitive, cx } from '@/components/primitive';
 import {
   sectionBodyClassName,
@@ -15,7 +16,7 @@ import {
 interface GastronomySectionProps {
   id?: string;
   className?: string;
-  contactHref?: string;
+  contactHref?: string | null;
 }
 
 export default function GastronomySection({
@@ -24,7 +25,7 @@ export default function GastronomySection({
   contactHref = '/contact',
 }: GastronomySectionProps) {
   return (
-    <Primitive.Section id={id} className={cx('space-y-10', className)}>
+    <ScrollSectionPrimitive id={id} scrollTone="lime" className={cx('space-y-10', className)}>
       <div className={sectionIntroClassName}>
         <p className={sectionEyebrowClassName}>
           Chef creativo • eventos • cenas privadas •{' '}
@@ -180,17 +181,19 @@ export default function GastronomySection({
         </Primitive.Card>
       </div>
 
-      <Link
-        href={contactHref}
-        className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]"
-      >
-        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors duration-300 group-hover:text-white">
-          Contacto _
-        </span>
-        <span className="shrink-0 font-mono text-sm text-zinc-700 transition-all duration-300 group-hover:translate-x-1 group-hover:text-lime-400">
-          →
-        </span>
-      </Link>
-    </Primitive.Section>
+      {contactHref ? (
+        <Link
+          href={contactHref}
+          className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]"
+        >
+          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors duration-300 group-hover:text-white">
+            Contacto _
+          </span>
+          <span className="shrink-0 font-mono text-sm text-zinc-700 transition-all duration-300 group-hover:translate-x-1 group-hover:text-lime-400">
+            →
+          </span>
+        </Link>
+      ) : null}
+    </ScrollSectionPrimitive>
   );
 }

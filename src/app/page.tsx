@@ -1,6 +1,7 @@
 import TopNav from '@/components/TopNav';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import MonoToken from '@/components/MonoToken';
+import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import ScrollReveal from '@/components/ScrollReveal';
 import HeroTypewriter from '@/components/HeroTypewriter';
 import ScrambleText from '@/components/ScrambleText';
@@ -61,28 +62,36 @@ export default function Home() {
       <TopNav currentPath="/" />
 
       {/* Hero Section — Editorial frame */}
-      <section id="hero" className="flex min-h-screen items-end pt-40 pb-16 md:pt-44 md:pb-24">
-        <div className="w-full max-w-6xl space-y-10">
-          <div className="space-y-9">
-            <h1 className="sr-only">John Herrera | Chef by Day, Digital Craft by Night</h1>
-            <ScrambleText
-              text="John Herrera /"
-              className="relative z-[1] font-mono text-[10px] uppercase tracking-[0.46em] text-zinc-600 hover:text-zinc-400 transition-colors duration-200 cursor-default select-none md:text-xs"
-            />
-            <ErrorBoundary>
-              <HeroTypewriter />
-            </ErrorBoundary>
-          </div>
+      <ErrorBoundary>
+        <ScrollProgressBlock
+          as="section"
+          id="hero"
+          variant="hero"
+          scrollTone="lime"
+          className="flex min-h-screen items-end pt-40 pb-16 md:pt-44 md:pb-24"
+        >
+          <div className="w-full max-w-6xl space-y-10">
+            <div className="space-y-9">
+              <h1 className="sr-only">John Herrera | Chef by Day, Digital Craft by Night</h1>
+              <ScrambleText
+                text="John Herrera /"
+                className="relative z-[1] font-mono text-[10px] uppercase tracking-[0.46em] text-zinc-600 hover:text-zinc-400 transition-colors duration-200 cursor-default select-none md:text-xs"
+              />
+              <ErrorBoundary>
+                <HeroTypewriter />
+              </ErrorBoundary>
+            </div>
 
-          <p
-            className="border-l border-lime-400/25 pl-6 font-mono text-sm leading-relaxed text-zinc-400"
-            style={{ animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 0.8s forwards', opacity: 0 }}
-          >
-            Precisión, producto y ejecución sin ruido.{' '}
-            Desde <MonoToken kind="location">Medellín</MonoToken>.
-          </p>
-        </div>
-      </section>
+            <p
+              className="border-l border-lime-400/25 pl-6 font-mono text-sm leading-relaxed text-zinc-400"
+              style={{ animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 0.8s forwards', opacity: 0 }}
+            >
+              Precisión, producto y ejecución sin ruido.{' '}
+              Desde <MonoToken kind="location">Medellín</MonoToken>.
+            </p>
+          </div>
+        </ScrollProgressBlock>
+      </ErrorBoundary>
     </main>
   );
 }
