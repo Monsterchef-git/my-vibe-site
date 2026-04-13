@@ -37,14 +37,16 @@ export default function GastronomySection({
 
       <div className={sectionIntroClassName}>
         <h2 className={cx(sectionTitleClassName, 'text-[var(--accent-primary)] night-glow')}>
-          Culinaria Creativa
+          Gastronomy
         </h2>
         <p className={sectionBodyClassName}>
-          Diseño experiencias donde la alta cocina y la estrategia se encuentran. Desde el
-          desarrollo de menús para <MonoToken kind="project">Wink Eventos</MonoToken> hasta cenas
-          privadas en <MonoToken kind="location">Medellín</MonoToken>, cada servicio combina
-          ingredientes locales, técnica precisa y una puesta en escena pensada para quedarse en la
-          memoria.
+          Product.
+          <br />
+          Timing.
+          <br />
+          Service.
+          <br />
+          Atmosphere.
         </p>
       </div>
 

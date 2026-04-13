@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-const LINE1 = 'Chef by day.';
-const LINE2 = 'Digital craft by night.';
+const LINE1 = 'Two disciplines.';
+const LINE2 = 'One standard.';
 
 const SPEED_L1   = 72;
 const SPEED_L2   = 52;

@@ -36,9 +36,11 @@ export default function DevelopmentSection({
           Digital Craft
         </h2>
         <p className={sectionBodyClassName}>
-          Construyo experiencias web con precisión técnica y criterio comercial. Trabajo con un
-          flujo apoyado en IA para diseñar interfaces rápidas, claras y enfocadas en conversión,
-          cuidando tanto el sistema visual como el rendimiento real del producto.
+          Less noise.
+          <br />
+          More order.
+          <br />
+          Stronger presence.
         </p>
       </div>
 

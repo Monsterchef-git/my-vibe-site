@@ -6,7 +6,7 @@ import AboutSection from '@/components/sections/AboutSection';
 export const metadata: Metadata = {
   title: 'About | John Herrera',
   description:
-    'Perfil de John Herrera: chef creativo en Medellín y constructor de experiencias digitales con enfoque editorial.',
+    'Profile of John Herrera: creative chef in Medellin and builder of editorial digital experiences.',
 };
 
 export default function AboutPage() {
@@ -23,12 +23,18 @@ export default function AboutPage() {
         tone="white"
         title={
           <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
-            Cocina.
+            Years in kitchens.
             <br />
-            <span className="text-[var(--accent-primary)] night-glow">Código.</span>
+            <span className="text-[var(--accent-primary)] night-glow">Now across digital.</span>
           </h1>
         }
-        description="El perfil detrás del servicio, la dirección creativa y la construcción digital: una misma obsesión por el detalle aplicada en dos medios distintos."
+        description={
+          <>
+            Same discipline.
+            <br />
+            Different medium.
+          </>
+        }
       />
 
       <AboutSection id="about-profile" className="bg-zinc-950/70" />

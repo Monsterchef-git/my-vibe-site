@@ -86,8 +86,8 @@ export default function Home() {
               className="border-l border-lime-400/25 pl-6 font-mono text-sm leading-relaxed text-zinc-400"
               style={{ animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 0.8s forwards', opacity: 0 }}
             >
-              Precisión, producto y ejecución sin ruido.{' '}
-              Desde <MonoToken kind="location">Medellín</MonoToken>.
+              Service. Structure. Taste.{' '}
+              From <MonoToken kind="location">Medellín</MonoToken>.
             </p>
           </div>
         </ScrollProgressBlock>

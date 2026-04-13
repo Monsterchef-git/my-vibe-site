@@ -3,7 +3,6 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import Eyebrow from '@/components/Eyebrow';
 import PageIntroHero from '@/components/PageIntroHero';
 import TopNav from '@/components/TopNav';
-import MonoToken from '@/components/MonoToken';
 import DevelopmentSection from '@/components/sections/DevelopmentSection';
 import GastronomySection from '@/components/sections/GastronomySection';
 
@@ -27,15 +26,14 @@ export default function WorksPage() {
         tone="cyan"
         title={
           <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
-            Dos frentes.
+            Different materials.
             <br />
-            <span className="text-cyan-400 night-glow-cyan">Una misma lógica.</span>
+            <span className="text-cyan-400 night-glow-cyan">Different tempos.</span>
           </h1>
         }
         description={
           <>
-            Gastronomía y craft digital bajo una misma disciplina: precisión, narrativa y
-            sistemas diseñados para convertir desde <MonoToken kind="location">Medellín</MonoToken>.
+            Same discipline.
           </>
         }
       />

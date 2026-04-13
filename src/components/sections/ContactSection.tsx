@@ -26,15 +26,11 @@ export default function ContactSection({
         <SectionChrome
           index="04"
           label="Contacto"
-          meta="Disponible · Medellín, Colombia"
+          meta="Private inquiries."
           tone="blue"
         />
 
         <div className="mb-32 space-y-11">
-          <ScrambleText
-            text="Conversemos ———"
-            className="relative z-[1] cursor-default select-none text-zinc-600 transition-colors duration-200 hover:text-zinc-400 font-mono text-[10px] uppercase tracking-[0.42em]"
-          />
           <a
             href="mailto:chef@johnherrerachef.com"
             className="group block font-mono text-[clamp(2.5rem,10vw,12rem)] uppercase tracking-[-0.08em] leading-[0.82] text-zinc-100 transition-all"

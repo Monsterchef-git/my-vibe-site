@@ -10,17 +10,17 @@ interface AboutSectionProps {
 }
 
 const stats = [
-  { value: '10+', label: 'Años en\ncocina', accent: false },
-  { value: '03', label: 'Marcas\nlanzadas', accent: false },
-  { value: '∞', label: 'Obsesión\ndetalle', accent: true },
+  { value: '10+', label: 'Years in\nkitchens', accent: false },
+  { value: '03', label: 'Brands\nlaunched', accent: false },
+  { value: '∞', label: 'Long-view\npractice', accent: true },
 ];
 
 const specRows = [
-  { key: 'CIUDAD', value: 'Medellín, Antioquia' },
-  { key: 'COCINA', value: 'Contemporánea tropical' },
-  { key: 'HERRAMIENTAS', value: 'Next.js · Tailwind · IA' },
-  { key: 'ENFOQUE', value: 'Landings · SEO · Dirección visual' },
-  { key: 'FILOSOFÍA', value: 'Precisión, producto local, alma' },
+  { key: 'CITY', value: 'Medellin, Colombia' },
+  { key: 'CUISINE', value: 'Contemporary tropical' },
+  { key: 'TOOLS', value: 'Next.js · Tailwind · AI' },
+  { key: 'FOCUS', value: 'Brand sites · SEO · visual direction' },
+  { key: 'APPROACH', value: 'Service-led · editorial · clear' },
 ];
 
 export default function AboutSection({
@@ -31,15 +31,15 @@ export default function AboutSection({
     <ScrollSectionPrimitive id={id} scrollTone="white" className={cx('pt-20 md:pt-8 overflow-hidden', className)}>
       <SectionChrome
         index="03"
-        label="Sobre mí"
-        meta="Medellín, Colombia"
+        label="About"
+        meta="Medellin, Colombia"
         tone="white"
       />
 
       {/* ── Headline editorial ── */}
       <div className="mb-16 space-y-8">
         <Eyebrow role="muted">About ———</Eyebrow>
-        <Eyebrow role="muted">Chef · Builder · Medellín</Eyebrow>
+        <Eyebrow role="muted">Chef · Builder · Medellin</Eyebrow>
         <div className="space-y-0">
           <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-white">
             John
@@ -49,8 +49,7 @@ export default function AboutSection({
           </h2>
         </div>
         <p className="max-w-2xl border-l border-white/10 pl-6 font-mono text-sm leading-relaxed text-zinc-400">
-          Dos disciplinas, un mismo estándar: servicio, dirección creativa y producto digital
-          construidos desde sistema, precisión y criterio editorial.
+          A way of working shaped by kitchens, now carried into digital.
         </p>
       </div>
 
@@ -82,25 +81,22 @@ export default function AboutSection({
           {/* Bio */}
           <div className="grid gap-6 border-t border-zinc-800/60 pt-8 md:grid-cols-2">
             <p className="font-mono text-sm leading-relaxed text-zinc-400">
-              Entiendo la creación como equilibrio entre técnica y narrativa. Más de una
-              década liderando cocinas en{' '}
-              <MonoToken kind="location">Medellín</MonoToken> afinó esa convicción: mi
-              propuesta gastronómica es contemporánea, de esencia tropical, con el producto
-              local como punto de partida y el rigor técnico como lenguaje.
+              I spent more than a decade in kitchens in{' '}
+              <MonoToken kind="location">Medellin</MonoToken>, learning how to work with
+              pace, pressure, and service without losing clarity.
             </p>
             <p className="font-mono text-sm leading-relaxed text-zinc-500">
-              Esa misma obsesión por el detalle la traslado al digital. Desarrollo landings
-              de alto impacto, optimizo SEO y diseño sistemas visuales. Hoy elevo el
-              estándar de bodas en <MonoToken kind="location">Medellín</MonoToken> desde{' '}
-              <MonoToken kind="project">Wink Eventos</MonoToken> y dirijo{' '}
-              <MonoToken kind="project">tecnical.app</MonoToken>.
+              Today that same way of thinking informs the digital side of my work: brand
+              sites, visual systems, and a more editorial approach to structure. I continue
+              leading the culinary direction at <MonoToken kind="project">Wink Eventos</MonoToken>{' '}
+              while building <MonoToken kind="project">tecnical.app</MonoToken>.
             </p>
           </div>
         </div>
 
         {/* Columna derecha: spec sheet vertical */}
         <div className="shrink-0 lg:w-60">
-          <Eyebrow as="span" role="dim" className="mb-4 block">Perfil</Eyebrow>
+          <Eyebrow as="span" role="dim" className="mb-4 block">Profile</Eyebrow>
           <div className="space-y-0">
             {specRows.map((item, i) => (
               <div
@@ -119,13 +115,13 @@ export default function AboutSection({
               </div>
             ))}
 
-            {/* Status CTA */}
+            {/* Status note */}
             <div className="border-t border-zinc-800/50 pt-4">
               <Eyebrow as="span" role="dim" className="block tracking-[0.18em]">
-                DISPONIBILIDAD
+                AVAILABILITY
               </Eyebrow>
               <MonoToken kind="status" className="mt-2 inline-block font-mono text-[10px] uppercase tracking-[0.24em]">
-                Disponible para ideas en cruce
+                Private inquiries
               </MonoToken>
             </div>
           </div>
