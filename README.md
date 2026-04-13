@@ -1,6 +1,6 @@
-# John Herrera | Creative Chef & Vibe-Coder
+# John Herrera | Creative Chef & Digital Craft
 
-Personal portfolio site — "Chef by Day, Vibe-Coder by Night."
+Personal portfolio site — "Chef by Day, Digital Craft by Night."
 
 Culinary direction and digital product craft from Medellin, Colombia.
 

@@ -106,7 +106,7 @@ export default async function LinkedInBannerPage() {
                 textShadow: '0 0 12px rgba(202,253,0,0.3)',
               }}
             >
-              Vibe-Coder by Night
+              Digital Craft by Night
             </span>
             <span
               style={{

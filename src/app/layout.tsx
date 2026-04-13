@@ -8,9 +8,9 @@ import "./globals.css";
 const siteUrl = "https://johnherrerachef.com";
 
 export const metadata: Metadata = {
-  title: "John Herrera | Creative Chef & Vibe-Coder",
+  title: "John Herrera | Creative Chef & Digital Craft",
   description:
-    "Chef by Day, Vibe-Coder by Night. Ingeniería culinaria y desarrollo de software de alto nivel en Medellín.",
+    "Chef by Day, Digital Craft by Night. Ingeniería culinaria y desarrollo de software de alto nivel en Medellín.",
   metadataBase: new URL(siteUrl),
 
   icons: {
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "John Herrera | Creative Chef & Vibe-Coder",
-    description: "Chef @ Wink Eventos | Vibe-Coding @ Night.",
+    title: "John Herrera | Creative Chef & Digital Craft",
+    description: "Chef @ Wink Eventos | Digital Craft @ Night.",
   },
 };
 
@@ -57,9 +57,9 @@ export default function RootLayout({
                   '@type': 'WebSite',
                   '@id': `${siteUrl}/#website`,
                   url: siteUrl,
-                  name: 'John Herrera | Creative Chef & Vibe-Coder',
+                  name: 'John Herrera | Creative Chef & Digital Craft',
                   description:
-                    'Chef by Day, Vibe-Coder by Night. Ingeniería culinaria y desarrollo de software de alto nivel en Medellín.',
+                    'Chef by Day, Digital Craft by Night. Ingeniería culinaria y desarrollo de software de alto nivel en Medellín.',
                   inLanguage: 'es-CO',
                 },
                 {

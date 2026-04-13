@@ -5,8 +5,8 @@
 
 ## Identity
 
-- **Owner:** John Herrera — creative chef & vibe-coder based in Medellin, Colombia.
-- **Concept:** "Chef by Day, Vibe-Coder by Night" — a personal portfolio that presents two disciplines under one brand: culinary direction and digital product craft.
+- **Owner:** John Herrera — creative chef focused on digital craft based in Medellin, Colombia.
+- **Concept:** "Chef by Day, Digital Craft by Night" — a personal portfolio that presents two disciplines under one brand: culinary direction and digital product craft.
 - **Domain:** johnherrerachef.com
 - **Language:** Spanish (es_CO). Section titles mix Spanish and English for stylistic effect.
 
@@ -102,7 +102,7 @@ public/
 
 The page follows a deliberate narrative arc:
 
-1. **Hero** (`#hero`) — "Chef by Day, Vibe-Coder by Night" declaration. Lime glow headline. Short tagline: "Dos disciplinas, un mismo estandar."
+1. **Hero** (`#hero`) — "Chef by Day, Digital Craft by Night" declaration. Lime glow headline. Short tagline: "Dos disciplinas, un mismo estandar."
 2. **About** (`#about`) — Two-column layout: bio narrative (left) + spec sheet terminal (right). Covers 10+ years in kitchens, transition to code, current roles.
 3. **Bridge** — `"Lo que cocino _"` with lime gradient lines.
 4. **Gastronomy** (`#gastronomy`) — "Culinaria Creativa". Photo grid (2x2 main + 3 side cards) with glitch/scanline effects. Wink Eventos, private dining, culinary metrics display.
@@ -126,7 +126,7 @@ The page follows a deliberate narrative arc:
 - **OG Image:** Dynamically generated via `opengraph-image.tsx` — black background, fork-circuit logo, "JOHN HERRERA / CULINARY ENGINE", `$ git commit -m 'umami'` in lime monospace.
 - **Twitter Card:** `summary_large_image`, same generated image.
 - **Favicons:** Fork-circuit icon at 16px, 32px, 180px (apple-touch).
-- **Metadata:** Title "John Herrera | Creative Chef & Vibe-Coder", locale es_CO.
+- **Metadata:** Title "John Herrera | Creative Chef & Digital Craft", locale es_CO.
 
 ## Performance Decisions
 
