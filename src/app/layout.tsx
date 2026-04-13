@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BackgroundTerminal from "@/components/BackgroundTerminal";
 import GoogleTracking from "@/components/GoogleTracking";
 import LenisProvider from "@/components/LenisProvider";
+import MagneticCursor from "@/components/MagneticCursor";
 import PageLoader from "@/components/PageLoader";
 import "./globals.css";
 
@@ -131,7 +132,8 @@ export default function RootLayout({
         <PageLoader />
         <LenisProvider />
         <BackgroundTerminal />
-        <div className="grain-overlay grain-overlay-animate" />
+        <MagneticCursor />
+        <div aria-hidden="true" className="signal-static-overlay" />
         <div className="relative z-10">
           {children}
         </div>

@@ -1,5 +1,6 @@
 import MonoToken from '@/components/MonoToken';
 import { cx } from '@/components/primitive';
+import ScrambleText from '@/components/ScrambleText';
 
 interface ContactSectionProps {
   id?: string;
@@ -13,23 +14,36 @@ export default function ContactSection({
   return (
     <footer id={id} className={cx('overflow-hidden px-6 pb-20', className)}>
       <div className="mx-auto max-w-7xl">
-        <div className="mb-32 space-y-6">
-          <p className="pl-2 font-mono text-[10px] uppercase tracking-[0.8em] text-zinc-600 md:text-xs">
-            Conversemos
-          </p>
+        <div className="mb-32 space-y-9">
+          <ScrambleText
+            text="Conversemos"
+            className="relative z-[1] pl-2 font-mono text-[10px] uppercase tracking-[0.46em] text-zinc-600 transition-colors duration-200 hover:text-zinc-400 cursor-default select-none md:text-xs"
+          />
           <a
             href="mailto:chef@johnherrerachef.com"
-            className="tight-headline group block text-[13vw] font-black uppercase tracking-tighter leading-[0.8] transition-all md:text-[10vw]"
+            className="group block font-mono text-[12vw] uppercase tracking-[-0.08em] leading-[0.82] text-zinc-100 transition-all md:text-[9.4vw]"
           >
-            <span className="block transition-transform duration-700 group-hover:translate-x-4">
-              chef@
-            </span>
-            <span className="block text-zinc-500 transition-all duration-700 group-hover:-translate-x-4 group-hover:text-white">
-              johnherrera
-            </span>
-            <span className="block transition-transform duration-700 group-hover:translate-x-8">
-              chef.com
-            </span>
+            <ScrambleText
+              as="span"
+              text="chef@"
+              className="block -translate-x-[0.01em] text-zinc-200 transition-[transform,color,font-style,letter-spacing] duration-700 delay-75 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[0.06em] group-hover:tracking-[-0.1em] group-hover:text-white group-hover:italic group-hover:delay-100"
+              speed={28}
+              stagger={32}
+            />
+            <ScrambleText
+              as="span"
+              text="johnherrera"
+              className="night-glow block translate-x-[0.08em] tracking-[-0.045em] text-[#cafd00] transition-[transform,color,font-style,letter-spacing] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[0.02em] group-hover:tracking-[-0.06em] group-hover:text-[#e3ff57] group-hover:italic group-hover:delay-0"
+              speed={28}
+              stagger={32}
+            />
+            <ScrambleText
+              as="span"
+              text="chef.com"
+              className="block translate-x-[0.18em] text-zinc-500 transition-[transform,color,font-style,letter-spacing] duration-700 delay-100 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[0.24em] group-hover:tracking-[-0.1em] group-hover:text-zinc-300 group-hover:italic group-hover:delay-150"
+              speed={28}
+              stagger={32}
+            />
           </a>
         </div>
 
