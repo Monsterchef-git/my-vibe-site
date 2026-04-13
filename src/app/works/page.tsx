@@ -20,26 +20,26 @@ export default function WorksPage() {
 
       {/* ── Editorial header ── */}
       <header className="mb-24 mt-14 md:mt-20">
-        <p className="font-mono text-[9px] uppercase tracking-[0.55em] text-zinc-600">
-          Works /
+        <p className="font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600">
+          Works ———
         </p>
-        <h1 className="mt-5 text-[clamp(3rem,8vw,7rem)] font-headline italic leading-[0.92] text-white">
+        <h1 className="mt-5 text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
           Dos frentes.
           <br />
-          <span className="text-[#cafd00] night-glow">Una misma lógica.</span>
+          <span className="text-[var(--accent-primary)] night-glow">Una misma lógica.</span>
         </h1>
         <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600">
-          | Gastronomy · Digital craft.
+          Gastronomy · Digital craft.
         </p>
       </header>
 
       {/* ── Chapter 01 ── */}
       <div className="mb-12 flex items-center gap-6">
-        <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.5em] text-lime-400/70">
+        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">
           01
         </span>
-        <div className="h-px flex-1 bg-gradient-to-r from-lime-400/20 to-transparent" />
-        <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.5em] text-lime-400/70">
+        <div className="h-px flex-1 bg-gradient-to-r from-lime-400/24 to-transparent" />
+        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">
           Gastronomy
         </span>
       </div>
@@ -52,11 +52,11 @@ export default function WorksPage() {
 
       {/* ── Chapter 02 ── */}
       <div className="mb-12 mt-24 flex items-center gap-6">
-        <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.5em] text-cyan-400/70">
-          02
+        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-cyan-400/60">
+          03
         </span>
-        <div className="h-px flex-1 bg-gradient-to-r from-cyan-400/20 to-transparent" />
-        <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.5em] text-cyan-400/70">
+        <div className="h-px flex-1 bg-gradient-to-r from-cyan-400/24 to-transparent" />
+        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-cyan-400/60">
           Digital craft
         </span>
       </div>

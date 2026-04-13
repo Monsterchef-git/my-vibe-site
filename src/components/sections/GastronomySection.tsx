@@ -1,14 +1,13 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import LiveScanMetrics from '@/components/LiveScanMetrics';
 import MonoToken from '@/components/MonoToken';
 import ProvenanceTokens from '@/components/ProvenanceTokens';
 import ScrollSectionPrimitive from '@/components/ScrollSectionPrimitive';
 import { Primitive, cx } from '@/components/primitive';
+import { SectionChrome, SectionCTA } from '@/components/sections/SectionChrome';
 import {
   sectionBodyClassName,
-  sectionEyebrowClassName,
   sectionIntroClassName,
   sectionTitleClassName,
 } from '@/components/sections/sectionStyles';
@@ -26,12 +25,19 @@ export default function GastronomySection({
 }: GastronomySectionProps) {
   return (
     <ScrollSectionPrimitive id={id} scrollTone="lime" className={cx('space-y-10', className)}>
+      <SectionChrome
+        index="01"
+        label="Gastronomía"
+        meta={
+          <>
+            Chef creativo · eventos · <MonoToken kind="location">Medellín</MonoToken>
+          </>
+        }
+        tone="lime"
+      />
+
       <div className={sectionIntroClassName}>
-        <p className={sectionEyebrowClassName}>
-          Chef creativo • eventos • cenas privadas •{' '}
-          <MonoToken kind="location">Medellín</MonoToken>
-        </p>
-        <h2 className={cx(sectionTitleClassName, 'text-lime-400 night-glow')}>
+        <h2 className={cx(sectionTitleClassName, 'text-[var(--accent-primary)] night-glow')}>
           Culinaria Creativa
         </h2>
         <p className={sectionBodyClassName}>
@@ -91,28 +97,28 @@ export default function GastronomySection({
           <div className="culinary-scanline absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <div className="culinary-scanbar absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(202,253,0,0),rgba(202,253,0,0.16),rgba(202,253,0,0))] opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
 
-          <div className="absolute inset-0 z-10 flex flex-col justify-between p-6 md:p-7">
+          <div className="absolute inset-0 z-10 flex flex-col justify-between p-6">
             <div className="flex min-w-0 flex-wrap items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1 space-y-3">
                 <span className="inline-block max-w-full truncate rounded-full border border-lime-400/30 bg-black/70 px-2 py-1 font-mono text-[7px] uppercase tracking-[0.15em] text-lime-400 backdrop-blur-xl sm:px-3 sm:text-[9px] sm:tracking-[0.36em]">
                   SERVICIO: PREMIUM_EVENT_01
                 </span>
-                <div className="max-w-[16rem] font-mono text-[8px] uppercase tracking-[0.15em] text-zinc-300 transition-colors duration-300 group-hover:text-lime-300/80 line-clamp-2 sm:text-[10px] sm:tracking-[0.3em] sm:line-clamp-none md:text-zinc-500">
+                <div className="max-w-[16rem] font-mono text-[8px] uppercase tracking-[0.15em] text-zinc-500 transition-colors duration-300 group-hover:text-lime-300/80 line-clamp-2 sm:text-[10px] sm:tracking-[0.3em] sm:line-clamp-none">
                   Lectura sensorial / secuencia de emplatado premium
                 </div>
               </div>
 
-              <div className="shrink-0 rounded-2xl border border-lime-400/20 bg-black/55 px-2 py-1.5 font-mono text-[7px] uppercase tracking-[0.15em] text-zinc-300 backdrop-blur-xl transition-colors duration-300 group-hover:border-lime-400/40 group-hover:text-lime-400 sm:px-3 sm:py-2 sm:text-[9px] sm:tracking-[0.3em] md:text-zinc-500">
+              <div className="shrink-0 rounded-2xl border border-lime-400/20 bg-black/55 px-2 py-1.5 font-mono text-[7px] uppercase tracking-[0.15em] text-zinc-500 backdrop-blur-xl transition-colors duration-300 group-hover:border-lime-400/40 group-hover:text-lime-400 sm:px-3 sm:py-2 sm:text-[9px] sm:tracking-[0.3em]">
                 LECTURA EN VIVO
               </div>
             </div>
 
             <div className="flex flex-col gap-5">
-              <div className="w-fit max-w-[24rem] rounded-[1.75rem] border border-white/10 bg-black/58 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.28)] backdrop-blur-md md:bg-black/46">
-                <h3 className="max-w-[14rem] text-3xl font-bold uppercase tracking-[-0.05em] text-white transition-all duration-500 group-hover:text-lime-100 md:text-4xl">
+              <div className="w-fit max-w-[24rem] rounded-[2rem] border border-white/10 bg-black/55 p-4 shadow-[0_24px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl md:bg-black/45">
+                <h3 className="max-w-[14rem] text-3xl font-headline italic leading-tight text-white transition-all duration-500 group-hover:text-lime-100 md:text-4xl">
                   Experiencias a Medida
                 </h3>
-                <p className="mt-2 max-w-[22rem] font-mono text-[11px] uppercase tracking-[0.24em] text-zinc-200 transition-colors duration-300 group-hover:text-lime-300/90 md:text-zinc-400">
+                <p className="mt-2 max-w-[22rem] font-mono text-[11px] uppercase tracking-[0.24em] text-zinc-400 transition-colors duration-300 group-hover:text-lime-300/90">
                   Producto local / señal precisa / ejecución al fuego
                 </p>
               </div>
@@ -134,7 +140,7 @@ export default function GastronomySection({
             className="object-cover opacity-80 transition-all md:opacity-40 md:grayscale group-hover:grayscale-0"
           />
           <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
-            <p className="rounded-[1.5rem] border border-white/10 bg-black/60 px-5 py-4 font-mono text-[10px] uppercase tracking-[0.3em] leading-relaxed text-zinc-100 backdrop-blur-md">
+            <p className="rounded-[1.5rem] border border-white/10 bg-black/60 px-5 py-4 font-mono text-[10px] uppercase tracking-[0.3em] leading-relaxed text-zinc-300 backdrop-blur-xl">
               Chef <br /> en <br /> servicio _
             </p>
           </div>
@@ -154,7 +160,7 @@ export default function GastronomySection({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-40 md:opacity-100" />
           <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
-            <span className="rounded-full border border-white/10 bg-black/60 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-100 backdrop-blur-md group-hover:text-lime-400 md:text-zinc-300">
+            <span className="rounded-full border border-white/10 bg-black/60 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-300 backdrop-blur-xl group-hover:text-lime-400">
               Composición fresca +
             </span>
           </div>
@@ -174,7 +180,7 @@ export default function GastronomySection({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-40 md:opacity-100" />
           <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center px-4 text-center">
-            <span className="rounded-full border border-white/10 bg-black/60 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-100 backdrop-blur-md group-hover:text-lime-400 md:text-zinc-300">
+            <span className="rounded-full border border-white/10 bg-black/60 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-zinc-300 backdrop-blur-xl group-hover:text-lime-400">
               Servicio emplatado +
             </span>
           </div>
@@ -182,17 +188,7 @@ export default function GastronomySection({
       </div>
 
       {contactHref ? (
-        <Link
-          href={contactHref}
-          className="group mt-10 flex items-center justify-between gap-4 rounded-[2rem] border border-zinc-800/60 bg-black/40 px-6 py-4 transition-all duration-300 hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]"
-        >
-          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.32em] text-lime-400 transition-colors duration-300 group-hover:text-white">
-            Contacto _
-          </span>
-          <span className="shrink-0 font-mono text-sm text-zinc-700 transition-all duration-300 group-hover:translate-x-1 group-hover:text-lime-400">
-            →
-          </span>
-        </Link>
+        <SectionCTA href={contactHref} label="Contacto _" tone="lime" />
       ) : null}
     </ScrollSectionPrimitive>
   );

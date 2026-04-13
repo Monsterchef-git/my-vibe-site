@@ -1,8 +1,7 @@
-import Link from 'next/link';
 import MonoToken from '@/components/MonoToken';
 import ScrollSectionPrimitive from '@/components/ScrollSectionPrimitive';
 import { cx } from '@/components/primitive';
-import { sectionEyebrowClassName } from '@/components/sections/sectionStyles';
+import { SectionChrome, SectionCTA } from '@/components/sections/SectionChrome';
 
 interface AboutSectionProps {
   id?: string;
@@ -31,33 +30,22 @@ export default function AboutSection({
 }: AboutSectionProps) {
   return (
     <ScrollSectionPrimitive id={id} scrollTone="white" className={cx('pt-20 md:pt-8 overflow-hidden', className)}>
-
-      {/* ── Marca de agua: número de sección ── */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -right-6 -top-10 select-none font-headline text-[22vw] font-bold italic leading-none text-zinc-900/60 md:text-[18vw]"
-      >
-        02
-      </span>
-
-      {/* ── Eyebrow ── */}
-      <div className="mb-12 flex items-center gap-6">
-        <span className={sectionEyebrowClassName}>02 ——— Sobre mí</span>
-        <span className="hidden h-px flex-1 bg-zinc-800 md:block" />
-        <span className={cx(sectionEyebrowClassName, 'hidden md:block')}>
-          Medellín, Colombia
-        </span>
-      </div>
+      <SectionChrome
+        index="02"
+        label="Sobre mí"
+        meta="Medellín, Colombia"
+        tone="white"
+      />
 
       {/* ── Headline editorial ── */}
       <div className="mb-16 space-y-0">
-        <p className="font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600">
-          {'// Chef · Dev · Builder'}
+        <p className="font-mono text-[10px] uppercase tracking-[0.42em]">
+          <MonoToken kind="comment">{'// Chef · Dev · Builder'}</MonoToken>
         </p>
-        <h2 className="font-headline text-[14vw] italic leading-[0.9] text-white md:text-[10vw] lg:text-[8vw]">
+        <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-white">
           John
         </h2>
-        <h2 className="font-headline text-[14vw] italic leading-[0.9] text-[#cafd00] night-glow md:text-[10vw] lg:text-[8vw]">
+        <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-[var(--accent-primary)] night-glow">
           Herrera
         </h2>
       </div>
@@ -71,11 +59,11 @@ export default function AboutSection({
           {/* Stats row */}
           <div className="grid grid-cols-3 divide-x divide-zinc-800/60">
             {stats.map((s) => (
-              <div key={s.label} className="px-6 first:pl-0 last:pr-0">
+              <div key={s.label} className="px-3 sm:px-5 first:pl-0 last:pr-0">
                 <p
                   className={cx(
-                    'font-headline text-5xl italic leading-none md:text-6xl',
-                    s.accent ? 'text-[#cafd00] night-glow' : 'text-white',
+                    'font-headline text-4xl italic leading-none sm:text-5xl md:text-6xl',
+                    s.accent ? 'text-[var(--accent-primary)] night-glow' : 'text-white',
                   )}
                 >
                   {s.value}
@@ -108,9 +96,9 @@ export default function AboutSection({
 
         {/* Columna derecha: spec sheet vertical */}
         <div className="shrink-0 lg:w-60">
-          <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.42em] text-zinc-700">
+          <MonoToken kind="comment" className="mb-4 block font-mono text-[9px] uppercase tracking-[0.42em]">
             {'// spec_sheet.yml'}
-          </p>
+          </MonoToken>
           <div className="space-y-0">
             {specRows.map((item, i) => (
               <div
@@ -130,12 +118,9 @@ export default function AboutSection({
               <span className="block font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-700">
                 STATUS
               </span>
-              <Link
-                href={contactHref}
-                className="mt-2 inline-flex rounded-full border border-lime-400/30 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-lime-400 transition-colors hover:border-lime-400 hover:bg-lime-400/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-400/60"
-              >
-                <MonoToken kind="status">Exploremos ideas</MonoToken>
-              </Link>
+              <MonoToken kind="status" className="mt-2 inline-block font-mono text-[10px] uppercase tracking-[0.24em]">
+                Disponible para ideas en cruce
+              </MonoToken>
             </div>
           </div>
         </div>
@@ -148,6 +133,8 @@ export default function AboutSection({
           Disponible para proyectos · Wink Eventos · tecnical.app · 2026
         </span>
       </div>
+
+      <SectionCTA href={contactHref} label="Exploremos ideas _" tone="white" />
 
     </ScrollSectionPrimitive>
   );

@@ -1,6 +1,7 @@
 import MonoToken from '@/components/MonoToken';
 import ScrollProgressBlock from '@/components/ScrollProgressBlock';
-import { cx } from '@/components/primitive';
+import { cx, sectionClassName } from '@/components/primitive';
+import { SectionChrome } from '@/components/sections/SectionChrome';
 import ScrambleText from '@/components/ScrambleText';
 
 interface ContactSectionProps {
@@ -18,17 +19,25 @@ export default function ContactSection({
       id={id}
       variant="footer"
       scrollTone="blue"
-      className={cx('overflow-hidden px-6 pb-20', className)}
+      className={cx(sectionClassName, 'pb-20 pt-20 md:pt-16', className)}
     >
       <div className="mx-auto max-w-7xl">
+        <SectionChrome
+          index="04"
+          label="Contacto"
+          meta="Disponible · Medellín, Colombia"
+          tone="blue"
+          watermarkSide="left"
+        />
+
         <div className="mb-32 space-y-11">
           <ScrambleText
             text="Conversemos"
-            className="relative z-[1] pl-2 font-mono text-[10px] uppercase tracking-[0.46em] text-zinc-600 transition-colors duration-200 hover:text-zinc-400 cursor-default select-none md:text-xs"
+            className="relative z-[1] font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600 transition-colors duration-200 hover:text-zinc-400 cursor-default select-none"
           />
           <a
             href="mailto:chef@johnherrerachef.com"
-            className="group block font-mono text-[12vw] uppercase tracking-[-0.08em] leading-[0.82] text-zinc-100 transition-all md:text-[9.4vw]"
+            className="group block font-mono text-[clamp(4rem,12vw,14rem)] uppercase tracking-[-0.08em] leading-[0.82] text-zinc-100 transition-all"
           >
             <ScrambleText
               as="span"
@@ -40,7 +49,7 @@ export default function ContactSection({
             <ScrambleText
               as="span"
               text="johnherrera"
-              className="night-glow block translate-x-[0.08em] tracking-[-0.045em] text-[#cafd00] transition-[transform,color,font-style,letter-spacing] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[0.02em] group-hover:tracking-[-0.06em] group-hover:text-[#e3ff57] group-hover:italic group-hover:delay-0"
+              className="night-glow block translate-x-[0.08em] tracking-[-0.045em] text-[var(--accent-primary)] transition-[transform,color,font-style,letter-spacing] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[0.02em] group-hover:tracking-[-0.06em] group-hover:text-[#e3ff57] group-hover:italic group-hover:delay-0"
               speed={28}
               stagger={32}
             />
@@ -55,7 +64,7 @@ export default function ContactSection({
         </div>
 
         <div className="flex flex-col justify-between gap-12 border-t border-zinc-900/50 pt-20 md:flex-row md:items-end">
-          <div className="grid grid-cols-2 gap-x-12 gap-y-4 font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-500 md:flex">
+          <div className="grid grid-cols-2 gap-x-12 gap-y-4 font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-500 md:flex">
             <a
               href="https://www.instagram.com/johnherrerachef/"
               target="_blank"
@@ -83,7 +92,7 @@ export default function ContactSection({
           </div>
 
           <div className="text-right">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] leading-loose text-zinc-800">
+            <p className="font-mono text-[10px] uppercase tracking-[0.42em] leading-loose text-zinc-800">
               <MonoToken kind="location">Medellín</MonoToken>, Antioquia <br />
               Chef creativo en <MonoToken kind="project">Wink Eventos</MonoToken> <br />
               Producto digital para <MonoToken kind="project">tecnical.app</MonoToken>
