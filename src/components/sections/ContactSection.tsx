@@ -1,3 +1,4 @@
+import Eyebrow from '@/components/Eyebrow';
 import MonoToken from '@/components/MonoToken';
 import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import { cx, sectionClassName } from '@/components/primitive';
@@ -27,17 +28,16 @@ export default function ContactSection({
           label="Contacto"
           meta="Disponible · Medellín, Colombia"
           tone="blue"
-          watermarkSide="left"
         />
 
         <div className="mb-32 space-y-11">
           <ScrambleText
-            text="Conversemos"
-            className="relative z-[1] font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600 transition-colors duration-200 hover:text-zinc-400 cursor-default select-none"
+            text="Conversemos ———"
+            className="relative z-[1] cursor-default select-none text-zinc-600 transition-colors duration-200 hover:text-zinc-400 font-mono text-[10px] uppercase tracking-[0.42em]"
           />
           <a
             href="mailto:chef@johnherrerachef.com"
-            className="group block font-mono text-[clamp(4rem,12vw,14rem)] uppercase tracking-[-0.08em] leading-[0.82] text-zinc-100 transition-all"
+            className="group block font-mono text-[clamp(2.5rem,10vw,12rem)] uppercase tracking-[-0.08em] leading-[0.82] text-zinc-100 transition-all"
           >
             <ScrambleText
               as="span"
@@ -64,14 +64,15 @@ export default function ContactSection({
         </div>
 
         <div className="flex flex-col justify-between gap-12 border-t border-zinc-900/50 pt-20 md:flex-row md:items-end">
-          <div className="grid grid-cols-2 gap-x-12 gap-y-4 font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-500 md:flex">
+          <div className="grid grid-cols-2 gap-x-12 gap-y-4 md:flex">
             <a
               href="https://www.instagram.com/johnherrerachef/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 transition-colors hover:text-lime-400"
             >
-              <span className="h-[1px] w-4 bg-zinc-800" /> Instagram
+              <span className="h-[1px] w-4 bg-zinc-800" />
+              <Eyebrow as="span" role="primary">Instagram</Eyebrow>
             </a>
             <a
               href="https://github.com/Monsterchef-git"
@@ -79,7 +80,8 @@ export default function ContactSection({
               rel="noopener noreferrer"
               className="flex items-center gap-2 transition-colors hover:text-cyan-400"
             >
-              <span className="h-[1px] w-4 bg-zinc-800" /> GitHub
+              <span className="h-[1px] w-4 bg-zinc-800" />
+              <Eyebrow as="span" role="primary">GitHub</Eyebrow>
             </a>
             <a
               href="https://www.linkedin.com/in/john-herrera-chef/"
@@ -87,16 +89,17 @@ export default function ContactSection({
               rel="noopener noreferrer"
               className="flex items-center gap-2 transition-colors hover:text-blue-400"
             >
-              <span className="h-[1px] w-4 bg-zinc-800" /> LinkedIn
+              <span className="h-[1px] w-4 bg-zinc-800" />
+              <Eyebrow as="span" role="primary">LinkedIn</Eyebrow>
             </a>
           </div>
 
           <div className="text-right">
-            <p className="font-mono text-[10px] uppercase tracking-[0.42em] leading-loose text-zinc-800">
+            <Eyebrow role="dim" className="leading-loose text-zinc-800">
               <MonoToken kind="location">Medellín</MonoToken>, Antioquia <br />
               Chef creativo en <MonoToken kind="project">Wink Eventos</MonoToken> <br />
               Producto digital para <MonoToken kind="project">tecnical.app</MonoToken>
-            </p>
+            </Eyebrow>
           </div>
         </div>
       </div>

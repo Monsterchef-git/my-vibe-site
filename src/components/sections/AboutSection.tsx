@@ -1,3 +1,4 @@
+import Eyebrow from '@/components/Eyebrow';
 import MonoToken from '@/components/MonoToken';
 import ScrollSectionPrimitive from '@/components/ScrollSectionPrimitive';
 import { cx } from '@/components/primitive';
@@ -12,7 +13,7 @@ interface AboutSectionProps {
 const stats = [
   { value: '10+', label: 'Años en\ncocina', accent: false },
   { value: '03', label: 'Marcas\nlanzadas', accent: false },
-  { value: '∞', label: 'Obsesión\npor detalle', accent: true },
+  { value: '∞', label: 'Obsesión\ndetalle', accent: true },
 ];
 
 const specRows = [
@@ -39,9 +40,9 @@ export default function AboutSection({
 
       {/* ── Headline editorial ── */}
       <div className="mb-16 space-y-0">
-        <p className="font-mono text-[10px] uppercase tracking-[0.42em]">
+        <Eyebrow role="muted">
           <MonoToken kind="comment">{'// Chef · Dev · Builder'}</MonoToken>
-        </p>
+        </Eyebrow>
         <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-white">
           John
         </h2>
@@ -59,7 +60,7 @@ export default function AboutSection({
           {/* Stats row */}
           <div className="grid grid-cols-3 divide-x divide-zinc-800/60">
             {stats.map((s) => (
-              <div key={s.label} className="px-3 sm:px-5 first:pl-0 last:pr-0">
+              <div key={s.label} className="px-2 sm:px-5 first:pl-0 last:pr-0">
                 <p
                   className={cx(
                     'font-headline text-4xl italic leading-none sm:text-5xl md:text-6xl',
@@ -68,9 +69,9 @@ export default function AboutSection({
                 >
                   {s.value}
                 </p>
-                <p className="mt-2 whitespace-pre-line font-mono text-[10px] uppercase tracking-[0.24em] text-zinc-600">
+                <Eyebrow as="p" role="dim" className="mt-2 whitespace-pre-line tracking-[0.18em] sm:tracking-[0.24em]">
                   {s.label}
-                </p>
+                </Eyebrow>
               </div>
             ))}
           </div>
@@ -96,28 +97,32 @@ export default function AboutSection({
 
         {/* Columna derecha: spec sheet vertical */}
         <div className="shrink-0 lg:w-60">
-          <MonoToken kind="comment" className="mb-4 block font-mono text-[9px] uppercase tracking-[0.42em]">
-            {'// spec_sheet.yml'}
-          </MonoToken>
+          <Eyebrow as="span" role="dim" className="mb-4 block">
+            <MonoToken kind="comment">{'// spec_sheet.yml'}</MonoToken>
+          </Eyebrow>
           <div className="space-y-0">
             {specRows.map((item, i) => (
               <div
                 key={item.key}
                 className={cx(
-                  'py-3 font-mono text-[10px] uppercase tracking-[0.18em]',
+                  'py-3',
                   i < specRows.length - 1 && 'border-b border-zinc-800/50',
                 )}
               >
-                <span className="block text-zinc-700">{item.key}</span>
-                <span className="mt-0.5 block text-zinc-300">{item.value}</span>
+                <Eyebrow as="span" role="dim" className="block tracking-[0.18em]">
+                  {item.key}
+                </Eyebrow>
+                <Eyebrow as="span" role="muted" className="mt-0.5 block tracking-[0.18em]">
+                  {item.value}
+                </Eyebrow>
               </div>
             ))}
 
             {/* Status CTA */}
             <div className="border-t border-zinc-800/50 pt-4">
-              <span className="block font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-700">
+              <Eyebrow as="span" role="dim" className="block tracking-[0.18em]">
                 STATUS
-              </span>
+              </Eyebrow>
               <MonoToken kind="status" className="mt-2 inline-block font-mono text-[10px] uppercase tracking-[0.24em]">
                 Disponible para ideas en cruce
               </MonoToken>
@@ -129,9 +134,9 @@ export default function AboutSection({
       {/* ── Footer ticker ── */}
       <div className="mt-12 flex items-center gap-4 border-t border-zinc-800/60 pt-6">
         <span className="h-1.5 w-1.5 rounded-full bg-lime-400" />
-        <span className="font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600">
+        <Eyebrow role="muted">
           Disponible para proyectos · Wink Eventos · tecnical.app · 2026
-        </span>
+        </Eyebrow>
       </div>
 
       <SectionCTA href={contactHref} label="Exploremos ideas _" tone="white" />

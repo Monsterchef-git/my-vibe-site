@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Eyebrow from '@/components/Eyebrow';
 import ScrambleText from '@/components/ScrambleText';
 
 const PROJECTS = [
@@ -101,9 +102,13 @@ export default function WorksList() {
           </div>
 
           {/* Tags — hidden on mobile */}
-          <span className="relative z-10 hidden shrink-0 font-mono text-[10px] uppercase tracking-[0.34em] text-zinc-600 transition-colors duration-500 group-hover:text-zinc-400 sm:block lg:text-[11px]">
+          <Eyebrow
+            as="span"
+            role="muted"
+            className="relative z-10 hidden shrink-0 transition-colors duration-500 group-hover:text-zinc-400 sm:block"
+          >
             {project.tags}
-          </span>
+          </Eyebrow>
 
           {/* Arrow */}
           <span className="relative z-10 shrink-0 font-mono text-base text-zinc-700 transition-[color,transform] duration-300 group-hover:translate-x-2 group-hover:text-cyan-400">

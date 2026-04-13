@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import Eyebrow from '@/components/Eyebrow';
 import TopNav from '@/components/TopNav';
 import DevelopmentSection from '@/components/sections/DevelopmentSection';
 import GastronomySection from '@/components/sections/GastronomySection';
@@ -20,45 +21,34 @@ export default function WorksPage() {
 
       {/* ── Editorial header ── */}
       <header className="mb-24 mt-14 md:mt-20">
-        <p className="font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600">
-          Works ———
-        </p>
+        <Eyebrow role="muted">Works ———</Eyebrow>
         <h1 className="mt-5 text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
           Dos frentes.
           <br />
           <span className="text-[var(--accent-primary)] night-glow">Una misma lógica.</span>
         </h1>
-        <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600">
-          Gastronomy · Digital craft.
-        </p>
+        <Eyebrow role="muted" className="mt-6">Gastronomy · Digital craft.</Eyebrow>
       </header>
 
       {/* ── Chapter 01 ── */}
       <div className="mb-12 flex items-center gap-6">
-        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">
-          01
-        </span>
+        <Eyebrow as="span" tone="lime">01</Eyebrow>
         <div className="h-px flex-1 bg-gradient-to-r from-lime-400/24 to-transparent" />
-        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">
-          Gastronomy
-        </span>
+        <Eyebrow as="span" tone="lime">Gastronomy</Eyebrow>
       </div>
 
       <GastronomySection
         id="works-gastronomy"
         className="bg-zinc-950/70"
         contactHref={null}
+        compact
       />
 
       {/* ── Chapter 02 ── */}
       <div className="mb-12 mt-24 flex items-center gap-6">
-        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-cyan-400/60">
-          03
-        </span>
+        <Eyebrow as="span" tone="cyan">03</Eyebrow>
         <div className="h-px flex-1 bg-gradient-to-r from-cyan-400/24 to-transparent" />
-        <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-cyan-400/60">
-          Digital craft
-        </span>
+        <Eyebrow as="span" tone="cyan">Digital craft</Eyebrow>
       </div>
 
       <ErrorBoundary>
@@ -66,6 +56,7 @@ export default function WorksPage() {
           id="works-development"
           className="bg-zinc-950/70"
           contactHref={null}
+          compact
         />
       </ErrorBoundary>
     </main>

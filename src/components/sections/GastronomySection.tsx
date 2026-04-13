@@ -16,25 +16,29 @@ interface GastronomySectionProps {
   id?: string;
   className?: string;
   contactHref?: string | null;
+  compact?: boolean;
 }
 
 export default function GastronomySection({
   id = 'gastronomy',
   className,
   contactHref = '/contact',
+  compact = false,
 }: GastronomySectionProps) {
   return (
     <ScrollSectionPrimitive id={id} scrollTone="lime" className={cx('space-y-10', className)}>
-      <SectionChrome
-        index="01"
-        label="Gastronomía"
-        meta={
-          <>
-            Chef creativo · eventos · <MonoToken kind="location">Medellín</MonoToken>
-          </>
-        }
-        tone="lime"
-      />
+      {!compact && (
+        <SectionChrome
+          index="01"
+          label="Gastronomía"
+          meta={
+            <>
+              Chef creativo · eventos · <MonoToken kind="location">Medellín</MonoToken>
+            </>
+          }
+          tone="lime"
+        />
+      )}
 
       <div className={sectionIntroClassName}>
         <h2 className={cx(sectionTitleClassName, 'text-[var(--accent-primary)] night-glow')}>

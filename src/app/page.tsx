@@ -1,5 +1,6 @@
 import TopNav from '@/components/TopNav';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import Eyebrow from '@/components/Eyebrow';
 import MonoToken from '@/components/MonoToken';
 import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import ScrollReveal from '@/components/ScrollReveal';
@@ -74,8 +75,8 @@ export default function Home() {
             <div className="space-y-9">
               <h1 className="sr-only">John Herrera | Chef by Day, Digital Craft by Night</h1>
               <ScrambleText
-                text="John Herrera /"
-                className="relative z-[1] font-mono text-[10px] uppercase tracking-[0.46em] text-zinc-600 hover:text-zinc-400 transition-colors duration-200 cursor-default select-none md:text-xs"
+                text="John Herrera ———"
+                className="relative z-[1] cursor-default select-none text-zinc-600 transition-colors duration-200 hover:text-zinc-400 font-mono text-[10px] uppercase tracking-[0.42em]"
               />
               <ErrorBoundary>
                 <HeroTypewriter />

@@ -1,45 +1,50 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { cx } from '@/components/primitive';
-import { sectionEyebrowClassName } from '@/components/sections/sectionStyles';
+import Eyebrow from '@/components/Eyebrow';
+import { eyebrowTones } from '@/components/sections/sectionStyles';
 
 type SectionTone = 'lime' | 'cyan' | 'blue' | 'white';
 
 const toneLineClassNames: Record<SectionTone, string> = {
-  lime: 'bg-gradient-to-r from-lime-400/24 to-transparent',
-  cyan: 'bg-gradient-to-r from-cyan-400/24 to-transparent',
-  blue: 'bg-gradient-to-r from-blue-400/24 to-transparent',
+  lime:  'bg-gradient-to-r from-lime-400/24 to-transparent',
+  cyan:  'bg-gradient-to-r from-cyan-400/24 to-transparent',
+  blue:  'bg-gradient-to-r from-blue-400/24 to-transparent',
   white: 'bg-gradient-to-r from-white/14 to-transparent',
 };
 
 const toneCtaClassNames: Record<
   SectionTone,
-  {
-    root: string;
-    label: string;
-    arrow: string;
-  }
+  { root: string; label: string; arrow: string }
 > = {
   lime: {
-    root: 'hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]',
+    root:  'hover:border-lime-400/30 hover:shadow-[0_0_24px_rgba(202,253,0,0.06)]',
     label: 'text-[var(--accent-primary)] group-hover:text-white',
     arrow: 'group-hover:text-[var(--accent-primary)]',
   },
   cyan: {
-    root: 'hover:border-cyan-400/30 hover:shadow-[0_0_24px_rgba(34,211,238,0.06)]',
+    root:  'hover:border-cyan-400/30 hover:shadow-[0_0_24px_rgba(34,211,238,0.06)]',
     label: 'text-cyan-400 group-hover:text-white',
     arrow: 'group-hover:text-cyan-400',
   },
   blue: {
-    root: 'hover:border-blue-400/30 hover:shadow-[0_0_24px_rgba(96,165,250,0.06)]',
+    root:  'hover:border-blue-400/30 hover:shadow-[0_0_24px_rgba(96,165,250,0.06)]',
     label: 'text-blue-400 group-hover:text-white',
     arrow: 'group-hover:text-blue-400',
   },
   white: {
-    root: 'hover:border-white/20 hover:shadow-[0_0_24px_rgba(255,255,255,0.06)]',
+    root:  'hover:border-white/20 hover:shadow-[0_0_24px_rgba(255,255,255,0.06)]',
     label: 'text-white group-hover:text-zinc-200',
     arrow: 'group-hover:text-white',
   },
+};
+
+// SectionTone → EyebrowTone mapping (white → primary role, others → toned)
+const toneEyebrowMeta: Record<SectionTone, string> = {
+  lime:  eyebrowTones.lime,
+  cyan:  eyebrowTones.cyan,
+  blue:  eyebrowTones.blue,
+  white: eyebrowTones.white,
 };
 
 interface SectionChromeProps {
@@ -48,7 +53,6 @@ interface SectionChromeProps {
   meta?: ReactNode;
   tone?: SectionTone;
   className?: string;
-  watermarkSide?: 'left' | 'right';
 }
 
 export function SectionChrome({
@@ -57,27 +61,16 @@ export function SectionChrome({
   meta,
   tone = 'white',
   className,
-  watermarkSide = 'right',
 }: SectionChromeProps) {
   return (
     <>
-      <span
-        aria-hidden
-        className={cx(
-          'pointer-events-none absolute -top-10 select-none font-headline text-[22vw] font-bold italic leading-none text-zinc-900/60 md:text-[18vw]',
-          watermarkSide === 'left' ? '-left-6' : '-right-6',
-        )}
-      >
-        {index}
-      </span>
-
       <div className={cx('mb-12 flex items-center gap-6', className)}>
-        <span className={sectionEyebrowClassName}>
+        <Eyebrow as="span">
           {index} ——— {label}
-        </span>
+        </Eyebrow>
         <span className={cx('hidden h-px flex-1 md:block', toneLineClassNames[tone])} />
         {meta ? (
-          <span className={cx(sectionEyebrowClassName, 'hidden text-zinc-600 md:block')}>
+          <span className={cx(toneEyebrowMeta[tone], 'hidden md:block')}>
             {meta}
           </span>
         ) : null}
@@ -110,14 +103,12 @@ export function SectionCTA({
         className,
       )}
     >
-      <span
-        className={cx(
-          'shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] transition-colors duration-300',
-          toneClasses.label,
-        )}
+      <Eyebrow
+        as="span"
+        className={cx('shrink-0 transition-colors duration-300', toneClasses.label)}
       >
         {label}
-      </span>
+      </Eyebrow>
       <span
         className={cx(
           'shrink-0 font-mono text-sm text-zinc-700 transition-all duration-300 group-hover:translate-x-1',
