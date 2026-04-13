@@ -2,12 +2,11 @@ import Eyebrow from '@/components/Eyebrow';
 import MonoToken from '@/components/MonoToken';
 import ScrollSectionPrimitive from '@/components/ScrollSectionPrimitive';
 import { cx } from '@/components/primitive';
-import { SectionChrome, SectionCTA } from '@/components/sections/SectionChrome';
+import { SectionChrome } from '@/components/sections/SectionChrome';
 
 interface AboutSectionProps {
   id?: string;
   className?: string;
-  contactHref?: string;
 }
 
 const stats = [
@@ -17,38 +16,42 @@ const stats = [
 ];
 
 const specRows = [
-  { key: 'BASE', value: 'Medellín, Antioquia' },
+  { key: 'CIUDAD', value: 'Medellín, Antioquia' },
   { key: 'COCINA', value: 'Contemporánea tropical' },
-  { key: 'STACK', value: 'Next.js · Tailwind · IA' },
-  { key: 'EXPERTISE', value: 'Landings · SEO · Deploy' },
+  { key: 'HERRAMIENTAS', value: 'Next.js · Tailwind · IA' },
+  { key: 'ENFOQUE', value: 'Landings · SEO · Dirección visual' },
   { key: 'FILOSOFÍA', value: 'Precisión, producto local, alma' },
 ];
 
 export default function AboutSection({
   id = 'about',
   className,
-  contactHref = '/contact',
 }: AboutSectionProps) {
   return (
     <ScrollSectionPrimitive id={id} scrollTone="white" className={cx('pt-20 md:pt-8 overflow-hidden', className)}>
       <SectionChrome
-        index="02"
+        index="03"
         label="Sobre mí"
         meta="Medellín, Colombia"
         tone="white"
       />
 
       {/* ── Headline editorial ── */}
-      <div className="mb-16 space-y-0">
-        <Eyebrow role="muted">
-          <MonoToken kind="comment">{'// Chef · Dev · Builder'}</MonoToken>
-        </Eyebrow>
-        <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-white">
-          John
-        </h2>
-        <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-[var(--accent-primary)] night-glow">
-          Herrera
-        </h2>
+      <div className="mb-16 space-y-8">
+        <Eyebrow role="muted">About ———</Eyebrow>
+        <Eyebrow role="muted">Chef · Builder · Medellín</Eyebrow>
+        <div className="space-y-0">
+          <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-white">
+            John
+          </h2>
+          <h2 className="font-headline text-[clamp(3rem,11vw,9rem)] italic leading-[0.9] text-[var(--accent-primary)] night-glow">
+            Herrera
+          </h2>
+        </div>
+        <p className="max-w-2xl border-l border-white/10 pl-6 font-mono text-sm leading-relaxed text-zinc-400">
+          Dos disciplinas, un mismo estándar: servicio, dirección creativa y producto digital
+          construidos desde sistema, precisión y criterio editorial.
+        </p>
       </div>
 
       {/* ── Grid principal ── */}
@@ -97,9 +100,7 @@ export default function AboutSection({
 
         {/* Columna derecha: spec sheet vertical */}
         <div className="shrink-0 lg:w-60">
-          <Eyebrow as="span" role="dim" className="mb-4 block">
-            <MonoToken kind="comment">{'// spec_sheet.yml'}</MonoToken>
-          </Eyebrow>
+          <Eyebrow as="span" role="dim" className="mb-4 block">Perfil</Eyebrow>
           <div className="space-y-0">
             {specRows.map((item, i) => (
               <div
@@ -121,7 +122,7 @@ export default function AboutSection({
             {/* Status CTA */}
             <div className="border-t border-zinc-800/50 pt-4">
               <Eyebrow as="span" role="dim" className="block tracking-[0.18em]">
-                STATUS
+                DISPONIBILIDAD
               </Eyebrow>
               <MonoToken kind="status" className="mt-2 inline-block font-mono text-[10px] uppercase tracking-[0.24em]">
                 Disponible para ideas en cruce
@@ -130,16 +131,6 @@ export default function AboutSection({
           </div>
         </div>
       </div>
-
-      {/* ── Footer ticker ── */}
-      <div className="mt-12 flex items-center gap-4 border-t border-zinc-800/60 pt-6">
-        <span className="h-1.5 w-1.5 rounded-full bg-lime-400" />
-        <Eyebrow role="muted">
-          Disponible para proyectos · Wink Eventos · tecnical.app · 2026
-        </Eyebrow>
-      </div>
-
-      <SectionCTA href={contactHref} label="Exploremos ideas _" tone="white" />
 
     </ScrollSectionPrimitive>
   );

@@ -24,11 +24,13 @@ const clamp = (value: number, min: number, max: number) =>
 
 export default function MagneticCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLSpanElement>(null);
   const frameRef = useRef<number | null>(null);
   const enabledRef = useRef(false);
   const visibleRef = useRef(false);
   const pressedRef = useRef(false);
   const activeElementRef = useRef<HTMLElement | null>(null);
+  const previousLensElementRef = useRef<HTMLElement | null>(null);
   const pointerRef = useRef({ x: 0, y: 0 });
   const currentRef = useRef({ x: 0, y: 0 });
   const sizeRef = useRef({ width: BASE_SIZE, height: BASE_SIZE });
@@ -36,8 +38,9 @@ export default function MagneticCursor() {
 
   useEffect(() => {
     const cursor = cursorRef.current;
+    const dot = dotRef.current;
 
-    if (!cursor) {
+    if (!cursor || !dot) {
       return;
     }
 
@@ -45,6 +48,16 @@ export default function MagneticCursor() {
       '(min-width: 768px) and (hover: hover) and (pointer: fine)',
     );
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const clearLensState = (element: HTMLElement | null) => {
+      if (!element || element.dataset.magnetic !== 'lens') {
+        return;
+      }
+
+      element.style.removeProperty('--lens-x');
+      element.style.removeProperty('--lens-y');
+      element.style.removeProperty('--lens-active');
+    };
 
     const render = () => {
       frameRef.current = null;
@@ -54,6 +67,7 @@ export default function MagneticCursor() {
       }
 
       const activeElement = activeElementRef.current;
+      const isLensMode = activeElement?.dataset.magnetic === 'lens';
       const pointer = pointerRef.current;
       let targetX = pointer.x;
       let targetY = pointer.y;
@@ -65,10 +79,29 @@ export default function MagneticCursor() {
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
 
-        targetX = pointer.x + (centerX - pointer.x) * 0.42;
-        targetY = pointer.y + (centerY - pointer.y) * 0.42;
-        targetWidth = clamp(rect.width + 18, HOVER_MIN_WIDTH, HOVER_MAX_WIDTH);
-        targetHeight = clamp(rect.height + 14, HOVER_MIN_HEIGHT, HOVER_MAX_HEIGHT);
+        if (isLensMode) {
+          const lensSize = clamp(Math.max(rect.height + 26, 78), 78, 108);
+          const localX = pointer.x - rect.left;
+          const localY = pointer.y - rect.top;
+          targetX = pointer.x + (centerX - pointer.x) * 0.22;
+          targetY = pointer.y + (centerY - pointer.y) * 0.22;
+          targetWidth = lensSize;
+          targetHeight = lensSize;
+          activeElement.style.setProperty('--lens-x', `${localX}px`);
+          activeElement.style.setProperty('--lens-y', `${localY}px`);
+          activeElement.style.setProperty('--lens-active', '1');
+          previousLensElementRef.current = activeElement;
+        } else {
+          targetX = pointer.x + (centerX - pointer.x) * 0.42;
+          targetY = pointer.y + (centerY - pointer.y) * 0.42;
+          targetWidth = clamp(rect.width + 18, HOVER_MIN_WIDTH, HOVER_MAX_WIDTH);
+          targetHeight = clamp(rect.height + 14, HOVER_MIN_HEIGHT, HOVER_MAX_HEIGHT);
+          clearLensState(previousLensElementRef.current);
+          previousLensElementRef.current = null;
+        }
+      } else {
+        clearLensState(previousLensElementRef.current);
+        previousLensElementRef.current = null;
       }
 
       const easing = activeElement ? 0.16 : 0.22;
@@ -83,6 +116,13 @@ export default function MagneticCursor() {
       cursor.style.opacity = visibleRef.current ? '1' : '0';
       cursor.style.width = `${width}px`;
       cursor.style.height = `${height}px`;
+      cursor.style.borderColor = isLensMode ? 'rgba(255,255,255,0.22)' : 'rgba(202,253,0,0.9)';
+      cursor.style.background = isLensMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.10)';
+      cursor.style.boxShadow = isLensMode
+        ? '0 18px 44px rgba(0,0,0,0.26), inset 0 0 0 1px rgba(255,255,255,0.08)'
+        : '0 0 22px rgba(202,253,0,0.16), inset 0 0 0 1px rgba(202,253,0,0.14)';
+      cursor.style.backdropFilter = 'none';
+      dot.style.opacity = isLensMode ? '0' : '1';
       cursor.style.transform = `translate3d(${currentRef.current.x - width / 2}px, ${
         currentRef.current.y - height / 2
       }px, 0)`;
@@ -111,6 +151,13 @@ export default function MagneticCursor() {
       cursor.style.opacity = '0';
       cursor.style.width = `${BASE_SIZE}px`;
       cursor.style.height = `${BASE_SIZE}px`;
+      clearLensState(previousLensElementRef.current);
+      previousLensElementRef.current = null;
+      cursor.style.borderColor = 'rgba(202,253,0,0.9)';
+      cursor.style.background = 'rgba(0,0,0,0.10)';
+      cursor.style.boxShadow = '0 0 22px rgba(202,253,0,0.16), inset 0 0 0 1px rgba(202,253,0,0.14)';
+      cursor.style.backdropFilter = 'none';
+      dot.style.opacity = '1';
     };
 
     const updateEnabled = () => {
@@ -128,11 +175,17 @@ export default function MagneticCursor() {
 
     const updateInteractiveTarget = (target: EventTarget | null) => {
       if (!(target instanceof Element)) {
+        clearLensState(previousLensElementRef.current);
+        previousLensElementRef.current = null;
         activeElementRef.current = null;
         return;
       }
 
       const interactiveTarget = target.closest(INTERACTIVE_SELECTOR);
+      if (activeElementRef.current && activeElementRef.current !== interactiveTarget) {
+        clearLensState(previousLensElementRef.current);
+        previousLensElementRef.current = null;
+      }
       activeElementRef.current = interactiveTarget instanceof HTMLElement ? interactiveTarget : null;
     };
 
@@ -194,11 +247,14 @@ export default function MagneticCursor() {
     <div
       ref={cursorRef}
       aria-hidden="true"
-      className={`pointer-events-none fixed left-0 top-0 z-[260] items-center justify-center rounded-full border border-[#cafd00] bg-black/10 opacity-0 shadow-[0_0_22px_rgba(202,253,0,0.16),inset_0_0_0_1px_rgba(202,253,0,0.14)] backdrop-blur-xl ${
+      className={`pointer-events-none fixed left-0 top-0 z-[260] items-center justify-center rounded-full border border-[#cafd00] bg-black/10 opacity-0 shadow-[0_0_22px_rgba(202,253,0,0.16),inset_0_0_0_1px_rgba(202,253,0,0.14)] ${
         enabled ? 'flex' : 'hidden'
       }`}
     >
-      <span className="h-1 w-1 rounded-full bg-[#cafd00] shadow-[0_0_10px_rgba(202,253,0,0.75)]" />
+      <span
+        ref={dotRef}
+        className="h-1 w-1 rounded-full bg-[#cafd00] shadow-[0_0_10px_rgba(202,253,0,0.75)] transition-opacity duration-200"
+      />
     </div>
   );
 }

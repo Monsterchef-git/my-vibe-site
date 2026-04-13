@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Eyebrow from '@/components/Eyebrow';
+import PageIntroHero from '@/components/PageIntroHero';
 import TopNav from '@/components/TopNav';
+import MonoToken from '@/components/MonoToken';
 import DevelopmentSection from '@/components/sections/DevelopmentSection';
 import GastronomySection from '@/components/sections/GastronomySection';
 
@@ -19,16 +21,24 @@ export default function WorksPage() {
     >
       <TopNav currentPath="/works" />
 
-      {/* ── Editorial header ── */}
-      <header className="mb-24 mt-14 md:mt-20">
-        <Eyebrow role="muted">Works ———</Eyebrow>
-        <h1 className="mt-5 text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
-          Dos frentes.
-          <br />
-          <span className="text-[var(--accent-primary)] night-glow">Una misma lógica.</span>
-        </h1>
-        <Eyebrow role="muted" className="mt-6">Gastronomy · Digital craft.</Eyebrow>
-      </header>
+      <PageIntroHero
+        className="mb-24"
+        eyebrow="Works ———"
+        tone="cyan"
+        title={
+          <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
+            Dos frentes.
+            <br />
+            <span className="text-cyan-400 night-glow-cyan">Una misma lógica.</span>
+          </h1>
+        }
+        description={
+          <>
+            Gastronomía y craft digital bajo una misma disciplina: precisión, narrativa y
+            sistemas diseñados para convertir desde <MonoToken kind="location">Medellín</MonoToken>.
+          </>
+        }
+      />
 
       {/* ── Chapter 01 ── */}
       <div className="mb-12 flex items-center gap-6">
@@ -40,13 +50,12 @@ export default function WorksPage() {
       <GastronomySection
         id="works-gastronomy"
         className="bg-zinc-950/70"
-        contactHref={null}
         compact
       />
 
       {/* ── Chapter 02 ── */}
       <div className="mb-12 mt-24 flex items-center gap-6">
-        <Eyebrow as="span" tone="cyan">03</Eyebrow>
+        <Eyebrow as="span" tone="cyan">02</Eyebrow>
         <div className="h-px flex-1 bg-gradient-to-r from-cyan-400/24 to-transparent" />
         <Eyebrow as="span" tone="cyan">Digital craft</Eyebrow>
       </div>
@@ -55,7 +64,6 @@ export default function WorksPage() {
         <DevelopmentSection
           id="works-development"
           className="bg-zinc-950/70"
-          contactHref={null}
           compact
         />
       </ErrorBoundary>

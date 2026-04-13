@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import PageIntroHero from '@/components/PageIntroHero';
 import TopNav from '@/components/TopNav';
 import AboutSection from '@/components/sections/AboutSection';
 
@@ -16,7 +17,21 @@ export default function AboutPage() {
     >
       <TopNav currentPath="/about" />
 
-      <AboutSection id="about-profile" className="mt-14 bg-zinc-950/70 md:mt-20" contactHref="/contact" />
+      <PageIntroHero
+        className="mb-20"
+        eyebrow="About ———"
+        tone="white"
+        title={
+          <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
+            Cocina.
+            <br />
+            <span className="text-[var(--accent-primary)] night-glow">Código.</span>
+          </h1>
+        }
+        description="El perfil detrás del servicio, la dirección creativa y la construcción digital: una misma obsesión por el detalle aplicada en dos medios distintos."
+      />
+
+      <AboutSection id="about-profile" className="bg-zinc-950/70" />
     </main>
   );
 }

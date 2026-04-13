@@ -97,7 +97,7 @@ export default function WorksList() {
             <ScrambleText
               text={project.title}
               as="span"
-              className="block truncate text-2xl font-headline italic leading-none text-white transition-colors duration-300 md:text-4xl lg:text-5xl"
+              className="block pr-[0.14em] text-2xl font-headline italic leading-[1.02] text-white transition-colors duration-300 md:text-4xl lg:text-5xl"
             />
           </div>
 

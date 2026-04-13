@@ -1,6 +1,5 @@
 import TopNav from '@/components/TopNav';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import Eyebrow from '@/components/Eyebrow';
 import MonoToken from '@/components/MonoToken';
 import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import ScrollReveal from '@/components/ScrollReveal';

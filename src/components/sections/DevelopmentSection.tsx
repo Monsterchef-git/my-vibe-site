@@ -2,7 +2,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import WorksList from '@/components/WorksList';
 import ScrollSectionPrimitive from '@/components/ScrollSectionPrimitive';
 import { cx } from '@/components/primitive';
-import { SectionChrome, SectionCTA } from '@/components/sections/SectionChrome';
+import { SectionChrome } from '@/components/sections/SectionChrome';
 import {
   sectionBodyClassName,
   sectionIntroClassName,
@@ -12,21 +12,19 @@ import {
 interface DevelopmentSectionProps {
   id?: string;
   className?: string;
-  contactHref?: string | null;
   compact?: boolean;
 }
 
 export default function DevelopmentSection({
   id = 'development',
   className,
-  contactHref = '/contact',
   compact = false,
 }: DevelopmentSectionProps) {
   return (
     <ScrollSectionPrimitive id={id} scrollTone="cyan" className={cx('space-y-10', className)}>
       {!compact && (
         <SectionChrome
-          index="03"
+          index="02"
           label="Digital Craft"
           meta="Next.js · IA aplicada · conversión"
           tone="cyan"
@@ -47,10 +45,6 @@ export default function DevelopmentSection({
       <ErrorBoundary>
         <WorksList />
       </ErrorBoundary>
-
-      {contactHref ? (
-        <SectionCTA href={contactHref} label="Conversemos _" tone="cyan" />
-      ) : null}
     </ScrollSectionPrimitive>
   );
 }
