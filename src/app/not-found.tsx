@@ -42,10 +42,10 @@ export default function NotFound() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
       {/* CRT Static noise background */}
-      <div className="not-found-static absolute inset-0 opacity-[0.07]" />
+      <div className="crt-static absolute inset-0 opacity-[0.07]" />
 
       {/* Scanlines */}
-      <div className="not-found-scanlines absolute inset-0 pointer-events-none" />
+      <div className="crt-scanlines absolute inset-0 pointer-events-none" />
 
       {/* Vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.8)_100%)]" />
@@ -55,7 +55,7 @@ export default function NotFound() {
         {/* Glitching 404 */}
         <div className="not-found-glitch-wrapper mb-8">
           <h1
-            className="not-found-glitch text-[clamp(6rem,20vw,12rem)] font-black leading-none tracking-tighter"
+            className="glitch-mark text-[clamp(6rem,20vw,12rem)] font-black leading-none tracking-tighter"
             data-text="404"
           >
             404
@@ -86,17 +86,17 @@ export default function NotFound() {
             {TERMINAL_LINES.slice(0, visibleLines).map((line, index) => (
               <p
                 key={`${cycle}-${index}`}
-                className={`${line.color ?? 'text-zinc-400'} not-found-line-in`}
+                className={`${line.color ?? 'text-zinc-400'} boot-line-in`}
               >
                 {line.text}
                 {index === visibleLines - 1 && (
-                  <span className="not-found-cursor ml-0.5 inline-block h-3.5 w-[6px] translate-y-[2px] bg-lime-400" />
+                  <span className="boot-cursor ml-0.5 inline-block h-3.5 w-[6px] translate-y-[2px] bg-lime-400" />
                 )}
               </p>
             ))}
             {visibleLines === 0 && (
               <p className="text-zinc-700">
-                <span className="not-found-cursor inline-block h-3.5 w-[6px] translate-y-[2px] bg-zinc-700" />
+                <span className="boot-cursor inline-block h-3.5 w-[6px] translate-y-[2px] bg-zinc-700" />
               </p>
             )}
           </div>

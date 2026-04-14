@@ -2,16 +2,23 @@ import type { Metadata } from "next";
 import BackgroundTerminal from "@/components/BackgroundTerminal";
 import GoogleTracking from "@/components/GoogleTracking";
 import LenisProvider from "@/components/LenisProvider";
+import MagneticCursor from "@/components/MagneticCursor";
 import PageLoader from "@/components/PageLoader";
 import "./globals.css";
 
 const siteUrl = "https://johnherrerachef.com";
+const siteTitle = "John Herrera | Creative Chef & Digital Craft";
+const siteDescription =
+  "Chef by Day, Digital Craft by Night. Ingenieria culinaria y desarrollo de software de alto nivel en Medellin.";
+const personImage = `${siteUrl}/images/about-john-herrera.png`;
 
 export const metadata: Metadata = {
-  title: "John Herrera | Creative Chef & Vibe-Coder",
-  description:
-    "Chef by Day, Vibe-Coder by Night. Ingeniería culinaria y desarrollo de software de alto nivel en Medellín.",
+  title: siteTitle,
+  description: siteDescription,
   metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "/",
+  },
 
   icons: {
     icon: [
@@ -23,19 +30,18 @@ export const metadata: Metadata = {
 
   // OG — la imagen se inyecta automáticamente desde opengraph-image.tsx
   openGraph: {
-    title: "John Herrera | Culinary Engine",
-    description:
-      "Bifurcando la precisión de la cocina con la estructura del código.",
+    title: siteTitle,
+    description: siteDescription,
     url: siteUrl,
-    siteName: "John Herrera Portfolio",
+    siteName: siteTitle,
     locale: "es_CO",
     type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "John Herrera | Creative Chef & Vibe-Coder",
-    description: "Chef @ Wink Eventos | Vibe-Coding @ Night.",
+    title: siteTitle,
+    description: siteDescription,
   },
 };
 
@@ -57,18 +63,9 @@ export default function RootLayout({
                   '@type': 'WebSite',
                   '@id': `${siteUrl}/#website`,
                   url: siteUrl,
-                  name: 'John Herrera | Creative Chef & Vibe-Coder',
-                  description:
-                    'Chef by Day, Vibe-Coder by Night. Ingeniería culinaria y desarrollo de software de alto nivel en Medellín.',
+                  name: siteTitle,
+                  description: siteDescription,
                   inLanguage: 'es-CO',
-                },
-                {
-                  '@type': 'ProfilePage',
-                  '@id': `${siteUrl}/#profilepage`,
-                  url: siteUrl,
-                  name: 'John Herrera Portfolio',
-                  isPartOf: { '@id': `${siteUrl}/#website` },
-                  mainEntity: { '@id': `${siteUrl}/#person` },
                 },
                 {
                   '@type': 'Person',
@@ -78,7 +75,7 @@ export default function RootLayout({
                   description:
                     'Chef con más de una década en alta cocina y desarrollador web especializado en landings de conversión, SEO y diseño de producto digital.',
                   url: siteUrl,
-                  image: `${siteUrl}/images/og-fork.png`,
+                  image: personImage,
                   email: 'chef@johnherrerachef.com',
                   address: {
                     '@type': 'PostalAddress',
@@ -131,7 +128,8 @@ export default function RootLayout({
         <PageLoader />
         <LenisProvider />
         <BackgroundTerminal />
-        <div className="grain-overlay grain-overlay-animate" />
+        <MagneticCursor />
+        <div aria-hidden="true" className="signal-static-overlay" />
         <div className="relative z-10">
           {children}
         </div>

@@ -1,14 +1,82 @@
 # Project Context — John Herrera Personal Site
 
 > AI-readable reference for any tool working on this codebase.
-> Last updated: 2026-03-29.
+> Last updated: 2026-04-13.
 
 ## Identity
 
-- **Owner:** John Herrera — creative chef & vibe-coder based in Medellin, Colombia.
-- **Concept:** "Chef by Day, Vibe-Coder by Night" — a personal portfolio that presents two disciplines under one brand: culinary direction and digital product craft.
+- **Owner:** John Herrera — creative chef focused on digital craft based in Medellin, Colombia.
+- **Concept:** "Chef by Day, Digital Craft by Night" — a personal portfolio that presents two disciplines under one brand: culinary direction and digital product craft.
 - **Domain:** johnherrerachef.com
 - **Language:** Spanish (es_CO). Section titles mix Spanish and English for stylistic effect.
+- **Current direction:** Premium editorial. Less overt UI/terminal ornament, more typography, whitespace, image presence, and restrained motion.
+
+## Voice Rules
+
+The voice should feel authored, precise, and premium.
+It should come from practice, not self-promotion.
+
+### Writing Principles
+
+- Prefer concrete language over abstract claims.
+- Avoid repeated use of words like precision, detail, narrative, obsession, standard.
+- Gastronomy should feel physical, sensorial, and service-led.
+- Digital should feel structured, calm, and intellectually clear.
+- About should read as position, not autobiography.
+- Contact should feel selective, minimal, and direct.
+- Never sound like an agency.
+- Never oversell.
+- Keep a strong editorial restraint.
+
+### Preferred Copy Direction
+
+- **Home**
+  - Prefer:
+    - `Two disciplines.`
+    - `One standard.`
+    - `Service. Structure. Taste.`
+  - Over:
+    - `Two disciplines. One standard.`
+    - `A practice grounded in service, structure, and taste.`
+
+- **Works**
+  - Prefer:
+    - `Different materials.`
+    - `Different tempos.`
+    - `Same discipline.`
+  - Over:
+    - `Two bodies of work. Different materials, different tempos, same level of care.`
+
+- **Gastronomy**
+  - Prefer:
+    - `Product.`
+    - `Timing.`
+    - `Service.`
+    - `Atmosphere.`
+  - Over:
+    - `From private dinners to hospitality concepts, the work begins with product and ends with the full rhythm of service.`
+
+- **Digital**
+  - Prefer:
+    - `Less noise.`
+    - `More order.`
+    - `Stronger presence.`
+  - Over:
+    - `A quieter kind of digital work: thoughtful structure, editorial clarity, and performance where it matters.`
+
+- **About**
+  - Prefer an entry closer to:
+    - `Years in kitchens.`
+    - `Now across digital.`
+    - `Same discipline.`
+    - `Different medium.`
+  - Then follow with a more human paragraph below.
+
+- **Contact**
+  - Prefer:
+    - `Private inquiries.`
+  - Over:
+    - `Selected commissions and private inquiries.`
 
 ## Stack
 
@@ -27,14 +95,15 @@
 ## Architecture
 
 ### Rendering Strategy
-- `page.tsx` is a **Server Component**. All static content (hero, about, gastronomy copy, footer) is pre-rendered at build time.
-- Interactive components are **Client Component islands** that hydrate on top:
-  - `ScrollReveal.tsx` — IntersectionObserver for `.reveal` class animations.
-  - `FloatingNav.tsx` — bottom nav bar with section tracking.
-  - `StitchCardStack.tsx` — 3D project carousel (5 projects).
-  - `TypewriterTerminal.tsx` — terminal typewriter animation.
+- `page.tsx` is a **Server Component** and currently acts as a focused brand entry hero, not a long single-page landing.
+- Internal pages (`/works`, `/about`, `/contact`) also render as **Server Components** and compose shared sections/primitives.
+- Interactive components remain **Client Component islands**:
+  - `TopNav.tsx` — primary route navigation.
+  - `ScrollReveal.tsx` — reveal triggers where needed.
+  - `WorksList.tsx` — hover-driven project list treatment.
+  - `HeroTypewriter.tsx`, `MagneticCursor.tsx`, `PageLoader.tsx` — controlled motion layers.
 - `BackgroundTerminal.tsx` is a Server Component (static HTML, CSS-only animation).
-- All client components are wrapped in `ErrorBoundary` for fail-silent resilience.
+- Client components should be wrapped in `ErrorBoundary` when composed from route-level Server Components.
 
 ### File Map
 
@@ -42,7 +111,10 @@
 src/
 ├── app/
 │   ├── layout.tsx              # Root layout, metadata, OG config, BackgroundTerminal
-│   ├── page.tsx                # Main page (Server Component), all sections composed here
+│   ├── page.tsx                # Home hero (Server Component)
+│   ├── works/page.tsx          # Editorial intro + gastronomy/development chapters
+│   ├── about/page.tsx          # Editorial intro + profile section
+│   ├── contact/page.tsx        # Contact route with oversized email CTA
 │   ├── not-found.tsx           # Custom 404 error page
 │   ├── robots.ts               # Search engine robots configuration
 │   ├── sitemap.ts              # Search engine sitemap generator
@@ -53,24 +125,21 @@ src/
 │   ├── primitive.tsx           # SectionPrimitive, CardPrimitive, cx() utility, tone system
 │   ├── MonoToken.tsx           # Styled inline tokens (comment | location | project | status)
 │   ├── BackgroundTerminal.tsx  # Fixed backdrop with scrolling terminal logs (Server Component)
-│   ├── FloatingNav.tsx         # Bottom navigation with 5 section buttons
+│   ├── TopNav.tsx              # Route navigation
 │   ├── LenisProvider.tsx       # Smooth scrolling wrapper
-│   ├── LiveScanMetrics.tsx     # Culinary metrics scanning animation
 │   ├── MagneticButton.tsx      # Magnetic hover button physics
 │   ├── PageLoader.tsx          # Initial loading animation sequence
-│   ├── ProvenanceTokens.tsx    # Ingredient tags with hover image previews
+│   ├── PageIntroHero.tsx       # Shared editorial page-intro hero for internal routes
 │   ├── ScrollReveal.tsx        # Scroll-triggered reveal animations
-│   ├── SplitReveal.tsx         # Text splitting scroll animation
-│   ├── StitchCardStack.tsx     # 3D card stack carousel for projects
+│   ├── ScrambleText.tsx        # Character scramble treatment for select copy
 │   ├── TypewriterTerminal.tsx  # Terminal typewriter effect with infinite loop
-│   ├── LandingCard.tsx         # Individual project card used inside StitchCardStack
+│   ├── WorksList.tsx           # Editorial project list with hover reveal
 │   └── ErrorBoundary.tsx       # Generic error boundary (fail-silent, logs to console)
 public/
 ├── images/
 │   ├── og-fork.png             # Fork-circuit brand icon (source for OG + favicons)
-│   ├── culinary-*.jpeg         # 4 gastronomy photos
-│   ├── *.png                   # Project screenshots
-│   └── [ingredient].png        # Provenance preview photos (cacao, maiz, mora, etc.)
+│   ├── culinary-*.jpeg         # Gastronomy images
+│   └── *.png                   # Project screenshots and social assets
 ├── apple-touch-icon.png        # 180x180 favicon
 ├── favicon-32x32.png           # 32x32 favicon
 └── favicon-16x16.png           # 16x16 favicon
@@ -92,41 +161,36 @@ public/
 ### Key CSS Classes
 - `.reveal` / `.reveal.active` — scroll-triggered fade-in with scale.
 - `.night-glow` — lime text-shadow effect.
-- `.hover-glitch` — 0.3s cubic-bezier color shift on hover.
-- `.tight-headline` — letter-spacing tightens on hover.
-- `.culinary-glitch-card` — hover glow, scanline, noise effects on gastronomy images.
+- `.night-glow-cyan` — cyan text-shadow treatment for digital craft.
+- `.tight-headline` — headline tracking behavior where applied.
 - `.background-terminal-scroll` — infinite translateY animation for backdrop.
 - `.grainy-bg` — inline grain texture per element.
 
-## Page Sections (Narrative Flow)
+## Route Map (Narrative Flow)
 
-The page follows a deliberate narrative arc:
+The experience is now split across dedicated routes:
 
-1. **Hero** (`#hero`) — "Chef by Day, Vibe-Coder by Night" declaration. Lime glow headline. Short tagline: "Dos disciplinas, un mismo estandar."
-2. **About** (`#about`) — Two-column layout: bio narrative (left) + spec sheet terminal (right). Covers 10+ years in kitchens, transition to code, current roles.
-3. **Bridge** — `"Lo que cocino _"` with lime gradient lines.
-4. **Gastronomy** (`#gastronomy`) — "Culinaria Creativa". Photo grid (2x2 main + 3 side cards) with glitch/scanline effects. Wink Eventos, private dining, culinary metrics display.
-5. **Bridge** — `"Lo que construyo _"` with cyan gradient lines.
-6. **Development** (`#development`) — "Digital Craft". StitchCardStack (5 projects) + tecnical.app panel with TypewriterTerminal.
-7. **Bridge** — Vertical line + closing phrase: "Si tu proyecto necesita la misma precision que un plato bien ejecutado — hablemos."
-8. **Contact** (`#contact`) — Giant email typography CTA + social links (Instagram, GitHub, LinkedIn) + footer info.
+1. **Home** (`/`) — Brand statement only. Large hero lockup, minimal copy, mono subline from Medellin.
+2. **Works** (`/works`) — Uses `PageIntroHero`, then breaks into two chapters:
+   - `01` **Gastronomy** — restrained image-led grid, premium service copy, hover-responsive photography.
+   - `02` **Digital Craft** — editorial list of projects via `WorksList`.
+3. **About** (`/about`) — Uses `PageIntroHero` and a profile section with stats, bio, and spec rail.
+4. **Contact** (`/contact`) — Large email lockup, social links, and location/work footer notes.
 
-### Featured Projects (in StitchCardStack)
-1. **iSolution Lab** — Apple repair lab landing (isolution.com.co)
-2. **Meghan's Momentum** — Ethical taxidermy artist portfolio (meghansmomentumstudios.com)
-3. **Spa Lleras** — Wellness booking landing (spalleras.com)
-4. **Lleras Medical** — Premium IV therapy site (llerasmedicallounge.com)
-5. **Blue Moon Cottage** — Hospitality booking + branding (bluemoonhopetown.com)
-
-### Sidebar Project
-- **tecnical.app** — SaaS landing for auto repair shops (tecnical.app). Includes live terminal animation.
+### Works List Projects
+1. **tecnical.app** — SaaS / Next.js
+2. **iSolution Lab** — Landing / Apple
+3. **Meghan's Momentum** — Editorial
+4. **Spa Lleras** — Landing / Wellness
+5. **Lleras Medical** — Landing / Salud
+6. **Blue Moon Cottage** — Hospitalidad
 
 ## SEO & Social
 
 - **OG Image:** Dynamically generated via `opengraph-image.tsx` — black background, fork-circuit logo, "JOHN HERRERA / CULINARY ENGINE", `$ git commit -m 'umami'` in lime monospace.
 - **Twitter Card:** `summary_large_image`, same generated image.
 - **Favicons:** Fork-circuit icon at 16px, 32px, 180px (apple-touch).
-- **Metadata:** Title "John Herrera | Creative Chef & Vibe-Coder", locale es_CO.
+- **Metadata:** Title "John Herrera | Creative Chef & Digital Craft", locale es_CO.
 
 ## Performance Decisions
 
@@ -134,7 +198,6 @@ The page follows a deliberate narrative arc:
 - **`will-change: transform`** on terminal scroll tracks.
 - **`prefers-reduced-motion`** respected — disables all animations.
 - **Culinary hero image** has `priority` for LCP optimization.
-- **Glitch overlay images** use `sizes="1px"` + `loading="lazy"` — decorative, only load smallest srcset.
 - **All below-fold images** use explicit `loading="lazy"`.
 - **Single icon library** (Lucide) — no duplicate dependencies.
 - **Error boundaries** wrap all client components — page never crashes entirely.
@@ -146,6 +209,8 @@ The page follows a deliberate narrative arc:
 - **Class merging** uses local `cx()` function (not clsx/classnames).
 - **Inline tokens** use `MonoToken` with `kind` prop: `'comment'` | `'location'` | `'project'` | `'status'`.
 - **Terminal components** must loop infinitely with a 3s reset delay.
+- **Page intros** for internal pages should prefer `PageIntroHero` over ad-hoc hero sections.
+- **Section numbering** in the current editorial order is `01` Gastronomía, `02` Digital Craft, `03` Sobre mí, `04` Contacto.
 
 ## Dev Server
 

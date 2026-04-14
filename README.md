@@ -1,8 +1,8 @@
-# John Herrera | Creative Chef & Vibe-Coder
+# John Herrera | Creative Chef & Digital Craft
 
-Personal portfolio site — "Chef by Day, Vibe-Coder by Night."
+Personal site built as an editorial portfolio for John Herrera.
 
-Culinary direction and digital product craft from Medellin, Colombia.
+The project presents two practices under one signature: premium culinary direction and digital product craft from Medellin, Colombia.
 
 ## Stack
 
@@ -20,6 +20,13 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+## Editorial Direction
+
+- Premium editorial reading over explicit "tech UI" treatment
+- Black base, lime/cyan/blue section tones, grain overlay, `backdrop-blur-xl`
+- `font-headline` for expressive section titles and `font-mono` for data, labels, and body copy
+- Shared section chrome and intro heroes so internal pages echo the home without duplicating it
 
 ## Analytics
 
@@ -42,68 +49,29 @@ npm run build
 npm start
 ```
 
-## Project Structure
+## Routes
 
-```
-src/
-├── app/
-│   ├── layout.tsx              # Root layout, metadata, OG tags, BackgroundTerminal
-│   ├── page.tsx                # Home page (Server Component)
-│   ├── not-found.tsx           # Custom 404 error page
-│   ├── robots.ts               # Search engine robots configuration
-│   ├── sitemap.ts              # Search engine sitemap generator
-│   ├── globals.css             # Global styles, animations, visual effects
-│   ├── opengraph-image.tsx     # Dynamic OG image (1200x630)
-│   └── twitter-image.tsx       # Twitter card image (re-exports OG)
-├── components/
-│   ├── primitive.tsx           # SectionPrimitive, CardPrimitive, cx(), tone system
-│   ├── MonoToken.tsx           # Styled inline code tokens
-│   ├── BackgroundTerminal.tsx  # Fixed scrolling terminal backdrop
-│   ├── FloatingNav.tsx         # Bottom navigation bar (5 sections)
-│   ├── LenisProvider.tsx       # Smooth scrolling wrapper
-│   ├── LiveScanMetrics.tsx     # Culinary metrics scanning animation
-│   ├── MagneticButton.tsx      # Magnetic hover button physics
-│   ├── PageLoader.tsx          # Initial loading animation sequence
-│   ├── ProvenanceTokens.tsx    # Ingredient tags with hover image previews
-│   ├── ScrollReveal.tsx        # Scroll-triggered reveal animations
-│   ├── SplitReveal.tsx         # Text splitting scroll animation
-│   ├── StitchCardStack.tsx     # 3D project carousel
-│   ├── LandingCard.tsx         # Project card component
-│   ├── TypewriterTerminal.tsx  # Terminal typewriter effect
-│   └── ErrorBoundary.tsx       # Fail-silent error boundary
-public/
-├── images/                     # Project screenshots, culinary photos, provenance images
-├── apple-touch-icon.png        # 180x180 favicon
-├── favicon-32x32.png           # 32x32 favicon
-└── favicon-16x16.png           # 16x16 favicon
-```
+- `/` — minimal hero statement and brand entry point
+- `/works` — editorial intro + chapter split for gastronomy and digital work
+- `/about` — editorial intro + profile section
+- `/contact` — large-format email CTA and social links
 
-## Page Sections
+## Active Building Blocks
 
-1. **Hero** — Brand declaration with lime glow typography
-2. **About** — Bio + spec sheet terminal (two-column)
-3. **Gastronomy** — Culinary work: photo grid with glitch effects
-4. **Development** — Digital projects: 3D card stack + tecnical.app terminal
-5. **Contact** — Email CTA + social links
-
-Sections are connected by narrative bridge elements ("Lo que cocino _", "Lo que construyo _") with color-coded gradient lines.
+- `PageIntroHero.tsx` provides the shared editorial hero used on `works` and `about`
+- `SectionChrome.tsx` handles section index, label, meta, and the shared CTA treatment
+- `GastronomySection.tsx` is now a restrained image-led grid with hover response, not a glitch-heavy feature block
+- `DevelopmentSection.tsx` uses `WorksList.tsx` for a cleaner editorial project list
+- `ContactSection.tsx` focuses on the email lockup and social links
+- `primitive.tsx` contains `SectionPrimitive`, `CardPrimitive`, and `cx()`
 
 ## Architecture Highlights
 
-- `page.tsx` is a Server Component — static content is pre-rendered for SEO
-- Interactive pieces (nav, carousel, terminal) hydrate as Client Component islands
-- All client components wrapped in `ErrorBoundary` for resilience
-- OG image generated at build time via `next/og` (fork-circuit logo + "Culinary Engine")
-- BackgroundTerminal disabled on mobile for GPU savings
-- `prefers-reduced-motion` fully respected
-
-## Visual System
-
-- **Background:** `#000000` with grain overlay
-- **Accent:** Lime `#cafd00` (gastronomy), Cyan (development), Blue (contact)
-- **Glass:** `backdrop-blur-xl` + semi-transparent borders
-- **Typography:** `font-headline` (italic titles), `font-mono` (data/terminal)
-- **Primitives:** `SectionPrimitive` and `CardPrimitive` with `tone` prop
+- `page.tsx` remains a Server Component
+- Internal pages reuse the same visual grammar through shared primitives instead of cloning layouts
+- Interactive pieces stay isolated as Client Components and are composed through `ErrorBoundary`
+- OG imagery is generated dynamically in `opengraph-image.tsx`
+- Background terminal stays off on mobile and motion respects `prefers-reduced-motion`
 
 ## AI Context
 
