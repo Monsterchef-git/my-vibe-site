@@ -6,13 +6,13 @@ import ScrambleText from '@/components/ScrambleText';
 
 const PROJECTS = [
   {
-    id: 'tecnical',
+    id: 'blue-moon',
     number: '01',
-    title: 'tecnical.app',
-    tags: 'SaaS · Next.js',
-    image: '/images/tecnicalapp.png',
-    alt: 'Captura de la landing de tecnical.app con propuesta para optimizar la operación de talleres.',
-    href: 'https://www.tecnical.app',
+    title: 'Blue Moon Cottage',
+    tags: 'Hospitality',
+    image: '/images/blue-moon-hero.png',
+    alt: 'Homepage for Blue Moon Cottage featuring a coastal hospitality interior in the Bahamas.',
+    href: 'https://www.bluemoonhopetown.com',
   },
   {
     id: 'isolution',
@@ -20,7 +20,7 @@ const PROJECTS = [
     title: 'iSolution Lab',
     tags: 'Landing · Apple',
     image: '/images/isolution.png',
-    alt: 'Captura de la landing de iSolution Service Center para reparación de dispositivos Apple en Medellín.',
+    alt: 'Landing page for iSolution Service Center focused on Apple device repair in Medellin.',
     href: 'https://isolution.com.co',
   },
   {
@@ -29,7 +29,7 @@ const PROJECTS = [
     title: "Meghan's Momentum",
     tags: 'Editorial',
     image: '/images/meghans.png',
-    alt: "Captura de la homepage editorial de Meghan's Momentum con enfoque artesanal y artístico.",
+    alt: "Editorial homepage for Meghan's Momentum with an artisanal, art-led direction.",
     href: 'https://www.meghansmomentumstudios.com',
   },
   {
@@ -38,26 +38,26 @@ const PROJECTS = [
     title: 'Spa Lleras',
     tags: 'Landing · Wellness',
     image: '/images/spa.png',
-    alt: 'Captura de la landing de Spa Lleras con hero de spa y reservas de bienestar en Medellín.',
+    alt: 'Landing page for Spa Lleras with a wellness-focused hero and booking flow.',
     href: 'https://spalleras.com/',
   },
   {
     id: 'lleras-medical',
     number: '05',
     title: 'Lleras Medical',
-    tags: 'Landing · Salud',
+    tags: 'Landing · Health',
     image: '/images/medical.png',
-    alt: 'Captura de la homepage de Lleras Medical con servicio premium de terapia intravenosa en Medellín.',
+    alt: 'Homepage for Lleras Medical promoting premium IV therapy services.',
     href: 'https://www.llerasmedicallounge.com/',
   },
   {
-    id: 'blue-moon',
+    id: 'tecnical',
     number: '06',
-    title: 'Blue Moon Cottage',
-    tags: 'Hospitalidad',
-    image: '/images/blue-moon-hero.png',
-    alt: 'Captura de la web de Blue Moon Cottage con interior de alojamiento frente al mar en Bahamas.',
-    href: 'https://www.bluemoonhopetown.com',
+    title: 'tecnical.app',
+    tags: 'SaaS · Next.js',
+    image: '/images/tecnicalapp.png',
+    alt: 'Landing page for tecnical.app focused on improving repair shop operations.',
+    href: 'https://www.tecnical.app',
   },
 ] as const;
 

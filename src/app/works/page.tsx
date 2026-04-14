@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Eyebrow from '@/components/Eyebrow';
-import PageIntroHero from '@/components/PageIntroHero';
 import TopNav from '@/components/TopNav';
 import DevelopmentSection from '@/components/sections/DevelopmentSection';
 import GastronomySection from '@/components/sections/GastronomySection';
@@ -20,23 +19,20 @@ export default function WorksPage() {
     >
       <TopNav currentPath="/works" />
 
-      <PageIntroHero
-        className="mb-24"
-        eyebrow="Works ———"
-        tone="cyan"
-        title={
+      <header className="mb-24 mt-14 space-y-8 md:mt-20 md:space-y-10">
+        <Eyebrow role="muted">Works ———</Eyebrow>
+        <div className="space-y-2">
           <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
             Different materials.
-            <br />
-            <span className="text-cyan-400 night-glow-cyan">Different tempos.</span>
           </h1>
-        }
-        description={
-          <>
-            Same discipline.
-          </>
-        }
-      />
+          <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-cyan-400 night-glow-cyan">
+            Different tempos.
+          </h1>
+        </div>
+        <p className="max-w-xl border-l border-cyan-400/20 pl-6 font-mono text-sm leading-relaxed text-zinc-400">
+          Same discipline.
+        </p>
+      </header>
 
       {/* ── Chapter 01 ── */}
       <div className="mb-12 flex items-center gap-6">
