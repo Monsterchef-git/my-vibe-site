@@ -6,47 +6,21 @@ import ScrollReveal from '@/components/ScrollReveal';
 import HeroTypewriter from '@/components/HeroTypewriter';
 import ScrambleText from '@/components/ScrambleText';
 
-
+const siteUrl = 'https://johnherrerachef.com';
+const siteTitle = 'John Herrera | Creative Chef & Digital Craft';
+const siteDescription =
+  'Chef by Day, Digital Craft by Night. Ingenieria culinaria y desarrollo de software de alto nivel en Medellin.';
 
 export default function Home() {
-
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': ['FoodEstablishment', 'LocalBusiness'],
-    name: 'John Herrera Chef',
-    description:
-      'Chef creativo especializado en cocina contemporánea tropical. Servicios de cenas privadas, mealprep y clases de cocina en Medellín, Colombia.',
-    url: 'https://johnherrerachef.com',
-    email: 'chef@johnherrerachef.com',
-    image: 'https://johnherrerachef.com/images/culinary-plating.jpeg',
-    priceRange: '$$$$',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Medellín',
-      addressRegion: 'Antioquia',
-      addressCountry: 'CO',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: '6.2442',
-      longitude: '-75.5812',
-    },
-    servesCuisine: 'Cocina Contemporánea Tropical',
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Servicios Gastronómicos',
-      itemListElement: [
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Cenas Privadas' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Mealprep Services' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Clases de Cocina' } },
-        { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Chef Privado Medellín' } },
-      ],
-    },
-    sameAs: [
-      'https://www.instagram.com/johnherrerachef/',
-      'https://www.linkedin.com/in/john-herrera-chef/',
-      'https://github.com/Monsterchef-git',
-    ],
+    '@type': 'ProfilePage',
+    '@id': `${siteUrl}/#profilepage`,
+    url: siteUrl,
+    name: siteTitle,
+    description: siteDescription,
+    isPartOf: { '@id': `${siteUrl}/#website` },
+    mainEntity: { '@id': `${siteUrl}/#person` },
   };
 
   return (
