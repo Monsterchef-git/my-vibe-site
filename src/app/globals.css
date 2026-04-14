@@ -3,6 +3,9 @@
 :root {
   --background: #0a0a0a;
   --primary: #cafd00;
+  --accent-primary: #cafd00;
+  --ease-stitch-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-stitch-surface: 0 20px 60px rgba(0, 0, 0, 0.35);
   --apple-accent: #0066cc;
   --apple-success: #34c759;
   --apple-bg-card: rgba(28, 28, 30, 0.5);
@@ -56,7 +59,7 @@ body {
 }
 
 .token-status {
-  color: rgb(163 230 53);
+  color: var(--accent-primary);
   text-shadow: 0 0 18px rgb(202 253 0 / 0.18);
 }
 
@@ -84,6 +87,10 @@ body {
 /* Resplandor Night Vision */
 .night-glow {
   text-shadow: 0 0 15px rgba(202, 253, 0, 0.5);
+}
+
+.night-glow-cyan {
+  text-shadow: 0 0 15px rgba(34, 211, 238, 0.45);
 }
 
 /* Iconos de Google */
@@ -226,7 +233,7 @@ body {
   letter-spacing: -0.05em;
   /* El toque suizo */
   line-height: 0.85;
-  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.7s var(--ease-stitch-enter);
 }
 
 .tight-headline:hover {
