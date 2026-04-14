@@ -115,7 +115,6 @@ src/
 │   ├── works/page.tsx          # Editorial intro + gastronomy/development chapters
 │   ├── about/page.tsx          # Editorial intro + profile section
 │   ├── contact/page.tsx        # Contact route with oversized email CTA
-│   ├── linkedin-banner/page.tsx# Auxiliary social asset route
 │   ├── not-found.tsx           # Custom 404 error page
 │   ├── robots.ts               # Search engine robots configuration
 │   ├── sitemap.ts              # Search engine sitemap generator

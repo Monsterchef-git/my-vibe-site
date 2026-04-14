@@ -55,7 +55,6 @@ npm start
 - `/works` — editorial intro + chapter split for gastronomy and digital work
 - `/about` — editorial intro + profile section
 - `/contact` — large-format email CTA and social links
-- `/linkedin-banner` — auxiliary banner output
 
 ## Active Building Blocks
 

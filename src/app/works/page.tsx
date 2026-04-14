@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Eyebrow from '@/components/Eyebrow';
+import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import TopNav from '@/components/TopNav';
 import DevelopmentSection from '@/components/sections/DevelopmentSection';
 import GastronomySection from '@/components/sections/GastronomySection';
@@ -34,12 +35,20 @@ export default function WorksPage() {
         </p>
       </header>
 
-      {/* ── Chapter 01 ── */}
-      <div className="mb-12 flex items-center gap-6">
-        <Eyebrow as="span" tone="lime">01</Eyebrow>
-        <div className="h-px flex-1 bg-gradient-to-r from-lime-400/24 to-transparent" />
-        <Eyebrow as="span" tone="lime">Gastronomy</Eyebrow>
-      </div>
+      <ErrorBoundary>
+        <ScrollProgressBlock
+          as="div"
+          variant="bridge"
+          scrollTone="lime"
+          className="scroll-progress-bridge mb-12 flex items-center justify-center gap-5 py-2 text-center"
+        >
+          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-transparent via-lime-400/35 to-lime-400/12 md:max-w-44" />
+          <span className="scroll-progress-bridge-label font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">
+            01
+          </span>
+          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-lime-400/12 via-lime-400/35 to-transparent md:max-w-44" />
+        </ScrollProgressBlock>
+      </ErrorBoundary>
 
       <GastronomySection
         id="works-gastronomy"
@@ -47,12 +56,20 @@ export default function WorksPage() {
         compact
       />
 
-      {/* ── Chapter 02 ── */}
-      <div className="mb-12 mt-24 flex items-center gap-6">
-        <Eyebrow as="span" tone="cyan">02</Eyebrow>
-        <div className="h-px flex-1 bg-gradient-to-r from-cyan-400/24 to-transparent" />
-        <Eyebrow as="span" tone="cyan">Digital craft</Eyebrow>
-      </div>
+      <ErrorBoundary>
+        <ScrollProgressBlock
+          as="div"
+          variant="bridge"
+          scrollTone="cyan"
+          className="scroll-progress-bridge mb-12 mt-24 flex items-center justify-center gap-5 py-2 text-center"
+        >
+          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-transparent via-cyan-400/35 to-cyan-400/12 md:max-w-44" />
+          <span className="scroll-progress-bridge-label font-mono text-[10px] uppercase tracking-[0.42em] text-cyan-400/60">
+            02
+          </span>
+          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-cyan-400/12 via-cyan-400/35 to-transparent md:max-w-44" />
+        </ScrollProgressBlock>
+      </ErrorBoundary>
 
       <ErrorBoundary>
         <DevelopmentSection
