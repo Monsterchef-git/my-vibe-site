@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import Eyebrow from '@/components/Eyebrow';
 import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import TopNav from '@/components/TopNav';
+import WorksHero from '@/components/WorksHero';
 import DevelopmentSection from '@/components/sections/DevelopmentSection';
 import GastronomySection from '@/components/sections/GastronomySection';
 
@@ -20,27 +20,16 @@ export default function WorksPage() {
     >
       <TopNav currentPath="/works" />
 
-      <header className="mb-24 mt-14 space-y-8 md:mt-20 md:space-y-10">
-        <Eyebrow role="muted">Works ———</Eyebrow>
-        <div className="space-y-2">
-          <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-white">
-            Different materials.
-          </h1>
-          <h1 className="text-[clamp(3rem,11vw,9rem)] font-headline italic leading-[0.92] text-cyan-400 night-glow-cyan">
-            Different tempos.
-          </h1>
-        </div>
-        <p className="max-w-xl border-l border-cyan-400/20 pl-6 font-mono text-sm leading-relaxed text-zinc-400">
-          Same discipline.
-        </p>
-      </header>
+      <ErrorBoundary>
+        <WorksHero />
+      </ErrorBoundary>
 
       <ErrorBoundary>
         <ScrollProgressBlock
           as="div"
           variant="bridge"
           scrollTone="lime"
-          className="scroll-progress-bridge mb-12 flex items-center justify-center gap-5 py-2 text-center"
+          className="scroll-progress-bridge mb-12 mt-16 flex items-center justify-center gap-5 py-2 text-center md:mt-20"
         >
           <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-transparent via-lime-400/35 to-lime-400/12 md:max-w-44" />
           <span className="scroll-progress-bridge-label font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">

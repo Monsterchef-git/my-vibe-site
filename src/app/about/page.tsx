@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import AboutHero from '@/components/AboutHero';
 import TopNav from '@/components/TopNav';
 import AboutSection from '@/components/sections/AboutSection';
 
@@ -16,7 +18,13 @@ export default function AboutPage() {
     >
       <TopNav currentPath="/about" />
 
-      <AboutSection id="about-profile" className="bg-zinc-950/70" />
+      <ErrorBoundary>
+        <AboutHero />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <AboutSection id="about-profile" className="bg-zinc-950/70" compact />
+      </ErrorBoundary>
     </main>
   );
 }

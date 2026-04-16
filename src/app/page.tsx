@@ -4,7 +4,6 @@ import MonoToken from '@/components/MonoToken';
 import ScrollProgressBlock from '@/components/ScrollProgressBlock';
 import ScrollReveal from '@/components/ScrollReveal';
 import HeroTypewriter from '@/components/HeroTypewriter';
-import ScrambleText from '@/components/ScrambleText';
 
 const siteUrl = 'https://johnherrerachef.com';
 const siteTitle = 'John Herrera | Creative Chef & Digital Craft';
@@ -45,12 +44,8 @@ export default function Home() {
           className="flex min-h-screen items-end pt-40 pb-16 md:pt-44 md:pb-24"
         >
           <div className="w-full max-w-6xl space-y-10">
-            <div className="space-y-9">
+            <div>
               <h1 className="sr-only">John Herrera | Chef by Day, Digital Craft by Night</h1>
-              <ScrambleText
-                text="John Herrera ———"
-                className="relative z-[1] cursor-default select-none text-zinc-600 transition-colors duration-200 hover:text-zinc-400 font-mono text-[10px] uppercase tracking-[0.42em]"
-              />
               <ErrorBoundary>
                 <HeroTypewriter />
               </ErrorBoundary>

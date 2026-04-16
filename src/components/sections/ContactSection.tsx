@@ -1,8 +1,7 @@
 import Eyebrow from '@/components/Eyebrow';
 import MonoToken from '@/components/MonoToken';
-import ScrollProgressBlock from '@/components/ScrollProgressBlock';
-import { cx, sectionClassName } from '@/components/primitive';
-import { SectionChrome } from '@/components/sections/SectionChrome';
+import InternalPageHeroFrame from '@/components/InternalPageHeroFrame';
+import { cx } from '@/components/primitive';
 import ScrambleText from '@/components/ScrambleText';
 
 interface ContactSectionProps {
@@ -15,22 +14,16 @@ export default function ContactSection({
   className,
 }: ContactSectionProps) {
   return (
-    <ScrollProgressBlock
-      as="footer"
-      id={id}
-      variant="footer"
-      scrollTone="blue"
-      className={cx(sectionClassName, 'pb-20 pt-20 md:pt-16', className)}
-    >
-      <div className="mx-auto max-w-7xl">
-        <SectionChrome
-          index="04"
-          label="Contacto"
-          meta="Private inquiries."
-          tone="blue"
-        />
+    <footer id={id} className={cx('pb-20', className)}>
+      <InternalPageHeroFrame
+        as="div"
+        className="mt-0 md:mt-0"
+        sectionClassName="min-h-[64svh] pt-0 md:min-h-[70svh] md:pt-0"
+        contentClassName="justify-end pb-12"
+      >
+        <div className="space-y-10">
+          <Eyebrow role="muted">Contact --- John Herrera</Eyebrow>
 
-        <div className="mb-32 space-y-11">
           <a
             href="mailto:chef@johnherrerachef.com"
             className="group block font-mono text-[clamp(2.5rem,10vw,12rem)] uppercase tracking-[-0.08em] leading-[0.82] text-zinc-100 transition-all"
@@ -57,9 +50,15 @@ export default function ContactSection({
               stagger={32}
             />
           </a>
-        </div>
 
-        <div className="flex flex-col justify-between gap-12 border-t border-zinc-900/50 pt-20 md:flex-row md:items-end">
+          <p className="max-w-xl border-l border-white/10 pl-6 font-mono text-sm leading-relaxed text-zinc-400">
+            Private inquiries for hospitality, brand direction and digital product.
+          </p>
+        </div>
+      </InternalPageHeroFrame>
+
+      <div className="mx-auto max-w-6xl border-t border-zinc-900/50 pt-16">
+        <div className="flex flex-col justify-between gap-12 md:flex-row md:items-end">
           <div className="grid grid-cols-2 gap-x-12 gap-y-4 md:flex">
             <a
               href="https://www.instagram.com/johnherrerachef/"
@@ -90,7 +89,7 @@ export default function ContactSection({
             </a>
           </div>
 
-          <div className="text-right">
+          <div className="md:text-right">
             <Eyebrow role="dim" className="leading-loose text-zinc-800">
               <MonoToken kind="location">Medellín</MonoToken>, Antioquia <br />
               Chef creativo en <MonoToken kind="project">Wink Eventos</MonoToken> <br />
@@ -99,6 +98,6 @@ export default function ContactSection({
           </div>
         </div>
       </div>
-    </ScrollProgressBlock>
+    </footer>
   );
 }
