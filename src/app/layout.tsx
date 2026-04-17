@@ -4,6 +4,7 @@ import GoogleTracking from "@/components/GoogleTracking";
 import LenisProvider from "@/components/LenisProvider";
 import MagneticCursor from "@/components/MagneticCursor";
 import PageLoader from "@/components/PageLoader";
+import ScrollReveal from "@/components/shared/ScrollReveal";
 import "./globals.css";
 
 const siteUrl = "https://johnherrerachef.com";
@@ -130,6 +131,7 @@ export default function RootLayout({
         <BackgroundTerminal />
         <MagneticCursor />
         <div aria-hidden="true" className="signal-static-overlay" />
+        <ScrollReveal />
         <div className="relative z-10">
           {children}
         </div>

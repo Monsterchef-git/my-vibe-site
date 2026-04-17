@@ -102,18 +102,13 @@ body {
 
 @layer utilities {
   .reveal {
-    opacity: 0;
-    transform: translate3d(0, 42px, 0) scale(0.985);
-    transform-origin: center top;
-    transition:
-      opacity 0.28s linear,
-      transform 0.56s cubic-bezier(0.16, 1.18, 0.32, 1);
-    will-change: transform, opacity;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: clip-path;
   }
 
   .reveal.active {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    clip-path: inset(0 0 0% 0);
   }
 
   .tight-headline {
@@ -823,7 +818,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal,
+  .reveal {
+    clip-path: inset(0 0 0% 0) !important;
+  }
+
   .reveal.active,
   .scroll-progress-block,
   .background-terminal-track,
