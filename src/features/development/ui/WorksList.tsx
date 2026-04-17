@@ -1,7 +1,16 @@
 import Image from 'next/image';
 
-// Blue Moon Cottage (01) is extracted to WorksFeaturedProject — cinematic card above this list.
 const PROJECTS = [
+  {
+    id: 'blue-moon',
+    number: '01',
+    title: 'Blue Moon',
+    titleLine2: 'Cottage',
+    tags: 'Hospitality · Landing',
+    image: '/images/blue-moon-hero.png',
+    alt: 'Blue Moon Cottage coastal hospitality interior in the Bahamas.',
+    href: 'https://www.bluemoonhopetown.com',
+  },
   {
     id: 'isolution',
     number: '02',
