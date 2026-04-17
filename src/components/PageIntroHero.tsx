@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Eyebrow, SectionPrimitive } from '@/design/primitives';
+import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
 import { cx } from '@/lib/utils/cx';
 
 type HeroTone = 'lime' | 'cyan' | 'white';
@@ -42,7 +43,12 @@ export default function PageIntroHero({
             <div className="max-w-5xl">{title}</div>
           </div>
 
-          <p className="max-w-2xl border-l border-white/10 pl-6 font-mono text-sm leading-relaxed text-zinc-400">
+          <p
+            className={cx(
+              sectionBodyClassName,
+              'max-w-[32rem] rounded-r-[1.75rem] border-l border-white/12 bg-black/24 py-1.5 pl-6 pr-5 backdrop-blur-[2px]',
+            )}
+          >
             {description}
           </p>
         </div>

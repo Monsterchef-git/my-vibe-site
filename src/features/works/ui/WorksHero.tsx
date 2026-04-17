@@ -2,6 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import InternalPageHeroFrame from '@/components/shared/InternalPageHeroFrame';
+import {
+  sectionBodyClassName,
+  sectionMicroClassName,
+} from '@/design/tokens/components/sectionStyles';
 import { cx } from '@/lib/utils/cx';
 
 const EYEBROW = 'Selected Work --- John Herrera';
@@ -115,7 +119,7 @@ export default function WorksHero() {
   return (
     <InternalPageHeroFrame>
       <div className="space-y-8 md:space-y-10">
-        <p className="font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-500">
+        <p className={sectionMicroClassName}>
           {EYEBROW}
         </p>
 
@@ -134,7 +138,7 @@ export default function WorksHero() {
             {/* Line 2 — demoted to eyebrow (Sprint 3C) */}
             <div
               className={cx(
-                'cursor-default select-none font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-500 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+                'cursor-default select-none font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-400 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
                 line2Visible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
               )}
             >
@@ -155,7 +159,7 @@ export default function WorksHero() {
             data-cursor="cta"
             data-cursor-label="Explore"
             data-cursor-tone="lime"
-            className="font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/70 transition-colors duration-200 hover:text-lime-300 focus-visible:text-lime-300"
+            className="font-mono text-[11px] uppercase tracking-[0.32em] text-lime-300/78 transition-colors duration-200 hover:text-lime-200 focus-visible:text-lime-200"
           >
             #{LEFT_LABEL}
           </a>
@@ -168,7 +172,7 @@ export default function WorksHero() {
             data-cursor="cta"
             data-cursor-label="Explore"
             data-cursor-tone="cyan"
-            className="font-mono text-[10px] uppercase tracking-[0.42em] text-cyan-300/70 transition-colors duration-200 hover:text-cyan-200 focus-visible:text-cyan-200 md:text-right"
+            className="font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300/78 transition-colors duration-200 hover:text-cyan-200 focus-visible:text-cyan-200 md:text-right"
           >
             #{RIGHT_LABEL}
           </a>
@@ -176,7 +180,8 @@ export default function WorksHero() {
 
         <p
           className={cx(
-            'max-w-xl border-l border-white/10 pl-6 font-mono text-sm leading-relaxed text-zinc-400 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
+            sectionBodyClassName,
+            'max-w-[32rem] rounded-r-[1.75rem] border-l border-white/12 bg-black/18 py-1.5 pl-6 pr-5 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] backdrop-blur-[2px]',
             sublineVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
           )}
         >

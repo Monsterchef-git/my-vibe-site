@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Eyebrow } from '@/design/primitives';
+import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
 import AboutNameStamp from '@/features/about/ui/AboutNameStamp';
 
 /**
@@ -45,7 +46,9 @@ export default function AboutHero() {
 
           <AboutNameStamp />
 
-          <p className="max-w-sm border-l border-white/10 pl-6 font-mono text-sm leading-relaxed text-zinc-400">
+          <p
+            className={`${sectionBodyClassName} max-w-[22rem] rounded-r-[1.75rem] border-l border-white/12 bg-black/28 py-1.5 pl-6 pr-5 backdrop-blur-[2px]`}
+          >
             A way of working shaped by kitchens,
             <br className="hidden md:block" />
             {' '}now carried into digital.

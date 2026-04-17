@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { sectionBodyClassName, sectionMicroClassName } from '@/design/tokens/components/sectionStyles';
+import { cx } from '@/lib/utils/cx';
 
 /**
  * Sprint 1A — Editorial full-bleed section below the home hero.
@@ -39,10 +41,10 @@ export default function HomeEditorialSection() {
 
         {/* Top row — eyebrow + index */}
         <div className="flex items-center justify-between">
-          <p className="font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">
+          <p className={cx(sectionMicroClassName, 'text-lime-300/78')}>
             Gastronomía
           </p>
-          <span className="font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-600">
+          <span className={sectionMicroClassName}>
             01 / 02
           </span>
         </div>
@@ -65,7 +67,9 @@ export default function HomeEditorialSection() {
 
           {/* Sub-row */}
           <div className="flex items-end justify-between gap-6">
-            <p className="border-l border-lime-400/25 pl-5 font-mono text-sm leading-relaxed text-zinc-400 max-w-[22rem]">
+            <p
+              className={`${sectionBodyClassName} max-w-[24rem] rounded-r-[1.75rem] border-l border-lime-400/28 bg-black/36 py-1.5 pl-5 pr-4 backdrop-blur-[2px]`}
+            >
               Culinary engineering.
               <br />
               From kitchen to digital.
@@ -73,7 +77,7 @@ export default function HomeEditorialSection() {
 
             <Link
               href="/works#works-gastronomy"
-              className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-white/50 transition-colors duration-300 hover:text-lime-400"
+              className="shrink-0 font-mono text-[11px] uppercase tracking-[0.32em] text-white/62 transition-colors duration-300 hover:text-lime-300"
             >
               Ver trabajo →
             </Link>

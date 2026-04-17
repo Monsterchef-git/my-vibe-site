@@ -1,5 +1,9 @@
 import { Eyebrow, MonoToken } from '@/design/primitives';
-import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
+import {
+  sectionBodyClassName,
+  sectionMicroClassName,
+  sectionSupportClassName,
+} from '@/design/tokens/components/sectionStyles';
 import { SectionChrome } from '@/design/ui';
 import ScrollSectionPrimitive from '@/components/shared/ScrollSectionPrimitive';
 import { cx } from '@/lib/utils/cx';
@@ -49,7 +53,7 @@ export default function AboutSection({
             I spent more than a decade in kitchens, learning how to work with pace,
             pressure, and service without losing clarity.
           </p>
-          <p className={cx(sectionBodyClassName, 'text-zinc-500')}>
+          <p className={sectionSupportClassName}>
             Today that same way of thinking informs the digital side of my work: brand
             sites, visual systems, and a more editorial approach to structure. I work as
             Creative Chef at <MonoToken kind="project">Wink Eventos</MonoToken> and lead
@@ -73,9 +77,9 @@ export default function AboutSection({
                 <Eyebrow as="span" role="dim" className="block tracking-[0.18em]">
                   {item.key}
                 </Eyebrow>
-                <Eyebrow as="span" role="muted" className="mt-0.5 block tracking-[0.18em]">
+                <span className={cx(sectionMicroClassName, 'mt-1 block normal-case tracking-[0.14em] text-zinc-300/76')}>
                   {item.value}
-                </Eyebrow>
+                </span>
               </div>
             ))}
 
