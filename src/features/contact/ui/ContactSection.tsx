@@ -1,6 +1,7 @@
 'use client';
 
-import { Eyebrow, MonoToken } from '@/design/primitives';
+import { Eyebrow } from '@/design/primitives';
+import { sectionMicroClassName } from '@/design/tokens/components/sectionStyles';
 import ScrambleText from '@/components/shared/ScrambleText';
 import { cx } from '@/lib/utils/cx';
 
@@ -24,7 +25,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
     <footer
       id={id}
       className={cx(
-        '-mx-6 -mt-28 relative min-h-screen overflow-hidden md:-mx-24 md:-mt-32',
+        'relative mx-auto mt-6 min-h-[88svh] w-[calc(100%-1rem)] max-w-[calc(100vw-1rem)] overflow-hidden rounded-[2.75rem] border border-zinc-800/80 md:mt-8 md:min-h-[92svh] md:w-[calc(100%-2rem)] md:max-w-[calc(100vw-2rem)]',
         className,
       )}
     >
@@ -40,18 +41,18 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
       />
 
       {/* Main layout */}
-      <div className="flex min-h-screen flex-col px-6 md:px-24">
+      <div className="flex min-h-[88svh] flex-col px-5 md:min-h-[92svh] md:px-14">
 
         {/* ── Top — eyebrow ── */}
-        <div className="flex items-center justify-between gap-4 pt-28 md:pt-36">
+        <div className="flex items-center justify-between gap-4 pt-20 md:pt-24">
           <Eyebrow role="muted" className="whitespace-nowrap">Contact --- John Herrera</Eyebrow>
-          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-700">
+          <span className={cx(sectionMicroClassName, 'shrink-0 text-zinc-500')}>
             Medellín, CO
           </span>
         </div>
 
         {/* ── Email installation — main visual mass ── */}
-        <div className="flex flex-1 flex-col justify-end pb-20 md:pb-28">
+        <div className="flex flex-1 flex-col justify-end pb-16 md:pb-20">
 
           <a
             href="mailto:chef@johnherrerachef.com"
@@ -64,8 +65,8 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               text="chef@"
               speed={28}
               stagger={32}
-              className="mb-1 ml-[4vw] block font-mono uppercase tracking-[-0.04em] text-zinc-600 transition-colors duration-500 group-hover:text-zinc-400"
-              style={{ fontSize: 'clamp(1.4rem, 3vw, 2.5rem)' }}
+              className="mb-1 ml-[2vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400 transition-colors duration-500 group-hover:text-zinc-200"
+              style={{ fontSize: 'clamp(1.15rem, 2.4vw, 2rem)' }}
             />
 
             {/* JOHNHERRERA — the installation. Fills the viewport. */}
@@ -75,7 +76,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               speed={22}
               stagger={28}
               className="night-glow block font-mono uppercase tracking-[-0.03em] text-[var(--accent-primary)] transition-[text-shadow] duration-500 group-hover:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)]"
-              style={{ fontSize: 'clamp(3.5rem, 16vw, 14rem)', lineHeight: 0.88 }}
+              style={{ fontSize: 'clamp(3.25rem, 13vw, 11rem)', lineHeight: 0.9 }}
             />
 
             {/* chef.com — medium, offset right, fading */}
@@ -84,17 +85,11 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               text="chef.com"
               speed={28}
               stagger={36}
-              className="mt-1 ml-[8vw] block font-mono uppercase tracking-[-0.04em] text-zinc-600 transition-colors duration-500 group-hover:text-zinc-500"
-              style={{ fontSize: 'clamp(1.8rem, 4.5vw, 4rem)' }}
+              className="mt-1 ml-[4vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400/88 transition-colors duration-500 group-hover:text-zinc-200"
+              style={{ fontSize: 'clamp(1.5rem, 3.6vw, 3.2rem)' }}
             />
           </a>
 
-          {/* Subline — anchored under the email */}
-          <p className="ml-[1vw] mt-8 max-w-xs border-l border-lime-400/20 pl-5 font-mono text-sm leading-relaxed text-zinc-500 md:max-w-sm">
-            Private inquiries for hospitality,
-            <br />
-            brand direction and digital product.
-          </p>
         </div>
 
         {/* ── Bottom anchor — stats + social ── */}
@@ -121,15 +116,8 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               ))}
             </div>
 
-            {/* Closing stats */}
-            <div className="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-700 md:text-right">
-              <span>06 Projects</span>
-              <span className="mx-3 text-zinc-800">·</span>
-              <span>02 Disciplines</span>
-              <span className="mx-3 text-zinc-800">·</span>
-              <MonoToken kind="location">Medellín</MonoToken>
-              <span className="mx-3 text-zinc-800">·</span>
-              <span>©{new Date().getFullYear()}</span>
+            <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-zinc-500 md:text-right">
+              <span>© 2026</span>
             </div>
           </div>
         </div>
