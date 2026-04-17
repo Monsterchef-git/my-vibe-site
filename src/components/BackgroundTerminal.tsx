@@ -1,4 +1,4 @@
-import MonoToken from '@/components/MonoToken';
+import { MonoToken } from '@/design/primitives';
 
 const LOG_BLOCKS = [
   {

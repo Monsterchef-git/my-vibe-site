@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 const INTERACTIVE_SELECTOR = [
+  '[data-cursor]',
   'a[href]',
   'button',
   '[role="button"]',
@@ -13,34 +14,86 @@ const INTERACTIVE_SELECTOR = [
   '[data-magnetic]',
 ].join(',');
 
-const BASE_SIZE = 26;
-const HOVER_MIN_WIDTH = 44;
-const HOVER_MAX_WIDTH = 140;
-const HOVER_MIN_HEIGHT = 44;
-const HOVER_MAX_HEIGHT = 88;
+const CURSOR_MODES = ['idle', 'link', 'cta', 'lens', 'drag'] as const;
+const CURSOR_TONES = ['neutral', 'lime', 'cyan', 'blue', 'white'] as const;
+
+type CursorMode = (typeof CURSOR_MODES)[number];
+type CursorTone = (typeof CURSOR_TONES)[number];
+
+const BASE_SIZE = 18;
+const BASE_EASING = 0.22;
+
+const TONE_RGB: Record<CursorTone, string> = {
+  neutral: '161, 161, 170',
+  lime: '202, 253, 0',
+  cyan: '34, 211, 238',
+  blue: '96, 165, 250',
+  white: '255, 255, 255',
+};
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
+const isCursorMode = (value: string | undefined): value is CursorMode =>
+  CURSOR_MODES.includes(value as CursorMode);
+
+const isCursorTone = (value: string | undefined): value is CursorTone =>
+  CURSOR_TONES.includes(value as CursorTone);
+
+const getCursorMode = (element: HTMLElement | null): CursorMode => {
+  if (!element) {
+    return 'idle';
+  }
+
+  return isCursorMode(element.dataset.cursor) ? element.dataset.cursor : 'link';
+};
+
+const getCursorLabel = (element: HTMLElement | null) =>
+  element?.dataset.cursorLabel?.trim() ?? '';
+
+const getCursorTone = (element: HTMLElement | null): CursorTone => {
+  if (!element) {
+    return 'neutral';
+  }
+
+  const explicitTone = element.dataset.cursorTone
+    ?? element.closest<HTMLElement>('[data-cursor-tone]')?.dataset.cursorTone
+    ?? element.closest<HTMLElement>('[data-scroll-tone]')?.dataset.scrollTone;
+
+  return isCursorTone(explicitTone) ? explicitTone : 'neutral';
+};
+
+const getStickiness = (element: HTMLElement | null) =>
+  element?.dataset.cursorStick === 'true';
+
 export default function MagneticCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
+  const shellRef = useRef<HTMLSpanElement>(null);
   const dotRef = useRef<HTMLSpanElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
   const frameRef = useRef<number | null>(null);
   const enabledRef = useRef(false);
   const visibleRef = useRef(false);
   const pressedRef = useRef(false);
   const activeElementRef = useRef<HTMLElement | null>(null);
-  const previousLensElementRef = useRef<HTMLElement | null>(null);
+  const hoveredElementRef = useRef<HTMLElement | null>(null);
   const pointerRef = useRef({ x: 0, y: 0 });
   const currentRef = useRef({ x: 0, y: 0 });
   const sizeRef = useRef({ width: BASE_SIZE, height: BASE_SIZE });
+  const velocityRef = useRef({ x: 0, y: 0 });
+  const speedRef = useRef(0);
+  const angleRef = useRef(0);
+  const stretchRef = useRef(0);
+  const lastPointerRef = useRef({ x: 0, y: 0 });
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     const cursor = cursorRef.current;
+    const shell = shellRef.current;
     const dot = dotRef.current;
+    const label = labelRef.current;
 
-    if (!cursor || !dot) {
+    if (!cursor || !shell || !dot || !label) {
       return;
     }
 
@@ -49,16 +102,6 @@ export default function MagneticCursor() {
     );
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    const clearLensState = (element: HTMLElement | null) => {
-      if (!element || element.dataset.magnetic !== 'lens') {
-        return;
-      }
-
-      element.style.removeProperty('--lens-x');
-      element.style.removeProperty('--lens-y');
-      element.style.removeProperty('--lens-active');
-    };
-
     const render = () => {
       frameRef.current = null;
 
@@ -66,66 +109,127 @@ export default function MagneticCursor() {
         return;
       }
 
-      const activeElement = activeElementRef.current;
-      const isLensMode = activeElement?.dataset.magnetic === 'lens';
+      const activeElement = activeElementRef.current?.isConnected
+        ? activeElementRef.current
+        : null;
+      const hoveredElement = hoveredElementRef.current?.isConnected
+        ? hoveredElementRef.current
+        : null;
+      const mode = getCursorMode(activeElement);
+      const tone = getCursorTone(activeElement ?? hoveredElement);
+      const labelText = getCursorLabel(activeElement);
+      const rgb = TONE_RGB[tone];
       const pointer = pointerRef.current;
+      const hasLabel = labelText.length > 0;
+      const isPressed = pressedRef.current;
+
       let targetX = pointer.x;
       let targetY = pointer.y;
       let targetWidth = BASE_SIZE;
       let targetHeight = BASE_SIZE;
+      let easing = BASE_EASING;
 
-      if (activeElement && activeElement.isConnected) {
+      if (activeElement) {
         const rect = activeElement.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
+        const stickyBoost = getStickiness(activeElement) ? 0.14 : 0;
 
-        if (isLensMode) {
-          const lensSize = clamp(Math.max(rect.height + 26, 78), 78, 108);
-          const localX = pointer.x - rect.left;
-          const localY = pointer.y - rect.top;
-          targetX = pointer.x + (centerX - pointer.x) * 0.22;
-          targetY = pointer.y + (centerY - pointer.y) * 0.22;
-          targetWidth = lensSize;
-          targetHeight = lensSize;
-          activeElement.style.setProperty('--lens-x', `${localX}px`);
-          activeElement.style.setProperty('--lens-y', `${localY}px`);
-          activeElement.style.setProperty('--lens-active', '1');
-          previousLensElementRef.current = activeElement;
+        if (mode === 'lens') {
+          const localX = rect.width > 0 ? pointer.x - rect.left : 0;
+          const localY = rect.height > 0 ? pointer.y - rect.top : 0;
+          const lensOffsetX = rect.width > 0 ? ((localX / rect.width) - 0.5) * 18 : 0;
+          const lensOffsetY = rect.height > 0 ? ((localY / rect.height) - 0.5) * 12 : 0;
+
+          targetWidth = clamp(rect.width * 0.34, 96, 184);
+          targetHeight = clamp(rect.height * 0.2, 68, 116);
+          targetX = pointer.x + (centerX - pointer.x) * (0.22 + stickyBoost) + lensOffsetX * 0.34;
+          targetY = pointer.y + (centerY - pointer.y) * (0.18 + stickyBoost * 0.4) + lensOffsetY * 0.34;
+          easing = 0.14;
+        } else if (mode === 'cta') {
+          targetWidth = clamp(rect.width + 28, 72, 196);
+          targetHeight = clamp(rect.height + 18, 42, 64);
+          targetX = pointer.x + (centerX - pointer.x) * (0.46 + stickyBoost);
+          targetY = pointer.y + (centerY - pointer.y) * (0.46 + stickyBoost);
+          easing = 0.18;
+        } else if (mode === 'drag') {
+          targetWidth = clamp(rect.width * 0.46, 108, 184);
+          targetHeight = clamp(rect.height * 0.16, 48, 74);
+          targetX = pointer.x + (centerX - pointer.x) * (0.3 + stickyBoost);
+          targetY = pointer.y + (centerY - pointer.y) * (0.26 + stickyBoost * 0.5);
+          easing = 0.15;
         } else {
-          targetX = pointer.x + (centerX - pointer.x) * 0.42;
-          targetY = pointer.y + (centerY - pointer.y) * 0.42;
-          targetWidth = clamp(rect.width + 18, HOVER_MIN_WIDTH, HOVER_MAX_WIDTH);
-          targetHeight = clamp(rect.height + 14, HOVER_MIN_HEIGHT, HOVER_MAX_HEIGHT);
-          clearLensState(previousLensElementRef.current);
-          previousLensElementRef.current = null;
+          targetWidth = clamp(rect.width + 18, 54, 168);
+          targetHeight = clamp(rect.height + 12, 36, 56);
+          targetX = pointer.x + (centerX - pointer.x) * (0.38 + stickyBoost);
+          targetY = pointer.y + (centerY - pointer.y) * (0.38 + stickyBoost);
+          easing = 0.17;
         }
-      } else {
-        clearLensState(previousLensElementRef.current);
-        previousLensElementRef.current = null;
       }
 
-      const easing = activeElement ? 0.16 : 0.22;
       currentRef.current.x += (targetX - currentRef.current.x) * easing;
       currentRef.current.y += (targetY - currentRef.current.y) * easing;
-      sizeRef.current.width += (targetWidth - sizeRef.current.width) * 0.18;
-      sizeRef.current.height += (targetHeight - sizeRef.current.height) * 0.18;
+      sizeRef.current.width += (targetWidth - sizeRef.current.width) * 0.2;
+      sizeRef.current.height += (targetHeight - sizeRef.current.height) * 0.2;
 
-      const width = sizeRef.current.width * (pressedRef.current ? 0.9 : 1);
-      const height = sizeRef.current.height * (pressedRef.current ? 0.9 : 1);
+      speedRef.current += (
+        Math.hypot(velocityRef.current.x, velocityRef.current.y) - speedRef.current
+      ) * 0.2;
+
+      const targetAngle = speedRef.current > 0.2
+        ? (Math.atan2(velocityRef.current.y, velocityRef.current.x) * 180) / Math.PI
+        : 0;
+      const maxStretch = mode === 'lens' ? 0.08 : mode === 'idle' ? 0.04 : 0.14;
+      const stretch = clamp(speedRef.current / 26, 0, maxStretch);
+
+      angleRef.current += (targetAngle - angleRef.current) * 0.18;
+      stretchRef.current += (stretch - stretchRef.current) * 0.18;
+
+      const width = sizeRef.current.width * (isPressed ? 0.94 : 1);
+      const height = sizeRef.current.height * (isPressed ? 0.92 : 1);
+      const scaleX = 1 + stretchRef.current;
+      const scaleY = 1 - stretchRef.current * 0.42;
 
       cursor.style.opacity = visibleRef.current ? '1' : '0';
       cursor.style.width = `${width}px`;
       cursor.style.height = `${height}px`;
-      cursor.style.borderColor = isLensMode ? 'rgba(255,255,255,0.22)' : 'rgba(202,253,0,0.9)';
-      cursor.style.background = isLensMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.10)';
-      cursor.style.boxShadow = isLensMode
-        ? '0 18px 44px rgba(0,0,0,0.26), inset 0 0 0 1px rgba(255,255,255,0.08)'
-        : '0 0 22px rgba(202,253,0,0.16), inset 0 0 0 1px rgba(202,253,0,0.14)';
-      cursor.style.backdropFilter = 'none';
-      dot.style.opacity = isLensMode ? '0' : '1';
       cursor.style.transform = `translate3d(${currentRef.current.x - width / 2}px, ${
         currentRef.current.y - height / 2
       }px, 0)`;
+
+      shell.style.borderRadius = mode === 'lens' ? '28px' : '999px';
+      shell.style.transform = `rotate(${angleRef.current}deg) scale(${scaleX}, ${scaleY})`;
+
+      if (mode === 'idle') {
+        shell.style.borderColor = `rgba(${rgb}, 0.2)`;
+        shell.style.background = 'rgba(10, 10, 10, 0.08)';
+        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.1), 0 0 18px rgba(${rgb}, 0.08)`;
+      } else if (mode === 'cta') {
+        shell.style.borderColor = `rgba(${rgb}, 0.9)`;
+        shell.style.background = `rgba(${rgb}, 0.08)`;
+        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.18), 0 0 34px rgba(${rgb}, 0.22), inset 0 0 20px rgba(${rgb}, 0.08)`;
+      } else if (mode === 'lens') {
+        shell.style.borderColor = `rgba(${rgb}, 0.72)`;
+        shell.style.background = 'rgba(10, 10, 10, 0.04)';
+        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 42px rgba(0, 0, 0, 0.24)`;
+      } else if (mode === 'drag') {
+        shell.style.borderColor = `rgba(${rgb}, 0.8)`;
+        shell.style.background = 'rgba(10, 10, 10, 0.12)';
+        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 16px 34px rgba(0, 0, 0, 0.24)`;
+      } else {
+        shell.style.borderColor = `rgba(${rgb}, 0.82)`;
+        shell.style.background = 'rgba(10, 10, 10, 0.12)';
+        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 0 26px rgba(${rgb}, 0.14)`;
+      }
+
+      dot.style.opacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
+      dot.style.background = `rgba(${rgb}, 1)`;
+      dot.style.boxShadow = `0 0 14px rgba(${rgb}, 0.72)`;
+
+      label.textContent = labelText.toUpperCase();
+      label.style.opacity = hasLabel && mode !== 'idle' ? '1' : '0';
+      label.style.color = `rgba(${rgb}, ${mode === 'cta' ? '1' : '0.88'})`;
+      label.style.letterSpacing = hasLabel ? '0.32em' : '0.24em';
 
       frameRef.current = window.requestAnimationFrame(render);
     };
@@ -145,19 +249,27 @@ export default function MagneticCursor() {
 
     const resetCursor = () => {
       activeElementRef.current = null;
+      hoveredElementRef.current = null;
       visibleRef.current = false;
       pressedRef.current = false;
       sizeRef.current = { width: BASE_SIZE, height: BASE_SIZE };
+      velocityRef.current = { x: 0, y: 0 };
+      speedRef.current = 0;
+      angleRef.current = 0;
+      stretchRef.current = 0;
       cursor.style.opacity = '0';
       cursor.style.width = `${BASE_SIZE}px`;
       cursor.style.height = `${BASE_SIZE}px`;
-      clearLensState(previousLensElementRef.current);
-      previousLensElementRef.current = null;
-      cursor.style.borderColor = 'rgba(202,253,0,0.9)';
-      cursor.style.background = 'rgba(0,0,0,0.10)';
-      cursor.style.boxShadow = '0 0 22px rgba(202,253,0,0.16), inset 0 0 0 1px rgba(202,253,0,0.14)';
-      cursor.style.backdropFilter = 'none';
+      shell.style.transform = 'scale(1)';
+      shell.style.borderRadius = '999px';
+      shell.style.borderColor = 'rgba(202, 253, 0, 0.2)';
+      shell.style.background = 'rgba(10, 10, 10, 0.08)';
+      shell.style.boxShadow = '0 0 0 1px rgba(202, 253, 0, 0.1), 0 0 18px rgba(202, 253, 0, 0.08)';
       dot.style.opacity = '1';
+      dot.style.background = 'rgba(202, 253, 0, 1)';
+      dot.style.boxShadow = '0 0 14px rgba(202, 253, 0, 0.72)';
+      label.textContent = '';
+      label.style.opacity = '0';
     };
 
     const updateEnabled = () => {
@@ -175,17 +287,15 @@ export default function MagneticCursor() {
 
     const updateInteractiveTarget = (target: EventTarget | null) => {
       if (!(target instanceof Element)) {
-        clearLensState(previousLensElementRef.current);
-        previousLensElementRef.current = null;
+        hoveredElementRef.current = null;
         activeElementRef.current = null;
         return;
       }
 
+      const hoveredTarget = target instanceof HTMLElement ? target : null;
       const interactiveTarget = target.closest(INTERACTIVE_SELECTOR);
-      if (activeElementRef.current && activeElementRef.current !== interactiveTarget) {
-        clearLensState(previousLensElementRef.current);
-        previousLensElementRef.current = null;
-      }
+
+      hoveredElementRef.current = hoveredTarget;
       activeElementRef.current = interactiveTarget instanceof HTMLElement ? interactiveTarget : null;
     };
 
@@ -194,11 +304,23 @@ export default function MagneticCursor() {
         return;
       }
 
-      pointerRef.current = { x: event.clientX, y: event.clientY };
+      const nextX = event.clientX;
+      const nextY = event.clientY;
 
       if (!visibleRef.current) {
         visibleRef.current = true;
-        currentRef.current = { x: event.clientX, y: event.clientY };
+        currentRef.current = { x: nextX, y: nextY };
+        pointerRef.current = { x: nextX, y: nextY };
+        lastPointerRef.current = { x: nextX, y: nextY };
+        velocityRef.current = { x: 0, y: 0 };
+      } else {
+        const deltaX = nextX - lastPointerRef.current.x;
+        const deltaY = nextY - lastPointerRef.current.y;
+
+        velocityRef.current.x += (deltaX - velocityRef.current.x) * 0.22;
+        velocityRef.current.y += (deltaY - velocityRef.current.y) * 0.22;
+        pointerRef.current = { x: nextX, y: nextY };
+        lastPointerRef.current = { x: nextX, y: nextY };
       }
 
       updateInteractiveTarget(event.target);
@@ -207,11 +329,14 @@ export default function MagneticCursor() {
 
     const handlePointerLeave = () => {
       activeElementRef.current = null;
+      hoveredElementRef.current = null;
       visibleRef.current = false;
+      velocityRef.current = { x: 0, y: 0 };
     };
 
     const handlePointerDown = () => {
       pressedRef.current = true;
+      startLoop();
     };
 
     const handlePointerUp = () => {
@@ -247,13 +372,21 @@ export default function MagneticCursor() {
     <div
       ref={cursorRef}
       aria-hidden="true"
-      className={`pointer-events-none fixed left-0 top-0 z-[260] items-center justify-center rounded-full border border-[#cafd00] bg-black/10 opacity-0 shadow-[0_0_22px_rgba(202,253,0,0.16),inset_0_0_0_1px_rgba(202,253,0,0.14)] ${
-        enabled ? 'flex' : 'hidden'
+      className={`pointer-events-none fixed left-0 top-0 z-[260] opacity-0 ${
+        enabled ? 'block' : 'hidden'
       }`}
     >
       <span
+        ref={shellRef}
+        className="absolute inset-0 rounded-full border border-transparent transition-[border-color,background-color,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]"
+      />
+      <span
+        ref={labelRef}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.32em] transition-opacity duration-150"
+      />
+      <span
         ref={dotRef}
-        className="h-1 w-1 rounded-full bg-[#cafd00] shadow-[0_0_10px_rgba(202,253,0,0.75)] transition-opacity duration-200"
+        className="absolute left-1/2 top-1/2 h-[4px] w-[4px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-150"
       />
     </div>
   );

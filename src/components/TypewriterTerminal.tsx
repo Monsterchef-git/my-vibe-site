@@ -1,11 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
-import MonoToken from '@/components/MonoToken';
-import { cx } from '@/components/primitive';
+import { MonoToken } from '@/design/primitives';
+import { cx } from '@/lib/utils/cx';
 
 const MESSAGES = [
   "// Desplegando tecnical.app Landing v1.2.0",
-  "import { Primitive, cx } from '@/components/primitive';",
+  "import { SectionPrimitive, CardPrimitive, MonoToken } from '@/design/primitives';",
   "import { TypewriterTerminal } from '@/components/TypewriterTerminal';",
   "",
   "> Inicializando tema: Stitch-Surface/4",
@@ -13,9 +13,9 @@ const MESSAGES = [
   "",
   "// Renderizando secciones de producto",
   "const Layout = () => (",
-  "  <Primitive.Section className={cx('bg-zinc-950/70')}>",
+  "  <SectionPrimitive className={cx('bg-zinc-950/70')}>",
   "    <TypewriterTerminal className='font-mono' />",
-  "  </Primitive.Section>",
+  "  </SectionPrimitive>",
   ");",
   "",
   "→ LCP optimizado: 0.8s",

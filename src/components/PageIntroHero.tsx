@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import Eyebrow from '@/components/Eyebrow';
-import { SectionPrimitive, cx } from '@/components/primitive';
+import { Eyebrow, SectionPrimitive } from '@/design/primitives';
+import { cx } from '@/lib/utils/cx';
 
 type HeroTone = 'lime' | 'cyan' | 'white';
 

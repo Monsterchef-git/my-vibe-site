@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { cx } from '@/components/primitive';
+import { cx } from '@/lib/utils/cx';
 
 const SCAN_PROFILES = [
   [

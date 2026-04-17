@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import { cx } from '@/components/primitive';
+import { cx } from '@/lib/utils/cx';
 
 type BootPanelVariant = 'loader' | 'hero';
 

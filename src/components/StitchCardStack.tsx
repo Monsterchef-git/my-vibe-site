@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import MonoToken from '@/components/MonoToken';
-import { CardPrimitive, cx } from '@/components/primitive';
+import { CardPrimitive, MonoToken } from '@/design/primitives';
+import { cx } from '@/lib/utils/cx';
 
 const PROJECTS = [
   {
@@ -156,6 +156,10 @@ export default function StitchCardStack() {
               )}
               role={isTopCard ? 'button' : undefined}
               tabIndex={isTopCard ? 0 : -1}
+              data-cursor={isTopCard ? 'drag' : undefined}
+              data-cursor-label={isTopCard ? 'Next' : undefined}
+              data-cursor-tone={isTopCard ? project.tone : undefined}
+              data-cursor-stick={isTopCard ? 'true' : undefined}
               style={{
                 transform,
                 opacity: isTopCard && isAnimating ? (isMobile ? 0.36 : 0) : opacity,
@@ -233,6 +237,9 @@ export default function StitchCardStack() {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(event) => event.stopPropagation()}
+                        data-cursor="cta"
+                        data-cursor-label="Open"
+                        data-cursor-tone={project.tone}
                         className="pointer-events-auto font-mono text-[10px] uppercase tracking-[0.24em] text-lime-400 transition-[color,transform] duration-[240ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] hover:-translate-y-0.5 hover:text-white sm:tracking-[0.32em]"
                       >
                         Ver proyecto _
@@ -250,6 +257,9 @@ export default function StitchCardStack() {
         <button
           type="button"
           onClick={nextCard}
+          data-cursor="cta"
+          data-cursor-label="Explore"
+          data-cursor-tone="cyan"
           className="group flex w-full max-w-[260px] flex-col items-center gap-3 rounded-[2rem] border border-zinc-800/80 bg-black px-6 py-5 text-center transition-[transform,border-color,box-shadow] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] hover:-translate-y-0.5 hover:border-cyan-400/40 hover:shadow-[0_0_24px_rgba(34,211,238,0.08)]"
         >
           <span className="font-mono text-[9px] uppercase tracking-[0.5em] text-zinc-600 transition-colors duration-[220ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] group-hover:text-cyan-400">
