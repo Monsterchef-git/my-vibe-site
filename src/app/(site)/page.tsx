@@ -1,25 +1,43 @@
+import type { Metadata } from 'next';
 import TopNav from '@/components/shared/TopNav';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import { MonoToken } from '@/design/primitives';
 import ScrollProgressBlock from '@/components/shared/ScrollProgressBlock';
 import HeroTypewriter from '@/features/home/ui/HeroTypewriter';
 import HomeEditorialSection from '@/features/home/ui/HomeEditorialSection';
+import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
-const siteUrl = 'https://johnherrerachef.com';
-const siteTitle = 'John Herrera | Creative Chef & Digital Craft';
-const siteDescription =
-  'Chef by Day, Digital Craft by Night. Ingenieria culinaria y desarrollo de software de alto nivel en Medellin.';
+const homeSeo = PAGE_SEO.home;
+
+export const metadata: Metadata = {
+  title: homeSeo.title,
+  description: homeSeo.description,
+  alternates: {
+    canonical: homeSeo.path,
+  },
+  openGraph: {
+    title: homeSeo.title,
+    description: homeSeo.description,
+    url: `${SITE_URL}${homeSeo.path}`,
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: homeSeo.title,
+    description: homeSeo.description,
+  },
+};
 
 export default function Home() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
-    '@id': `${siteUrl}/#profilepage`,
-    url: siteUrl,
-    name: siteTitle,
-    description: siteDescription,
-    isPartOf: { '@id': `${siteUrl}/#website` },
-    mainEntity: { '@id': `${siteUrl}/#person` },
+    '@id': `${SITE_URL}${homeSeo.path}#profilepage`,
+    url: `${SITE_URL}${homeSeo.path}`,
+    name: homeSeo.title,
+    description: homeSeo.description,
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    mainEntity: { '@id': `${SITE_URL}/#person` },
   };
 
   return (

@@ -2,6 +2,10 @@ import Image from 'next/image';
 import { Eyebrow } from '@/design/primitives';
 import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
 import AboutNameStamp from '@/features/about/ui/AboutNameStamp';
+import {
+  BLUR_ABOUT_PORTRAIT,
+  IMAGE_ABOUT_PORTRAIT,
+} from '@/lib/imageAssets';
 
 /**
  * Sprint 1C — Portrait as the hero, not a widget inside it.
@@ -17,11 +21,12 @@ export default function AboutHero() {
       {/* Give the portrait a larger right-side canvas instead of scaling it down inside the hero. */}
       <div className="absolute inset-0 bg-white md:-top-[2%] md:-right-[10%] md:-bottom-[10%] md:left-[30%]">
         <Image
-          src="/images/about-john-herrera.png"
+          src={IMAGE_ABOUT_PORTRAIT}
           alt="Portrait of John Herrera"
           fill
           sizes="(min-width: 768px) 70vw, 100vw"
-          loading="eager"
+          placeholder="blur"
+          blurDataURL={BLUR_ABOUT_PORTRAIT}
           priority
           className="object-cover object-[center_18%] md:object-[center_30%]"
         />

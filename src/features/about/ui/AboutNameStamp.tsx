@@ -58,11 +58,9 @@ export default function AboutNameStamp() {
           lockupVisible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-8 opacity-0 blur-sm',
         )}
       >
-        <h1 className="font-headline text-[clamp(3.75rem,10vw,8.8rem)] italic leading-[0.9] tracking-[-0.04em] text-white">
-          John
-        </h1>
-        <h1 className="font-headline text-[clamp(3.75rem,10vw,8.8rem)] italic leading-[0.9] tracking-[-0.04em] text-[var(--accent-primary)] night-glow">
-          Herrera
+        <h1 className="font-headline text-[clamp(3.75rem,10vw,8.8rem)] italic leading-[0.9] tracking-[-0.04em]">
+          <span className="block text-white">John</span>
+          <span className="night-glow block text-[var(--accent-primary)]">Herrera</span>
         </h1>
       </div>
     </div>

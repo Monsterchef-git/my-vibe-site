@@ -45,7 +45,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
 
         {/* ── Top — eyebrow ── */}
         <div className="flex items-center justify-between gap-4 pt-20 md:pt-24">
-          <Eyebrow role="muted" className="whitespace-nowrap">Contact --- John Herrera</Eyebrow>
+          <Eyebrow as="h1" role="muted" className="whitespace-nowrap">Contact --- John Herrera</Eyebrow>
           <span className={cx(sectionMicroClassName, 'shrink-0 text-zinc-500')}>
             Medellín, CO
           </span>
@@ -57,7 +57,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
           <a
             href="mailto:chef@johnherrerachef.com"
             aria-label="Send email to chef@johnherrerachef.com"
-            className="group block leading-none"
+            className="group block rounded-[1.75rem] leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             {/* chef@ — small, indented, dim. Like a label on a container. */}
             <ScrambleText
@@ -65,7 +65,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               text="chef@"
               speed={28}
               stagger={32}
-              className="mb-1 ml-[2vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400 transition-colors duration-500 group-hover:text-zinc-200"
+              className="mb-1 ml-[2vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400 transition-colors duration-500 group-hover:text-zinc-200 group-focus-visible:text-zinc-200"
               style={{ fontSize: 'clamp(1.15rem, 2.4vw, 2rem)' }}
             />
 
@@ -75,7 +75,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               text="JOHNHERRERA"
               speed={22}
               stagger={28}
-              className="night-glow block font-mono uppercase tracking-[-0.03em] text-[var(--accent-primary)] transition-[text-shadow] duration-500 group-hover:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)]"
+              className="night-glow block font-mono uppercase tracking-[-0.03em] text-[var(--accent-primary)] transition-[text-shadow] duration-500 group-hover:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)] group-focus-visible:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)]"
               style={{ fontSize: 'clamp(3.25rem, 13vw, 11rem)', lineHeight: 0.9 }}
             />
 
@@ -85,7 +85,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               text="chef.com"
               speed={28}
               stagger={36}
-              className="mt-1 ml-[4vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400/88 transition-colors duration-500 group-hover:text-zinc-200"
+              className="mt-1 ml-[4vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400/88 transition-colors duration-500 group-hover:text-zinc-200 group-focus-visible:text-zinc-200"
               style={{ fontSize: 'clamp(1.5rem, 3.6vw, 3.2rem)' }}
             />
           </a>
@@ -99,16 +99,31 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
             {/* Social links */}
             <div className="flex flex-wrap gap-x-8 gap-y-3">
               {[
-                { href: 'https://www.instagram.com/johnherrerachef/', label: 'Instagram', color: 'hover:text-lime-400' },
-                { href: 'https://github.com/Monsterchef-git', label: 'GitHub', color: 'hover:text-cyan-400' },
-                { href: 'https://www.linkedin.com/in/john-herrera-chef/', label: 'LinkedIn', color: 'hover:text-blue-400' },
+                {
+                  href: 'https://www.instagram.com/johnherrerachef/',
+                  label: 'Instagram',
+                  color: 'hover:text-lime-400 focus-visible:text-lime-300',
+                },
+                {
+                  href: 'https://github.com/Monsterchef-git',
+                  label: 'GitHub',
+                  color: 'hover:text-cyan-400 focus-visible:text-cyan-300',
+                },
+                {
+                  href: 'https://www.linkedin.com/in/john-herrera-chef/',
+                  label: 'LinkedIn',
+                  color: 'hover:text-blue-400 focus-visible:text-blue-300',
+                },
               ].map(({ href, label, color }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={cx('flex items-center gap-2 transition-colors duration-300', color)}
+                  className={cx(
+                    'flex min-h-11 items-center gap-2 rounded-full px-2 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+                    color,
+                  )}
                 >
                   <span className="h-px w-4 bg-zinc-800" />
                   <Eyebrow as="span" role="primary">{label}</Eyebrow>

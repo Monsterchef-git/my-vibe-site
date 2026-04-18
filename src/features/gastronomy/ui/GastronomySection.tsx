@@ -54,7 +54,7 @@ export default function GastronomySection({
       </div>
 
       <ErrorBoundary>
-        <div className="reveal">
+        <div>
           <GastronomyHorizontalGallery />
         </div>
       </ErrorBoundary>

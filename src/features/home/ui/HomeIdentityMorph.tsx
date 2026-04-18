@@ -4,6 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
+import {
+  BLUR_BLUE_MOON,
+  BLUR_CULINARY_PLATING,
+  IMAGE_BLUE_MOON,
+  IMAGE_CULINARY_PLATING,
+} from '@/lib/imageAssets';
 import { cx } from '@/lib/utils/cx';
 
 const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -15,10 +21,11 @@ const STATES = [
   {
     id: 'gastronomy',
     word: 'CHEF',
-    image: '/images/culinary-plating.jpeg',
+    image: IMAGE_CULINARY_PLATING,
+    blurDataURL: BLUR_CULINARY_PLATING,
     imageAlt: 'Emplatado de alta cocina con acabado editorial.',
     dividerClassName: 'bg-lime-300/24',
-    linkClassName: 'hover:text-lime-300',
+    linkClassName: 'hover:border-lime-300/45 hover:text-lime-300 focus-visible:border-lime-300/55 focus-visible:text-lime-200 active:text-lime-200',
     wordClassName: 'text-white',
     ambientClassName:
       'bg-[radial-gradient(ellipse_80%_60%_at_88%_8%,rgba(202,253,0,0.12),transparent_50%)]',
@@ -35,10 +42,11 @@ const STATES = [
   {
     id: 'development',
     word: 'DEV',
-    image: '/images/blue-moon-hero.png',
+    image: IMAGE_BLUE_MOON,
+    blurDataURL: BLUR_BLUE_MOON,
     imageAlt: 'Interfaz digital inmersiva con tratamiento editorial.',
     dividerClassName: 'bg-cyan-300/24',
-    linkClassName: 'hover:text-cyan-300',
+    linkClassName: 'hover:border-cyan-300/45 hover:text-cyan-300 focus-visible:border-cyan-300/55 focus-visible:text-cyan-200 active:text-cyan-200',
     wordClassName: 'text-cyan-300 night-glow-cyan',
     ambientClassName:
       'bg-[radial-gradient(ellipse_80%_60%_at_88%_8%,rgba(34,211,238,0.14),transparent_52%)]',
@@ -222,6 +230,8 @@ export default function HomeIdentityMorph() {
             alt={STATES[0].imageAlt}
             fill
             sizes="100vw"
+            placeholder="blur"
+            blurDataURL={STATES[0].blurDataURL}
             priority
             className="identity-morph-main"
             style={{
@@ -257,6 +267,8 @@ export default function HomeIdentityMorph() {
             alt={STATES[1].imageAlt}
             fill
             sizes="100vw"
+            placeholder="blur"
+            blurDataURL={STATES[1].blurDataURL}
             loading="lazy"
             className="identity-morph-main"
             style={{
@@ -333,13 +345,11 @@ export default function HomeIdentityMorph() {
               <Link
                 href={activeState.href}
                 className={cx(
-                  'pointer-events-auto inline-flex items-center font-mono text-[11px] uppercase tracking-[0.32em] text-white/84 transition-colors duration-300 [text-shadow:0_6px_34px_rgba(0,0,0,0.95)]',
+                  'pointer-events-auto inline-flex min-h-11 items-center rounded-full border border-white/15 bg-black/35 px-4 font-mono text-[11px] uppercase tracking-[0.24em] text-white/90 transition-[border-color,color,background-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black [text-shadow:0_6px_34px_rgba(0,0,0,0.95)]',
                   activeState.linkClassName,
                 )}
               >
-                <span className="border-b border-current/45 pb-1">
-                  {activeState.cta}
-                </span>
+                {activeState.cta}
               </Link>
             </div>
           </div>

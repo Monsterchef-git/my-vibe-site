@@ -1,19 +1,50 @@
 import type { Metadata } from 'next';
 import TopNav from '@/components/shared/TopNav';
 import { ContactSection } from '@/features/contact/ui';
+import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
+const contactSeo = PAGE_SEO.contact;
 export const metadata: Metadata = {
-  title: 'Contact | John Herrera',
-  description:
-    'Contacto para proyectos gastronómicos, experiencias privadas y trabajo de producto digital con John Herrera.',
+  title: contactSeo.title,
+  description: contactSeo.description,
+  alternates: {
+    canonical: contactSeo.path,
+  },
+  openGraph: {
+    title: contactSeo.title,
+    description: contactSeo.description,
+    url: `${SITE_URL}${contactSeo.path}`,
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: contactSeo.title,
+    description: contactSeo.description,
+  },
 };
 
 export default function ContactPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    '@id': `${SITE_URL}${contactSeo.path}#contactpage`,
+    url: `${SITE_URL}${contactSeo.path}`,
+    name: contactSeo.title,
+    description: contactSeo.description,
+    inLanguage: 'es-CO',
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    mainEntity: { '@id': `${SITE_URL}/#person` },
+  };
+
   return (
     <main
       id="main-content"
       className="relative z-0 bg-[#0a0a0a] pt-28 text-white md:pt-32"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <TopNav currentPath="/contact" />
 
       <ContactSection className="bg-zinc-950/70" />

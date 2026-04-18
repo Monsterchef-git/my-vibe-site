@@ -119,9 +119,9 @@ export default function WorksHero() {
   return (
     <InternalPageHeroFrame>
       <div className="space-y-8 md:space-y-10">
-        <p className={sectionMicroClassName}>
+        <h1 className={sectionMicroClassName}>
           {EYEBROW}
-        </p>
+        </h1>
 
         <div
           className="relative min-h-[13rem] sm:min-h-[15rem] md:min-h-[16.5rem] lg:min-h-[18rem]"
@@ -159,7 +159,7 @@ export default function WorksHero() {
             data-cursor="cta"
             data-cursor-label="Explore"
             data-cursor-tone="lime"
-            className="font-mono text-[11px] uppercase tracking-[0.32em] text-lime-300/78 transition-colors duration-200 hover:text-lime-200 focus-visible:text-lime-200"
+            className="inline-flex min-h-11 items-center rounded-full px-2 font-mono text-[11px] uppercase tracking-[0.32em] text-lime-300/78 transition-colors duration-200 hover:text-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-lime-200"
           >
             #{LEFT_LABEL}
           </a>
@@ -172,7 +172,7 @@ export default function WorksHero() {
             data-cursor="cta"
             data-cursor-label="Explore"
             data-cursor-tone="cyan"
-            className="font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300/78 transition-colors duration-200 hover:text-cyan-200 focus-visible:text-cyan-200 md:text-right"
+            className="inline-flex min-h-11 items-center rounded-full px-2 font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300/78 transition-colors duration-200 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-cyan-200 md:justify-end md:text-right"
           >
             #{RIGHT_LABEL}
           </a>

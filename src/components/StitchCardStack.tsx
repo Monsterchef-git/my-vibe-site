@@ -3,6 +3,18 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CardPrimitive, MonoToken } from '@/design/primitives';
+import {
+  BLUR_BLUE_MOON,
+  BLUR_ISOLUTION,
+  BLUR_MEDICAL,
+  BLUR_MEGHANS,
+  BLUR_SPA,
+  IMAGE_BLUE_MOON,
+  IMAGE_ISOLUTION,
+  IMAGE_MEDICAL,
+  IMAGE_MEGHANS,
+  IMAGE_SPA,
+} from '@/lib/imageAssets';
 import { cx } from '@/lib/utils/cx';
 
 const PROJECTS = [
@@ -10,7 +22,8 @@ const PROJECTS = [
     id: 'isolution',
     title: 'iSolution Lab',
     description: 'Laboratorio de reparación avanzada y micro-soldadura para el ecosistema Apple.',
-    image: '/images/isolution.png',
+    image: IMAGE_ISOLUTION,
+    blurDataURL: BLUR_ISOLUTION,
     alt: 'Captura de la landing de iSolution Service Center para reparación de dispositivos Apple en Medellín.',
     tone: 'cyan' as const,
     label: 'Especialista Apple',
@@ -20,7 +33,8 @@ const PROJECTS = [
     id: 'meghans',
     title: "Meghan's Momentum",
     description: 'Experiencia editorial para una artista de taxidermia ética y piezas hechas a mano.',
-    image: '/images/meghans.png',
+    image: IMAGE_MEGHANS,
+    blurDataURL: BLUR_MEGHANS,
     alt: "Captura de la homepage editorial de Meghan's Momentum con enfoque artesanal y artístico.",
     tone: 'neutral' as const,
     label: 'Portafolio editorial',
@@ -30,7 +44,8 @@ const PROJECTS = [
     id: 'spa-lleras',
     title: 'Spa Lleras',
     description: 'Landing de alta conversión con una atmósfera visual orientada al bienestar.',
-    image: '/images/spa.png',
+    image: IMAGE_SPA,
+    blurDataURL: BLUR_SPA,
     alt: 'Captura de la landing de Spa Lleras con hero de spa y reservas de bienestar en Medellín.',
     tone: 'cyan' as const,
     label: 'Reserva wellness',
@@ -40,7 +55,8 @@ const PROJECTS = [
     id: 'lleras-medical',
     title: 'Lleras Medical',
     description: 'Experiencia digital premium enfocada en revitalización, bienestar profundo y balance personal.',
-    image: '/images/medical.png',
+    image: IMAGE_MEDICAL,
+    blurDataURL: BLUR_MEDICAL,
     alt: 'Captura de la homepage de Lleras Medical con servicio premium de terapia intravenosa en Medellín.',
     tone: 'blue' as const,
     label: 'Recuperación premium',
@@ -50,7 +66,8 @@ const PROJECTS = [
     id: 'blue-moon',
     title: 'Blue Moon Cottage',
     description: 'Branding y motor de reservas para una experiencia de hospedaje aspiracional.',
-    image: '/images/blue-moon-hero.png',
+    image: IMAGE_BLUE_MOON,
+    blurDataURL: BLUR_BLUE_MOON,
     alt: 'Captura de la web de Blue Moon Cottage con interior de alojamiento frente al mar en Bahamas.',
     tone: 'lime' as const,
     label: 'Hospitalidad premium',
@@ -182,6 +199,8 @@ export default function StitchCardStack() {
                       alt={project.alt}
                       fill
                       sizes="(min-width: 1024px) 680px, (min-width: 640px) 620px, calc(100vw - 3rem)"
+                      placeholder="blur"
+                      blurDataURL={project.blurDataURL}
                       quality={72}
                       className={cx(
                         'object-cover [backface-visibility:hidden] transition-[filter,transform,opacity] duration-[260ms] ease-[cubic-bezier(0.16,1.18,0.32,1)] md:duration-[420ms]',

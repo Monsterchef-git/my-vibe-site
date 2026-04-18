@@ -4,29 +4,65 @@ import { useEffect } from 'react';
 
 export default function ScrollReveal() {
   useEffect(() => {
-    const check = () => {
-      document.querySelectorAll<HTMLElement>('.reveal:not(.active)').forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight + 60 && rect.bottom > 0) {
-          el.classList.add('active');
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const revealAll = () => {
+      document.querySelectorAll<HTMLElement>('.reveal').forEach((element) => {
+        element.classList.add('active');
+      });
+    };
+
+    if (reducedMotionQuery.matches) {
+      revealAll();
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        rootMargin: '60px 0px',
+        threshold: 0.01,
+      },
+    );
+
+    const revealInViewport = () => {
+      document.querySelectorAll<HTMLElement>('.reveal:not(.active)').forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 60 && rect.bottom > -60) {
+          element.classList.add('active');
+          observer.unobserve(element);
         }
       });
     };
 
-    // Run immediately for elements already in view
-    check();
+    const observePendingReveal = () => {
+      document.querySelectorAll<HTMLElement>('.reveal:not(.active)').forEach((element) => {
+        observer.observe(element);
+      });
+    };
 
-    window.addEventListener('scroll', check, { passive: true });
-    window.addEventListener('resize', check);
+    observePendingReveal();
+    revealInViewport();
+    window.addEventListener('scroll', revealInViewport, { passive: true });
+    window.addEventListener('resize', revealInViewport);
 
-    // Pick up elements added by client-side navigation
-    const mo = new MutationObserver(check);
-    mo.observe(document.body, { childList: true, subtree: true });
+    const mutationObserver = new MutationObserver(() => {
+      observePendingReveal();
+      revealInViewport();
+    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      window.removeEventListener('scroll', check);
-      window.removeEventListener('resize', check);
-      mo.disconnect();
+      window.removeEventListener('scroll', revealInViewport);
+      window.removeEventListener('resize', revealInViewport);
+      mutationObserver.disconnect();
+      observer.disconnect();
     };
   }, []);
 

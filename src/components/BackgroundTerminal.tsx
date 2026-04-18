@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { MonoToken } from '@/design/primitives';
 
 const LOG_BLOCKS = [
@@ -33,6 +36,8 @@ const LOG_BLOCKS = [
   },
 ];
 
+const DESKTOP_QUERY = '(min-width: 768px) and (hover: hover) and (pointer: fine)';
+
 function TerminalBlock() {
   return (
     <div className="background-terminal-block font-mono text-[10px] uppercase tracking-[0.28em] md:text-[11px]">
@@ -67,6 +72,29 @@ function TerminalBlock() {
 }
 
 export default function BackgroundTerminal() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia(DESKTOP_QUERY);
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncEnabled = () => {
+      setEnabled(desktopQuery.matches && !reducedMotionQuery.matches);
+    };
+
+    syncEnabled();
+    desktopQuery.addEventListener('change', syncEnabled);
+    reducedMotionQuery.addEventListener('change', syncEnabled);
+
+    return () => {
+      desktopQuery.removeEventListener('change', syncEnabled);
+      reducedMotionQuery.removeEventListener('change', syncEnabled);
+    };
+  }, []);
+
+  if (!enabled) {
+    return null;
+  }
+
   return (
     <div aria-hidden="true" className="background-terminal-shell">
       <div className="background-terminal-column left-[-6%] top-[-12%] h-[160%] w-[52%] -rotate-[8deg]">

@@ -18,13 +18,20 @@ export default function TopNav({ currentPath }: TopNavProps) {
       <div className="grid gap-3 lg:grid-cols-[auto_1fr_auto] lg:items-center">
 
         {/* Logo — sin contenedor, glitch en hover */}
-        <Link href="/" data-cursor="link" className="justify-self-start group leading-none">
+        <Link
+          href="/"
+          data-cursor="link"
+          className="group inline-flex min-h-11 min-w-11 items-center justify-center justify-self-start rounded-full leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        >
           <p className="hover-glitch font-black text-2xl tracking-[-0.12em] text-white transition-colors duration-150">
             JH.
           </p>
         </Link>
 
-        <nav className="justify-self-center overflow-x-auto rounded-full border border-white/10 bg-zinc-900/72 px-2 py-2 shadow-[var(--shadow-stitch-surface)] backdrop-blur-xl [scrollbar-width:none]">
+        <nav
+          aria-label="Primary"
+          className="max-w-full justify-self-center overflow-x-auto rounded-full border border-white/10 bg-zinc-900/72 px-2 py-2 shadow-[var(--shadow-stitch-surface)] backdrop-blur-xl [scrollbar-width:none]"
+        >
           <div className="flex items-center gap-1">
             {NAV_ITEMS.map((item) => {
               const isActive = currentPath === item.href;
@@ -35,10 +42,10 @@ export default function TopNav({ currentPath }: TopNavProps) {
                   aria-current={isActive ? 'page' : undefined}
                   data-cursor="link"
                   className={cx(
-                    'rounded-full border px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.42em] whitespace-nowrap transition-[color,border-color,background-color,box-shadow] duration-200',
+                    'inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2.5 font-mono text-[10px] uppercase whitespace-nowrap tracking-[0.32em] transition-[color,border-color,background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
                     isActive
                       ? 'border-white/10 bg-white text-black shadow-[0_0_18px_rgba(255,255,255,0.16)]'
-                      : 'border-transparent text-zinc-500 hover:border-white/10 hover:text-white',
+                      : 'border-transparent text-zinc-400 hover:border-white/10 hover:text-white focus-visible:border-white/10 focus-visible:text-white',
                   )}
                 >
                   {item.label}
@@ -54,7 +61,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
           data-cursor="cta"
           data-cursor-label="Contact"
           data-cursor-tone="lime"
-          className="hidden justify-self-end items-center gap-2.5 group md:flex"
+          className="group inline-flex min-h-11 items-center justify-self-start gap-2.5 rounded-full border border-white/12 bg-zinc-900/72 px-3 backdrop-blur-xl transition-[border-color,color] duration-200 hover:border-lime-300/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:justify-self-end"
         >
           <div className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent-primary)] opacity-60 motion-reduce:hidden" />
@@ -62,7 +69,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
           </div>
           <ScrambleText
             text="Let's build."
-            className="font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-400 transition-colors duration-200 group-hover:text-[var(--accent-primary)]"
+            className="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-300 transition-colors duration-200 group-hover:text-[var(--accent-primary)] group-focus-visible:text-[var(--accent-primary)]"
           />
         </Link>
 

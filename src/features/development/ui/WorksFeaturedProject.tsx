@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { BLUR_BLUE_MOON, IMAGE_BLUE_MOON } from '@/lib/imageAssets';
 
 /**
  * Sprint 1B — Cinematic featured card for the first digital project.
@@ -22,10 +23,12 @@ export default function WorksFeaturedProject() {
       {/* Image — slow scale on hover */}
       <div className="relative h-[52svh]">
         <Image
-          src="/images/blue-moon-hero.png"
+          src={IMAGE_BLUE_MOON}
           alt="Blue Moon Cottage — coastal hospitality interior, Bahamas"
           fill
           sizes="(min-width: 768px) calc(100vw - 12rem), calc(100vw - 3rem)"
+          placeholder="blur"
+          blurDataURL={BLUR_BLUE_MOON}
           loading="lazy"
           className="object-cover object-top transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
         />

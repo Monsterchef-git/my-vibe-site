@@ -1,24 +1,25 @@
 import type { Metadata } from "next";
-import BackgroundTerminal from "@/components/BackgroundTerminal";
+import AppEffects from "@/components/AppEffects";
 import GoogleTracking from "@/components/GoogleTracking";
-import LenisProvider from "@/components/LenisProvider";
-import MagneticCursor from "@/components/MagneticCursor";
-import PageLoader from "@/components/PageLoader";
-import ScrollReveal from "@/components/shared/ScrollReveal";
+import {
+  PAGE_SEO,
+  PERSON_IMAGE,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/lib/constants";
 import "./globals.css";
 
-const siteUrl = "https://johnherrerachef.com";
-const siteTitle = "John Herrera | Creative Chef & Digital Craft";
-const siteDescription =
-  "Chef by Day, Digital Craft by Night. Ingenieria culinaria y desarrollo de software de alto nivel en Medellin.";
-const personImage = `${siteUrl}/images/about-john-herrera.png`;
+const siteUrl = SITE_URL;
+const siteTitle = SITE_TITLE;
+const siteDescription = PAGE_SEO.home.description;
+const personImage = PERSON_IMAGE;
 
 export const metadata: Metadata = {
   title: siteTitle,
   description: siteDescription,
   metadataBase: new URL(siteUrl),
   alternates: {
-    canonical: "/",
+    canonical: PAGE_SEO.home.path,
   },
 
   icons: {
@@ -126,12 +127,8 @@ export default function RootLayout({
         >
           Ir al contenido
         </a>
-        <PageLoader />
-        <LenisProvider />
-        <BackgroundTerminal />
-        <MagneticCursor />
+        <AppEffects />
         <div aria-hidden="true" className="signal-static-overlay" />
-        <ScrollReveal />
         <div className="relative z-10">
           {children}
         </div>

@@ -2,6 +2,10 @@
 
 import Image from 'next/image';
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import {
+  BLUR_CULINARY_PLATING,
+  IMAGE_CULINARY_PLATING,
+} from '@/lib/imageAssets';
 import { cx } from '@/lib/utils/cx';
 
 type GalleryFrame = {
@@ -12,18 +16,20 @@ type GalleryFrame = {
   panelClassName: string;
   stackClassName: string;
   imageClassName?: string;
+  blurDataURL?: string;
   priority?: boolean;
 };
 
 const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'plating',
-    src: '/images/culinary-plating.jpeg',
+    src: IMAGE_CULINARY_PLATING,
     alt: 'Platos de carne emplatados para un servicio premium.',
     sizes: '(min-width: 1280px) 34vw, (min-width: 768px) 44vw, 100vw',
     panelClassName: 'h-[72vh] w-[34vw] min-w-[27rem]',
     stackClassName: 'min-h-[30rem]',
     imageClassName: 'object-center scale-[0.9] md:scale-[0.86]',
+    blurDataURL: BLUR_CULINARY_PLATING,
     priority: true,
   },
   {
@@ -146,6 +152,8 @@ function GalleryStill({
         fill
         priority={frame.priority}
         sizes={frame.sizes}
+        placeholder={frame.blurDataURL ? 'blur' : 'empty'}
+        blurDataURL={frame.blurDataURL}
         loading={frame.priority ? undefined : 'lazy'}
         className={cx(
           'object-cover transition-[transform,filter,opacity] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:opacity-64 md:grayscale group-hover:scale-[1.035] group-hover:opacity-100 group-hover:grayscale-0',

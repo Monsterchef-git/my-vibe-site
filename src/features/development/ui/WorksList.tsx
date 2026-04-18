@@ -1,4 +1,18 @@
 import Image from 'next/image';
+import {
+  BLUR_BLUE_MOON,
+  BLUR_ISOLUTION,
+  BLUR_MEDICAL,
+  BLUR_MEGHANS,
+  BLUR_SPA,
+  BLUR_TECNICAL,
+  IMAGE_BLUE_MOON,
+  IMAGE_ISOLUTION,
+  IMAGE_MEDICAL,
+  IMAGE_MEGHANS,
+  IMAGE_SPA,
+  IMAGE_TECNICAL,
+} from '@/lib/imageAssets';
 
 const PROJECTS = [
   {
@@ -7,7 +21,8 @@ const PROJECTS = [
     title: 'Blue Moon',
     titleLine2: 'Cottage',
     tags: 'Hospitality · Landing',
-    image: '/images/blue-moon-hero.png',
+    image: IMAGE_BLUE_MOON,
+    blurDataURL: BLUR_BLUE_MOON,
     alt: 'Blue Moon Cottage coastal hospitality interior in the Bahamas.',
     href: 'https://www.bluemoonhopetown.com',
   },
@@ -17,7 +32,8 @@ const PROJECTS = [
     title: 'iSolution Lab',
     titleLine2: null,
     tags: 'Landing · Apple',
-    image: '/images/isolution.png',
+    image: IMAGE_ISOLUTION,
+    blurDataURL: BLUR_ISOLUTION,
     alt: 'Landing page for iSolution Service Center focused on Apple device repair in Medellin.',
     href: 'https://isolution.com.co',
   },
@@ -27,7 +43,8 @@ const PROJECTS = [
     title: "Meghan's",
     titleLine2: 'Momentum',
     tags: 'Editorial',
-    image: '/images/meghans.png',
+    image: IMAGE_MEGHANS,
+    blurDataURL: BLUR_MEGHANS,
     alt: "Editorial homepage for Meghan's Momentum with an artisanal, art-led direction.",
     href: 'https://www.meghansmomentumstudios.com',
   },
@@ -37,7 +54,8 @@ const PROJECTS = [
     title: 'Spa Lleras',
     titleLine2: null,
     tags: 'Landing · Wellness',
-    image: '/images/spa.png',
+    image: IMAGE_SPA,
+    blurDataURL: BLUR_SPA,
     alt: 'Landing page for Spa Lleras with a wellness-focused hero and booking flow.',
     href: 'https://spalleras.com/',
   },
@@ -47,7 +65,8 @@ const PROJECTS = [
     title: 'Lleras',
     titleLine2: 'Medical',
     tags: 'Landing · Health',
-    image: '/images/medical.png',
+    image: IMAGE_MEDICAL,
+    blurDataURL: BLUR_MEDICAL,
     alt: 'Homepage for Lleras Medical promoting premium IV therapy services.',
     href: 'https://www.llerasmedicallounge.com/',
   },
@@ -57,7 +76,8 @@ const PROJECTS = [
     title: 'tecnical.app',
     titleLine2: null,
     tags: 'SaaS · Next.js',
-    image: '/images/tecnicalapp.png',
+    image: IMAGE_TECNICAL,
+    blurDataURL: BLUR_TECNICAL,
     alt: 'Landing page for tecnical.app focused on improving repair shop operations.',
     href: 'https://www.tecnical.app',
   },
@@ -86,6 +106,8 @@ export default function WorksList() {
               alt={project.alt}
               fill
               sizes="(min-width: 640px) 50vw, 100vw"
+              placeholder="blur"
+              blurDataURL={project.blurDataURL}
               loading="lazy"
               className="object-cover object-top transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
             />
