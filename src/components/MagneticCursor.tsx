@@ -14,7 +14,7 @@ const INTERACTIVE_SELECTOR = [
   '[data-magnetic]',
 ].join(',');
 
-const CURSOR_MODES = ['idle', 'link', 'cta', 'lens', 'drag'] as const;
+const CURSOR_MODES = ['idle', 'link', 'cta', 'lens', 'drag', 'scroll'] as const;
 const CURSOR_TONES = ['neutral', 'lime', 'cyan', 'blue', 'white'] as const;
 
 type CursorMode = (typeof CURSOR_MODES)[number];
@@ -158,6 +158,12 @@ export default function MagneticCursor() {
           targetX = pointer.x + (centerX - pointer.x) * (0.3 + stickyBoost);
           targetY = pointer.y + (centerY - pointer.y) * (0.26 + stickyBoost * 0.5);
           easing = 0.15;
+        } else if (mode === 'scroll') {
+          targetWidth = hasLabel ? clamp(labelText.length * 11 + 42, 92, 136) : 96;
+          targetHeight = 36;
+          targetX = pointer.x;
+          targetY = pointer.y;
+          easing = 0.2;
         } else {
           targetWidth = clamp(rect.width + 18, 54, 168);
           targetHeight = clamp(rect.height + 12, 36, 56);
@@ -204,6 +210,10 @@ export default function MagneticCursor() {
         shell.style.borderColor = `rgba(${rgb}, 0.2)`;
         shell.style.background = 'rgba(10, 10, 10, 0.08)';
         shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.1), 0 0 18px rgba(${rgb}, 0.08)`;
+      } else if (mode === 'scroll') {
+        shell.style.borderColor = `rgba(${rgb}, 0.72)`;
+        shell.style.background = 'rgba(10, 10, 10, 0.18)';
+        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.16), 0 0 28px rgba(${rgb}, 0.18), inset 0 0 22px rgba(${rgb}, 0.06)`;
       } else if (mode === 'cta') {
         shell.style.borderColor = `rgba(${rgb}, 0.9)`;
         shell.style.background = `rgba(${rgb}, 0.08)`;
@@ -229,7 +239,7 @@ export default function MagneticCursor() {
       label.textContent = labelText.toUpperCase();
       label.style.opacity = hasLabel && mode !== 'idle' ? '1' : '0';
       label.style.color = `rgba(${rgb}, ${mode === 'cta' ? '1' : '0.88'})`;
-      label.style.letterSpacing = hasLabel ? '0.32em' : '0.24em';
+      label.style.letterSpacing = hasLabel && mode === 'scroll' ? '0.26em' : hasLabel ? '0.32em' : '0.24em';
 
       frameRef.current = window.requestAnimationFrame(render);
     };
