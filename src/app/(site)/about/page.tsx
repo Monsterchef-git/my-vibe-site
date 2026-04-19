@@ -42,7 +42,7 @@ export default function AboutPage() {
   return (
     <main
       id="main-content"
-      className="relative z-0 min-h-screen bg-[#0a0a0a] px-6 pb-16 pt-28 text-white md:px-24 md:pt-32"
+      className="relative z-0 min-h-screen bg-[#0a0a0a] pb-16 pt-28 text-white md:pt-32"
     >
       <script
         type="application/ld+json"
@@ -56,7 +56,7 @@ export default function AboutPage() {
 
       <section
         aria-label="About intro"
-        className="py-14 md:py-20"
+        className="px-6 py-40 md:px-24 md:py-56"
       >
         <p className={`${sectionBodyClassName} max-w-[32rem]`}>
           A way of working shaped by kitchens, now carried into digital.
@@ -64,7 +64,7 @@ export default function AboutPage() {
       </section>
 
       <ErrorBoundary>
-        <AboutSection id="about-profile" compact />
+        <AboutSection id="about-profile" compact className="pt-24 md:pt-32" />
       </ErrorBoundary>
     </main>
   );

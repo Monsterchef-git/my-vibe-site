@@ -11,7 +11,8 @@ export default function HomeEditorialSection() {
   return (
     <section
       aria-label="Kitchen craft and digital craft editorial work"
-      className="-mx-6 md:-mx-24 relative h-[190svh] overflow-clip bg-black md:h-[220svh]"
+      // Required for the morph scroll math: keeps the sticky track bounded to this long wrapper.
+      className="relative h-[190svh] overflow-clip bg-black md:h-[220svh]"
     >
       <ErrorBoundary>
         <HomeIdentityMorph />

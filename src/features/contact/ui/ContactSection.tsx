@@ -11,22 +11,12 @@ interface ContactSectionProps {
   className?: string;
 }
 
-/**
- * Sprint 1D — Contact as a visual installation.
- *
- * The email address is not just large text — each part has its own scale,
- * indentation, and weight. chef@ (small/dim) → JOHNHERRERA (massive/lime) →
- * chef.com (medium/muted). Ratio ≈ 6:1 between smallest and largest.
- *
- * Escapes parent padding with negative margins, fills the viewport,
- * and closes with a stats anchor row.
- */
 export default function ContactSection({ id = 'contact', className }: ContactSectionProps) {
   return (
     <section
       id={id}
       className={cx(
-        'relative -mx-6 md:-mx-24',
+        'relative',
         className,
       )}
     >
@@ -44,17 +34,12 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
 
       <section
         aria-label="Email installation"
-        className="relative overflow-hidden px-6 pb-16 pt-8 md:px-24 md:pb-24 md:pt-12"
+        className="relative px-6 py-24 md:px-24 md:py-32"
       >
         <AmbientGlow
           tone="lime"
-          intensity="strong"
+          intensity="medium"
           position="bottom-left"
-        />
-        <AmbientGlow
-          tone="lime"
-          intensity="soft"
-          position="top-right"
         />
         <div className="relative">
           <a
@@ -103,7 +88,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         </div>
       </section>
 
-      <footer className="px-6 pb-10 md:px-24 md:pb-14">
+      <footer className="px-6 pb-14 pt-40 md:px-24 md:pb-16 md:pt-56">
         <div className="space-y-0">
           {[
             {
@@ -128,7 +113,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               target="_blank"
               rel="noopener noreferrer"
               className={cx(
-                'flex min-h-14 items-center justify-between border-t border-zinc-900 font-mono text-[11px] uppercase transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:min-h-16',
+                'flex items-baseline justify-between border-t border-zinc-900/60 py-6 font-mono text-[11px] uppercase transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-7',
                 tracking.label,
                 color,
               )}
@@ -137,7 +122,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               <span aria-hidden="true" className="text-zinc-600">↗</span>
             </a>
           ))}
-          <div className={cx('border-t border-zinc-900 pt-5 font-mono text-[11px] uppercase text-zinc-500', tracking.label)}>
+          <div className={cx('border-y border-zinc-900/60 pt-5 font-mono text-[11px] uppercase text-zinc-500', tracking.label)}>
             © 2026
           </div>
         </div>

@@ -7,7 +7,6 @@ import {
 } from '@/design/tokens/components/sectionStyles';
 import { SectionChrome } from '@/design/ui';
 import GastronomyHorizontalGallery from '@/features/gastronomy/ui/GastronomyHorizontalGallery';
-import ScrollSectionPrimitive from '@/components/shared/ScrollSectionPrimitive';
 import { cx } from '@/lib/utils/cx';
 
 interface GastronomySectionProps {
@@ -22,46 +21,47 @@ export default function GastronomySection({
   compact = false,
 }: GastronomySectionProps) {
   return (
-    <ScrollSectionPrimitive
+    <section
       id={id}
-      scrollTone="lime"
-      className={cx('space-y-12 !overflow-visible', className)}
+      data-scroll-tone="lime"
+      data-cursor-role="chef"
+      className={cx('relative', className)}
     >
-      {!compact && (
-        <SectionChrome
-          index="01"
-          label="Gastronomy"
-          meta={
-            <>
-              Chef creativo · eventos · <MonoToken kind="location">Medellin</MonoToken>
-            </>
-          }
-          tone="lime"
-        />
-      )}
+      <div className="px-6 pb-40 md:px-24 md:pb-56">
+        {!compact && (
+          <SectionChrome
+            index="01"
+            label="Gastronomy"
+            meta={
+              <>
+                Chef creativo · eventos · <MonoToken kind="location">Medellin</MonoToken>
+              </>
+            }
+            tone="lime"
+          />
+        )}
 
-      <div className={cx(sectionIntroClassName, 'reveal')}>
-        <div className="space-y-4">
-          <h2 className={cx(sectionTitleClassName, 'text-[var(--accent-primary)] night-glow')}>
-            Gastronomy
-          </h2>
-          <p className={sectionBodyClassName}>
-            Product.
-            <br />
-            Timing.
-            <br />
-            Service.
-            <br />
-            Atmosphere.
-          </p>
+        <div className={cx(sectionIntroClassName, 'reveal')}>
+          <div className="space-y-4">
+            <h2 className={cx(sectionTitleClassName, 'text-[var(--accent-primary)] night-glow')}>
+              Gastronomy
+            </h2>
+            <p className={sectionBodyClassName}>
+              Product.
+              <br />
+              Timing.
+              <br />
+              Service.
+              <br />
+              Atmosphere.
+            </p>
+          </div>
         </div>
       </div>
 
       <ErrorBoundary>
-        <div>
-          <GastronomyHorizontalGallery />
-        </div>
+        <GastronomyHorizontalGallery />
       </ErrorBoundary>
-    </ScrollSectionPrimitive>
+    </section>
   );
 }

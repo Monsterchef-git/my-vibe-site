@@ -43,7 +43,7 @@ export default function Home() {
   };
 
   return (
-    <main id="main-content" className="min-h-screen signal-static-bg bg-[#0a0a0a] text-white px-6 md:px-24 relative z-0">
+    <main id="main-content" className="relative z-0 min-h-screen signal-static-bg bg-[#0a0a0a] text-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -57,7 +57,6 @@ export default function Home() {
           id="hero"
           variant="hero"
           scrollTone="lime"
-          className="-mx-6 md:-mx-24"
         >
           <Hero
             eyebrow="HOME"

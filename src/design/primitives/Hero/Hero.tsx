@@ -12,6 +12,7 @@ export interface HeroProps {
   tone: HeroTone;
   anchor?: ReactNode;
   children?: ReactNode;
+  sidePosition?: 'right' | 'background';
   className?: string;
 }
 
@@ -36,17 +37,31 @@ export function Hero({
   tone,
   anchor,
   children,
+  sidePosition = 'right',
   className,
 }: HeroProps) {
+  const hasSide = Boolean(children);
+  const showBackdropSide = hasSide && sidePosition === 'background';
+  const showRightSide = hasSide && sidePosition === 'right';
+
   return (
     <section
       className={cx(
-        'relative flex min-h-svh w-full items-end px-6 pb-10 pt-28 md:px-24 md:pb-14 md:pt-32 lg:pb-16',
+        'relative flex min-h-svh w-full items-end pb-10 pt-28 md:pb-14 md:pt-32 lg:pb-16',
         className,
       )}
     >
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-        <div className="max-w-[58rem] space-y-6">
+      {showBackdropSide ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]"
+        >
+          {children}
+        </div>
+      ) : null}
+
+      <div className="relative z-10 mx-auto flex w-full max-w-[78rem] flex-col gap-8 px-6 md:px-24 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+        <div className="max-w-[68rem] space-y-6">
           <Eyebrow
             as="p"
             tone={toneToEyebrowTone[tone]}
@@ -76,8 +91,8 @@ export function Hero({
           ) : null}
         </div>
 
-        {children ? (
-          <div className="hidden w-full max-w-[40vw] shrink-0 items-end justify-end lg:flex">
+        {showRightSide ? (
+          <div className="hidden w-full shrink-0 items-end justify-end lg:flex lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]">
             {children}
           </div>
         ) : null}
