@@ -109,7 +109,7 @@ export default function WorksList() {
               placeholder="blur"
               blurDataURL={project.blurDataURL}
               loading="lazy"
-              className="object-cover object-top transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+              className="object-cover object-top [clip-path:inset(3%_3%_3%_3%)] group-hover:[clip-path:inset(0%_0%_0%_0%)] group-hover:scale-[1.04] transition-[transform,clip-path] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
             />
 
             {/* Gradient */}

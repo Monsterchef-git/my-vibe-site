@@ -138,7 +138,7 @@ export default function WorksHero() {
             {/* Line 2 — demoted to eyebrow (Sprint 3C) */}
             <div
               className={cx(
-                'cursor-default select-none font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-400 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
+                'cursor-default select-none font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]',
                 line2Visible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
               )}
             >

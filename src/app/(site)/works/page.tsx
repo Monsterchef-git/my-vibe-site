@@ -60,13 +60,9 @@ export default function WorksPage() {
           as="div"
           variant="bridge"
           scrollTone="lime"
-          className="scroll-progress-bridge mb-12 mt-16 flex items-center justify-center gap-5 py-2 text-center md:mt-20"
+          className="scroll-progress-bridge mb-12 mt-16 px-0 py-2 md:mt-20"
         >
-          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-transparent via-lime-400/35 to-lime-400/12 md:max-w-44" />
-          <span className="scroll-progress-bridge-label font-mono text-[10px] uppercase tracking-[0.42em] text-lime-400/60">
-            01
-          </span>
-          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-lime-400/12 via-lime-400/35 to-transparent md:max-w-44" />
+          <div className="scroll-progress-bridge-line h-px w-full bg-gradient-to-r from-lime-400/55 via-lime-400/25 to-transparent" />
         </ScrollProgressBlock>
       </ErrorBoundary>
 
@@ -81,13 +77,9 @@ export default function WorksPage() {
           as="div"
           variant="bridge"
           scrollTone="cyan"
-          className="scroll-progress-bridge mb-12 mt-24 flex items-center justify-center gap-5 py-2 text-center"
+          className="scroll-progress-bridge mb-12 mt-24 px-0 py-2"
         >
-          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-transparent via-cyan-400/35 to-cyan-400/12 md:max-w-44" />
-          <span className="scroll-progress-bridge-label font-mono text-[10px] uppercase tracking-[0.42em] text-cyan-400/60">
-            02
-          </span>
-          <div className="scroll-progress-bridge-line h-px flex-1 max-w-28 bg-gradient-to-r from-cyan-400/12 via-cyan-400/35 to-transparent md:max-w-44" />
+          <div className="scroll-progress-bridge-line h-px w-full bg-gradient-to-r from-lime-400/40 via-cyan-400/35 to-transparent" />
         </ScrollProgressBlock>
       </ErrorBoundary>
 
