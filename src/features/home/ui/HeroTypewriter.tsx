@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { cx } from '@/lib/utils/cx';
 
 const NAME_EYEBROW = 'John Herrera ---';
-const LINE1 = 'Two disciplines.';
-const LINE2 = 'One standard.';
+const LINE1 = 'Chef + Dev.';
+const LINE2 = 'From the kitchen to the web.';
 
 const SPEED_L1 = 72;
 const SPEED_L2 = 52;
@@ -204,7 +204,7 @@ export default function HeroTypewriter() {
         className="relative min-h-[12rem] sm:min-h-[14rem] md:min-h-[15rem] lg:min-h-[17rem]"
         aria-label={`John Herrera. ${LINE1} ${LINE2}`}
       >
-        <span className="sr-only">John Herrera. Two disciplines. One standard.</span>
+        <span className="sr-only">John Herrera. Chef plus dev. From the kitchen to the web.</span>
 
         <div
           aria-hidden="true"

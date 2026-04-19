@@ -11,6 +11,7 @@ const worksSeo = PAGE_SEO.works;
 export const metadata: Metadata = {
   title: worksSeo.title,
   description: worksSeo.description,
+  keywords: worksSeo.keywords,
   alternates: {
     canonical: worksSeo.path,
   },
@@ -35,7 +36,7 @@ export default function WorksPage() {
     url: `${SITE_URL}${worksSeo.path}`,
     name: worksSeo.title,
     description: worksSeo.description,
-    inLanguage: 'es-CO',
+    inLanguage: 'en',
     isPartOf: { '@id': `${SITE_URL}/#website` },
     about: { '@id': `${SITE_URL}/#person` },
   };
@@ -62,6 +63,9 @@ export default function WorksPage() {
           scrollTone="lime"
           className="scroll-progress-bridge mb-12 mt-16 px-0 py-2 md:mt-20"
         >
+          <p className="scroll-progress-bridge-label pb-3 text-center font-mono text-[10px] uppercase tracking-[0.28em]">
+            KITCHEN CRAFT
+          </p>
           <div className="scroll-progress-bridge-line h-px w-full bg-gradient-to-r from-lime-400/55 via-lime-400/25 to-transparent" />
         </ScrollProgressBlock>
       </ErrorBoundary>
@@ -79,6 +83,9 @@ export default function WorksPage() {
           scrollTone="cyan"
           className="scroll-progress-bridge mb-12 mt-24 px-0 py-2"
         >
+          <p className="scroll-progress-bridge-label pb-3 text-center font-mono text-[10px] uppercase tracking-[0.28em]">
+            DIGITAL CRAFT
+          </p>
           <div className="scroll-progress-bridge-line h-px w-full bg-gradient-to-r from-lime-400/40 via-cyan-400/35 to-transparent" />
         </ScrollProgressBlock>
       </ErrorBoundary>

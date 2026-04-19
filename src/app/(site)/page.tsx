@@ -12,6 +12,7 @@ const homeSeo = PAGE_SEO.home;
 export const metadata: Metadata = {
   title: homeSeo.title,
   description: homeSeo.description,
+  keywords: homeSeo.keywords,
   alternates: {
     canonical: homeSeo.path,
   },
@@ -36,6 +37,7 @@ export default function Home() {
     url: `${SITE_URL}${homeSeo.path}`,
     name: homeSeo.title,
     description: homeSeo.description,
+    inLanguage: 'en',
     isPartOf: { '@id': `${SITE_URL}/#website` },
     mainEntity: { '@id': `${SITE_URL}/#person` },
   };
@@ -64,13 +66,13 @@ export default function Home() {
             style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 10 }}
           >
             <span className="-rotate-90 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.36em] text-zinc-600">
-              Chef · Developer · Medellín, CO
+              Chef · Dev · Medellín, CO
             </span>
           </div>
 
           <div className="w-full max-w-6xl space-y-10">
             <div>
-              <h1 className="sr-only">John Herrera | Chef by Day, Digital Craft by Night</h1>
+              <h1 className="sr-only">John Herrera | Chef and Dev in Medellín</h1>
               <ErrorBoundary>
                 <HeroTypewriter />
               </ErrorBoundary>
@@ -80,8 +82,8 @@ export default function Home() {
               className="border-l border-lime-400/25 pl-6 font-mono text-sm leading-relaxed text-zinc-400"
               style={{ animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 0.8s forwards', opacity: 0 }}
             >
-              Service. Structure. Taste.{' '}
-              From <MonoToken kind="location">Medellín</MonoToken>.
+              I work between the kitchen and the web, building simple, effective landing pages from{' '}
+              <MonoToken kind="location">Medellín</MonoToken>.
             </p>
           </div>
         </ScrollProgressBlock>

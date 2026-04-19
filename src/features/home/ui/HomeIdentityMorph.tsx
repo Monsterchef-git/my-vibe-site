@@ -16,6 +16,7 @@ const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const MORPH_START = 0.24;
 const MORPH_END = 0.74;
 const SWITCH_THRESHOLD = 0.52;
+const BRIDGE_LABELS = ['KITCHEN CRAFT', 'DIGITAL CRAFT'] as const;
 
 const STATES = [
   {
@@ -23,7 +24,7 @@ const STATES = [
     word: 'CHEF',
     image: IMAGE_CULINARY_PLATING,
     blurDataURL: BLUR_CULINARY_PLATING,
-    imageAlt: 'Emplatado de alta cocina con acabado editorial.',
+    imageAlt: 'Editorial culinary plating.',
     dividerClassName: 'bg-lime-300/24',
     linkClassName: 'hover:border-lime-300/45 hover:text-lime-300 focus-visible:border-lime-300/55 focus-visible:text-lime-200 active:text-lime-200',
     wordClassName: 'text-white',
@@ -31,20 +32,20 @@ const STATES = [
       'bg-[radial-gradient(ellipse_80%_60%_at_88%_8%,rgba(202,253,0,0.12),transparent_50%)]',
     copy: (
       <>
-        Culinary engineering.
+        Kitchen craft.
         <br />
         Service, structure, taste.
       </>
     ),
     href: '/works#works-gastronomy',
-    cta: 'Ver gastronomía →',
+    cta: 'See kitchen work →',
   },
   {
     id: 'development',
     word: 'DEV',
     image: IMAGE_BLUE_MOON,
     blurDataURL: BLUR_BLUE_MOON,
-    imageAlt: 'Interfaz digital inmersiva con tratamiento editorial.',
+    imageAlt: 'Immersive digital interface with editorial treatment.',
     dividerClassName: 'bg-cyan-300/24',
     linkClassName: 'hover:border-cyan-300/45 hover:text-cyan-300 focus-visible:border-cyan-300/55 focus-visible:text-cyan-200 active:text-cyan-200',
     wordClassName: 'text-cyan-300 night-glow-cyan',
@@ -52,13 +53,13 @@ const STATES = [
       'bg-[radial-gradient(ellipse_80%_60%_at_88%_8%,rgba(34,211,238,0.14),transparent_52%)]',
     copy: (
       <>
-        Digital systems.
+        Digital craft.
         <br />
         Product, detail, launch.
       </>
     ),
     href: '/works#works-development',
-    cta: 'Ver digital craft →',
+    cta: 'See digital work →',
   },
 ] as const;
 
@@ -206,6 +207,7 @@ export default function HomeIdentityMorph() {
   const developmentOpacity = clamp(0.12 + morphProgress * 0.7, 0, 0.82);
   const gastronomyTransform = `translate3d(${-2.4 * morphProgress}%, 0, 0) scale(${1 + morphProgress * 0.035})`;
   const developmentTransform = `translate3d(${2.8 * (1 - morphProgress)}%, 0, 0) scale(${1.08 - morphProgress * 0.08})`;
+  const bridgeStep = morphProgress >= SWITCH_THRESHOLD ? 1 : 0;
 
   return (
     <div
@@ -351,6 +353,28 @@ export default function HomeIdentityMorph() {
               >
                 {activeState.cta}
               </Link>
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-white/10 pt-4 font-mono text-[10px] uppercase tracking-[0.24em]"
+            >
+              {BRIDGE_LABELS.map((label, index) => (
+                <span
+                  key={label}
+                  className={cx(
+                    'transition-colors duration-300',
+                    index === bridgeStep && index === 0 && 'text-lime-300',
+                    index === bridgeStep && index === 1 && 'text-cyan-300',
+                    index === bridgeStep && index === 2 && 'text-blue-300',
+                    index !== bridgeStep && index < bridgeStep && 'text-zinc-300/80',
+                    index > bridgeStep && 'text-zinc-500',
+                  )}
+                >
+                  {label}
+                  {index < BRIDGE_LABELS.length - 1 && <span className="mx-2 text-zinc-600">→</span>}
+                </span>
+              ))}
             </div>
           </div>
         </div>

@@ -7,6 +7,7 @@ const contactSeo = PAGE_SEO.contact;
 export const metadata: Metadata = {
   title: contactSeo.title,
   description: contactSeo.description,
+  keywords: contactSeo.keywords,
   alternates: {
     canonical: contactSeo.path,
   },
@@ -31,7 +32,7 @@ export default function ContactPage() {
     url: `${SITE_URL}${contactSeo.path}`,
     name: contactSeo.title,
     description: contactSeo.description,
-    inLanguage: 'es-CO',
+    inLanguage: 'en',
     isPartOf: { '@id': `${SITE_URL}/#website` },
     mainEntity: { '@id': `${SITE_URL}/#person` },
   };

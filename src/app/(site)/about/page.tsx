@@ -8,6 +8,7 @@ const aboutSeo = PAGE_SEO.about;
 export const metadata: Metadata = {
   title: aboutSeo.title,
   description: aboutSeo.description,
+  keywords: aboutSeo.keywords,
   alternates: {
     canonical: aboutSeo.path,
   },
@@ -32,7 +33,7 @@ export default function AboutPage() {
     url: `${SITE_URL}${aboutSeo.path}`,
     name: aboutSeo.title,
     description: aboutSeo.description,
-    inLanguage: 'es-CO',
+    inLanguage: 'en',
     isPartOf: { '@id': `${SITE_URL}/#website` },
     mainEntity: { '@id': `${SITE_URL}/#person` },
   };

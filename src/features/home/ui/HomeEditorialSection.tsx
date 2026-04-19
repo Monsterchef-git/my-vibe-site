@@ -10,7 +10,7 @@ import HomeIdentityMorph from '@/features/home/ui/HomeIdentityMorph';
 export default function HomeEditorialSection() {
   return (
     <section
-      aria-label="Gastronomía y digital craft — trabajo editorial"
+      aria-label="Kitchen craft and digital craft editorial work"
       className="-mx-6 md:-mx-24 relative h-[190svh] overflow-clip bg-black md:h-[220svh]"
     >
       <ErrorBoundary>

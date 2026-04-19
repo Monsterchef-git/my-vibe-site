@@ -61,7 +61,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
           data-cursor="cta"
           data-cursor-label="Contact"
           data-cursor-tone="lime"
-          className="group inline-flex min-h-11 items-center justify-self-start gap-2.5 rounded-full border border-white/12 bg-zinc-900/72 px-3 backdrop-blur-xl transition-[border-color,color] duration-200 hover:border-lime-300/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:justify-self-end"
+          className="group inline-flex min-h-11 items-center justify-self-start gap-2.5 px-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:justify-self-end"
         >
           <div className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent-primary)] opacity-60 motion-reduce:hidden" />
