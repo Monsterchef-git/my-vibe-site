@@ -67,7 +67,7 @@ const PROJECTS = [
     tags: 'Landing · Health',
     image: IMAGE_MEDICAL,
     blurDataURL: BLUR_MEDICAL,
-    alt: 'Homepage for Lleras Medical promoting premium IV therapy services.',
+    alt: 'Homepage for Lleras Medical promoting IV therapy services.',
     href: 'https://www.llerasmedicallounge.com/',
   },
   {

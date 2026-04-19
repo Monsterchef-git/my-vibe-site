@@ -30,7 +30,7 @@ export default function GastronomySection({
       {!compact && (
         <SectionChrome
           index="01"
-          label="Gastronomia"
+          label="Gastronomy"
           meta={
             <>
               Chef creativo · eventos · <MonoToken kind="location">Medellin</MonoToken>

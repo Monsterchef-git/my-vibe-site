@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import AppEffects from "@/components/AppEffects";
-import GoogleTracking from "@/components/GoogleTracking";
+import type { Metadata } from 'next';
+import AppEffects from '@/components/AppEffects';
+import GoogleTracking from '@/components/GoogleTracking';
 import {
   PAGE_SEO,
   PERSON_IMAGE,
   SITE_TITLE,
   SITE_URL,
-} from "@/lib/constants";
-import "./globals.css";
+} from '@/lib/constants';
+import './globals.css';
 
 const siteUrl = SITE_URL;
 const siteTitle = SITE_TITLE;
@@ -30,18 +30,17 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
 
-  // OG — la imagen se inyecta automáticamente desde opengraph-image.tsx
   openGraph: {
     title: siteTitle,
     description: siteDescription,
     url: siteUrl,
     siteName: siteTitle,
-    locale: "es_CO",
-    type: "website",
+    locale: 'en_US',
+    type: 'website',
   },
 
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     title: siteTitle,
     description: siteDescription,
   },
@@ -53,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -67,15 +66,15 @@ export default function RootLayout({
                   url: siteUrl,
                   name: siteTitle,
                   description: siteDescription,
-                  inLanguage: 'es-CO',
+                  inLanguage: 'en-US',
                 },
                 {
                   '@type': 'Person',
                   '@id': `${siteUrl}/#person`,
                   name: 'John Herrera',
-                  jobTitle: ['Chef Creativo', 'Desarrollador Web'],
+                  jobTitle: ['Creative Chef', 'Web Developer'],
                   description:
-                    'Chef con más de una década en alta cocina y desarrollador web especializado en landings de conversión, SEO y diseño de producto digital.',
+                    'Creative chef with over a decade in kitchen service, now building conversion-focused landing pages and digital interfaces.',
                   url: siteUrl,
                   image: personImage,
                   email: 'chef@johnherrerachef.com',
@@ -103,13 +102,13 @@ export default function RootLayout({
                     {
                       '@type': 'Organization',
                       name: 'Wink Eventos',
-                      description: 'Chef creativo para eventos y cenas privadas',
+                      description: 'Creative chef for events and private dinners',
                     },
                     {
                       '@type': 'Organization',
                       name: 'tecnical.app',
                       url: 'https://www.tecnical.app',
-                      description: 'Producto digital y landing para SaaS de talleres',
+                      description: 'Digital product and landing experience for a workshop SaaS',
                     },
                   ],
                 },
@@ -120,12 +119,11 @@ export default function RootLayout({
       </head>
       <body className="relative antialiased bg-black selection:bg-lime-400 selection:text-black" suppressHydrationWarning>
         <GoogleTracking />
-        {/* Skip-to-content para navegación por teclado */}
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:rounded-full focus:bg-lime-400 focus:px-4 focus:py-2 focus:font-mono focus:text-[11px] focus:uppercase focus:tracking-widest focus:text-black focus:outline-none"
         >
-          Ir al contenido
+          Skip to content
         </a>
         <AppEffects />
         <div aria-hidden="true" className="signal-static-overlay" />

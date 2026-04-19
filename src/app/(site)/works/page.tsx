@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
-import ScrollProgressBlock from '@/components/shared/ScrollProgressBlock';
 import TopNav from '@/components/shared/TopNav';
 import { DevelopmentSection } from '@/features/development/ui';
 import { GastronomySection } from '@/features/gastronomy/ui';
@@ -94,19 +93,14 @@ export default function WorksPage() {
         compact
       />
 
-      <ErrorBoundary>
-        <ScrollProgressBlock
-          as="div"
-          variant="bridge"
-          scrollTone="cyan"
-          className="scroll-progress-bridge mb-12 mt-24 px-0 py-2"
-        >
-          <p className="scroll-progress-bridge-label pb-3 text-center font-mono text-[10px] uppercase tracking-[0.28em]">
-            DIGITAL CRAFT
-          </p>
-          <div className="scroll-progress-bridge-line h-px w-full bg-gradient-to-r from-lime-400/40 via-cyan-400/35 to-transparent" />
-        </ScrollProgressBlock>
-      </ErrorBoundary>
+      <section
+        aria-label="Works narrative bridge"
+        className="flex min-h-40 items-center justify-center py-10 md:py-16"
+      >
+        <p className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-zinc-500">
+          ready for service →
+        </p>
+      </section>
 
       <ErrorBoundary>
         <DevelopmentSection

@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const alt = 'John Herrera — Culinary Engine';
+export const alt = 'Cooked fast. Shipped faster.';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -57,7 +57,7 @@ export default async function OG() {
         >
           <span
             style={{
-              fontSize: 52,
+              fontSize: 56,
               fontStyle: 'italic',
               fontWeight: 900,
               color: '#ffffff',
@@ -65,23 +65,22 @@ export default async function OG() {
               lineHeight: 1,
             }}
           >
-            JOHN HERRERA
+            COOKED FAST.
           </span>
           <span
             style={{
-              fontSize: 28,
-              fontWeight: 700,
-              color: '#ffffff',
-              letterSpacing: '0.32em',
-              opacity: 0.5,
+              fontSize: 64,
+              fontStyle: 'italic',
+              fontWeight: 900,
+              color: '#cafd00',
+              letterSpacing: '-0.03em',
               lineHeight: 1,
             }}
           >
-            CULINARY ENGINE
+            SHIPPED FASTER.
           </span>
         </div>
 
-        {/* Terminal line */}
         <div
           style={{
             marginTop: 32,
@@ -93,13 +92,12 @@ export default async function OG() {
           <span
             style={{
               fontFamily: 'monospace',
-              fontSize: 18,
-              color: '#cafd00',
-              letterSpacing: '0.05em',
-              textShadow: '0 0 20px rgba(202,253,0,0.4)',
+              fontSize: 16,
+              color: '#a1a1aa',
+              letterSpacing: '0.16em',
             }}
           >
-            {'$ git commit -m \'umami\''}
+            {'twelve years plating. now shipping interfaces.'}
           </span>
         </div>
       </div>

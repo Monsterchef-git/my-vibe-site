@@ -24,7 +24,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'plating',
     src: IMAGE_CULINARY_PLATING,
-    alt: 'Platos de carne emplatados para un servicio premium.',
+    alt: 'Plated meat dishes prepared for a high-paced dinner service.',
     sizes: '(min-width: 1280px) 34vw, (min-width: 768px) 44vw, 100vw',
     panelClassName: 'h-[72vh] w-[34vw] min-w-[27rem]',
     stackClassName: 'min-h-[30rem]',
@@ -35,7 +35,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'seaside-toast',
     src: '/images/culinary-01-optimized.jpg',
-    alt: 'Tostada con huevo pochado, salsa holandesa, cebolla encurtida y alcaparras servida frente al mar.',
+    alt: 'Toast with poached egg, hollandaise, pickled onion, and capers served by the sea.',
     sizes: '(min-width: 1280px) 30vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-8 mt-[8vh] h-[64vh] w-[30vw] min-w-[22rem]',
     stackClassName: 'min-h-[26rem]',
@@ -44,7 +44,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'causa',
     src: '/images/culinary-04-optimized.jpg',
-    alt: 'Causa limena con langostinos crocantes, aguacate y cebolla encurtida servida en plato negro.',
+    alt: 'Lima-style causa with crispy shrimp, avocado, and pickled onion served on a black plate.',
     sizes: '(min-width: 1280px) 22vw, (min-width: 768px) 34vw, 100vw',
     panelClassName: '-ml-14 mt-[24vh] h-[44vh] w-[22vw] min-w-[16rem] z-[2]',
     stackClassName: 'min-h-[22rem]',
@@ -53,7 +53,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'paella',
     src: '/images/culinary-05-optimized.jpg',
-    alt: 'Paella de mariscos en paellera grande con camarones y mejillones durante el servicio.',
+    alt: 'Seafood paella in a large pan with shrimp and mussels during dinner service.',
     sizes: '(min-width: 1280px) 52vw, (min-width: 768px) 70vw, 100vw',
     panelClassName: '-ml-10 mt-[12vh] h-[56vh] w-[52vw] min-w-[38rem]',
     stackClassName: 'min-h-[24rem]',
@@ -62,7 +62,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'kitchen',
     src: '/images/culinary-chef.jpeg',
-    alt: 'Chef emplatando durante un servicio gastronomico en cocina.',
+    alt: 'Chef plating during a live kitchen service.',
     sizes: '(min-width: 1280px) 26vw, (min-width: 768px) 38vw, 100vw',
     panelClassName: '-ml-4 mt-[2vh] h-[68vh] w-[26vw] min-w-[20rem]',
     stackClassName: 'min-h-[28rem]',
@@ -71,7 +71,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'chef-portrait',
     src: '/images/culinary-02-optimized.jpg',
-    alt: 'Chef sonriendo en cocina mientras presenta un plato, con mise en place y sarten de vegetales al frente.',
+    alt: 'Chef smiling in the kitchen while presenting a dish, with mise en place and vegetables in the foreground.',
     sizes: '(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-10 mt-[14vh] h-[74vh] w-[28vw] min-w-[21rem] z-[2]',
     stackClassName: 'min-h-[30rem]',
@@ -80,7 +80,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'fresh-bowl',
     src: '/images/culinary-fresh.jpeg',
-    alt: 'Bowl de atun sellado con vegetales frescos y microgreens.',
+    alt: 'Seared tuna bowl with fresh vegetables and microgreens.',
     sizes: '(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 100vw',
     panelClassName: '-ml-12 mt-[24vh] h-[46vh] w-[20vw] min-w-[15rem] z-[3]',
     stackClassName: 'min-h-[20rem]',
@@ -89,7 +89,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'breakfast',
     src: '/images/culinary-03-optimized.jpg',
-    alt: 'Desayuno con huevos, aguacate, arepa, salchichas, fruta fresca y batido servido en mesa.',
+    alt: 'Breakfast spread with eggs, avocado, arepa, sausages, fresh fruit, and smoothie.',
     sizes: '(min-width: 1280px) 24vw, (min-width: 768px) 36vw, 100vw',
     panelClassName: '-ml-8 mt-[8vh] h-[58vh] w-[24vw] min-w-[18rem]',
     stackClassName: 'min-h-[24rem]',
@@ -98,7 +98,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   {
     id: 'creamy-plate',
     src: '/images/culinary-hero.jpeg',
-    alt: 'Plato servido con sopa cremosa y crostini en montaje editorial.',
+    alt: 'Served dish with creamy soup and crostini in an editorial setup.',
     sizes: '(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-10 mt-[18vh] h-[54vh] w-[28vw] min-w-[21rem]',
     stackClassName: 'min-h-[24rem]',

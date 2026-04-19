@@ -1,7 +1,7 @@
 export const SITE_URL = 'https://johnherrerachef.com';
 export const SITE_TITLE = 'John Herrera | Chef + Dev in Medellín';
 export const SITE_DESCRIPTION =
-  'Chef + Dev in Medellín. From the kitchen to the web: simple, effective landing pages and digital experiences built with craft.';
+  'Cooked fast. Shipped faster. Twelve years plating, now shipping interfaces.';
 export const PERSON_IMAGE = `${SITE_URL}/images/about-john-herrera.webp`;
 
 export const PAGE_SEO = {
@@ -22,7 +22,7 @@ export const PAGE_SEO = {
   works: {
     title: 'Works | John Herrera',
     description:
-      'Kitchen craft and digital craft by John Herrera: culinary direction, web development, and conversion landing pages.',
+      'Taste, applied. Kitchens and interfaces, same instinct.',
     keywords: [
       'kitchen craft',
       'digital craft',
@@ -36,7 +36,7 @@ export const PAGE_SEO = {
   about: {
     title: 'About | John Herrera',
     description:
-      'About John Herrera, a chef and dev in Medellín working between culinary service and web development.',
+      'Mise en place for the web. The kitchen taught me the rest.',
     keywords: [
       'about John Herrera',
       'chef and dev',
@@ -49,7 +49,7 @@ export const PAGE_SEO = {
   contact: {
     title: 'Contact | John Herrera',
     description:
-      'Contact John Herrera for kitchen collaborations and web projects built with clarity and craft.',
+      'The pass is open. Briefs, reservations, collaborations.',
     keywords: [
       'contact John Herrera',
       'kitchen collaboration',
