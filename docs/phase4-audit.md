@@ -1,6 +1,6 @@
-# Fase 4 Audit (Safe Pass)
+# Fase 4 Audit
 
-## Orphan component candidates (not deleted)
+## Orphan components removed
 
 - src/components/BootPanel.tsx
 - src/components/LandingCard.tsx
@@ -14,11 +14,18 @@
 - src/components/TypewriterTerminal.tsx
 - src/features/development/ui/WorksFeaturedProject.tsx
 
-## Dependency notes
+## Dependency cleanup
 
-- `lucide-react` is currently referenced only by `src/components/LandingCard.tsx` (orphan candidate), so dependency removal is postponed to avoid touching component inventory without explicit approval.
+- Removed `lucide-react` after removing the only referencing component (`LandingCard.tsx`).
 
-## CSS notes
+## CSS cleanup
 
-- Removed only duplicated `@keyframes hero-fade-up` definition in `src/app/globals.css`.
-- No visual utility/class purge was executed in this safe pass.
+- Removed duplicated `@keyframes hero-fade-up` definition in `src/app/globals.css`.
+- Removed unreferenced legacy utility/class blocks tied to deleted components:
+  - `material-symbols-outlined`
+  - `tight-headline`
+  - `status-dot` / `status-pulse`
+  - `grain-overlay` / `grain-overlay-animate`
+  - `isolution-card*`, `btn-apple`
+  - `culinary-*` legacy blocks
+  - `split-unit` / `split-visible`
