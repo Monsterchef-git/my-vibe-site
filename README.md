@@ -63,7 +63,20 @@ Active source of truth is under `src/design/`:
 - `src/design/primitives/*` for base building blocks
 - `src/design/ui/*` for composed design-system pieces
 
-## Analytics
+## Security Headers
+
+Configured globally in `next.config.ts`:
+
+- `Content-Security-Policy`
+- `Permissions-Policy`
+- `Cross-Origin-Opener-Policy`
+- `Cross-Origin-Resource-Policy`
+- `Strict-Transport-Security`
+- `X-Frame-Options`
+- `X-Content-Type-Options`
+- `Referrer-Policy`
+
+## Analytics and Consent
 
 Optional env vars:
 
@@ -76,10 +89,38 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 - `NEXT_PUBLIC_GA_ID`: enables direct GA4 installation
 - If GA4 is already sent via GTM, leave `NEXT_PUBLIC_GA_ID` empty to avoid duplicates
 
+Consent mode is default-denied and uses this banner copy:
+
+> We use cookies to improve your experience, analyze traffic, and personalize content. You can accept all cookies or reject non-essential cookies.
+
+Tracked custom events:
+
+- `cta_contact_click`
+- `mailto_click`
+- `project_click`
+- `nav_click`
+
+## CI
+
+GitHub Actions workflow: `.github/workflows/ci.yml`
+
+Runs on every push and pull request:
+
+1. `npm ci`
+2. `npm run lint`
+3. `npm run build`
+
+## Deployment Checklist
+
+1. Configure env vars (`NEXT_PUBLIC_GTM_ID`, optional `NEXT_PUBLIC_GA_ID`).
+2. Run `npm run lint` and `npm run build`.
+3. Verify consent banner and events in GTM/GA debug view.
+4. Deploy.
+
 ## AI Context
 
 See [CONTEXT.md](./CONTEXT.md) for full AI-oriented project context.
 
-## Phase 4 Safe Audit
+## Phase 4 Audit
 
-See [docs/phase4-audit.md](./docs/phase4-audit.md) for orphan/debt findings generated without touching active components.
+See [docs/phase4-audit.md](./docs/phase4-audit.md) for cleanup decisions applied in Phase 4.

@@ -1,5 +1,7 @@
 import Script from 'next/script';
+import { Suspense } from 'react';
 import GoogleTrackingEvents from '@/components/GoogleTrackingEvents';
+import TrackingConsent from '@/components/TrackingConsent';
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
@@ -11,6 +13,23 @@ export default function GoogleTracking() {
 
   return (
     <>
+      <Script
+        id="google-consent-default"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+window.gtag = window.gtag || gtag;
+gtag('consent', 'default', {
+  analytics_storage: 'denied',
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  wait_for_update: 500
+});`,
+        }}
+      />
+
       {gtmId ? (
         <>
           <Script
@@ -52,9 +71,13 @@ gtag('js', new Date());
 gtag('config', '${gaId}', { send_page_view: false });`,
             }}
           />
-          <GoogleTrackingEvents gaId={gaId} />
         </>
       ) : null}
+
+      <Suspense fallback={null}>
+        <GoogleTrackingEvents gaId={gaId} />
+      </Suspense>
+      <TrackingConsent />
     </>
   );
 }
