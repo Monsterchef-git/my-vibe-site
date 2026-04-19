@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Eyebrow, { type EyebrowTone } from '@/design/primitives/Eyebrow';
+import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { cx } from '@/lib/utils/cx';
 
 export type HeroTone = 'lime' | 'cyan' | 'blue' | 'white';
@@ -58,14 +59,15 @@ export function Hero({
             {statement}
           </h1>
 
-          <p className="font-mono text-sm uppercase tracking-[0.14em] text-zinc-400 md:text-base">
+          <p className={cx('font-mono text-sm uppercase text-zinc-400 md:text-base', tracking.label)}>
             {counterLine}
           </p>
 
           {anchor ? (
             <div
               className={cx(
-                'font-mono text-xs uppercase tracking-[0.24em] md:text-sm',
+                'font-mono text-xs uppercase md:text-sm',
+                tracking.label,
                 toneToAccentClassName[tone],
               )}
             >

@@ -22,3 +22,4 @@ export {
   type HeroProps,
   type HeroTone,
 } from '@/design/primitives/Hero';
+export { AmbientGlow } from '@/design/primitives/AmbientGlow';

@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { tracking } from '@/design/tokens/primitives/atmosphere';
+import { cx } from '@/lib/utils/cx';
 
 const TARGET = 'JOHN HERRERA';
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -64,7 +66,7 @@ export default function HomeNameScramble() {
   return (
     <p
       aria-label="John Herrera"
-      className="font-mono text-[1.3rem] uppercase tracking-[0.24em] text-lime-300 md:text-[1.65rem]"
+      className={cx('font-mono text-[1.3rem] uppercase text-lime-300 md:text-[1.65rem]', tracking.label)}
     >
       {display}
     </p>

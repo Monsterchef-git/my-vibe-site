@@ -3,7 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { AmbientGlow } from '@/design/primitives';
 import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
+import { tracking } from '@/design/tokens/primitives/atmosphere';
 import {
   BLUR_BLUE_MOON,
   BLUR_CULINARY_PLATING,
@@ -28,8 +30,7 @@ const STATES = [
     dividerClassName: 'bg-lime-300/24',
     linkClassName: 'hover:border-lime-300/45 hover:text-lime-300 focus-visible:border-lime-300/55 focus-visible:text-lime-200 active:text-lime-200',
     wordClassName: 'text-white',
-    ambientClassName:
-      'bg-[radial-gradient(ellipse_80%_60%_at_88%_8%,rgba(202,253,0,0.12),transparent_50%)]',
+    ambientTone: 'lime',
     copy: (
       <>
         Kitchen craft.
@@ -49,8 +50,7 @@ const STATES = [
     dividerClassName: 'bg-cyan-300/24',
     linkClassName: 'hover:border-cyan-300/45 hover:text-cyan-300 focus-visible:border-cyan-300/55 focus-visible:text-cyan-200 active:text-cyan-200',
     wordClassName: 'text-cyan-300 night-glow-cyan',
-    ambientClassName:
-      'bg-[radial-gradient(ellipse_80%_60%_at_88%_8%,rgba(34,211,238,0.14),transparent_52%)]',
+    ambientTone: 'cyan',
     copy: (
       <>
         Digital craft.
@@ -253,9 +253,10 @@ export default function HomeIdentityMorph() {
             className="pointer-events-none absolute inset-x-0 bottom-0 h-[44%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.34)_28%,rgba(0,0,0,0.84)_100%)]"
           />
 
-          <div
-            aria-hidden="true"
-            className={cx('pointer-events-none absolute inset-0', STATES[0].ambientClassName)}
+          <AmbientGlow
+            tone={STATES[0].ambientTone}
+            intensity="strong"
+            position="top-right"
             style={{ opacity: clamp(1 - morphProgress * 0.75, 0, 1) }}
           />
         </div>
@@ -290,9 +291,10 @@ export default function HomeIdentityMorph() {
             className="pointer-events-none absolute inset-x-0 bottom-0 h-[44%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.34)_28%,rgba(0,0,0,0.84)_100%)]"
           />
 
-          <div
-            aria-hidden="true"
-            className={cx('pointer-events-none absolute inset-0', STATES[1].ambientClassName)}
+          <AmbientGlow
+            tone={STATES[1].ambientTone}
+            intensity="strong"
+            position="top-right"
             style={{ opacity: clamp(morphProgress * 1.1, 0, 1) }}
           />
         </div>
@@ -347,7 +349,8 @@ export default function HomeIdentityMorph() {
               <Link
                 href={activeState.href}
                 className={cx(
-                  'pointer-events-auto inline-flex min-h-11 items-center rounded-full border border-white/15 bg-black/35 px-4 font-mono text-[11px] uppercase tracking-[0.24em] text-white/90 transition-[border-color,color,background-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black [text-shadow:0_6px_34px_rgba(0,0,0,0.95)]',
+                  'pointer-events-auto inline-flex min-h-11 items-center rounded-full border border-white/15 bg-black/35 px-4 font-mono text-[11px] uppercase text-white/90 transition-[border-color,color,background-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black [text-shadow:0_6px_34px_rgba(0,0,0,0.95)]',
+                  tracking.label,
                   activeState.linkClassName,
                 )}
               >
@@ -357,7 +360,7 @@ export default function HomeIdentityMorph() {
 
             <div
               aria-hidden="true"
-              className="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-white/10 pt-4 font-mono text-[10px] uppercase tracking-[0.24em]"
+              className={cx('flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-white/10 pt-4 font-mono text-[10px] uppercase', tracking.label)}
             >
               {BRIDGE_LABELS.map((label, index) => (
                 <span

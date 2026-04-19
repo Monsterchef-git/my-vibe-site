@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import ScrambleText from '@/components/shared/ScrambleText';
+import { glassDepth, tracking } from '@/design/tokens/primitives/atmosphere';
 import { cx } from '@/lib/utils/cx';
 
 const NAV_ITEMS = [
@@ -23,14 +24,17 @@ export default function TopNav({ currentPath }: TopNavProps) {
           data-cursor="link"
           className="group inline-flex min-h-11 min-w-11 items-center justify-center justify-self-start rounded-full leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
-          <p className="hover-glitch font-black text-2xl tracking-[-0.12em] text-white transition-colors duration-150">
+          <p className={cx('hover-glitch font-black text-2xl text-white transition-colors duration-150', tracking.dense)}>
             JH.
           </p>
         </Link>
 
         <nav
           aria-label="Primary"
-          className="max-w-full justify-self-center overflow-x-auto rounded-full border border-white/10 bg-zinc-900/72 px-2 py-2 shadow-[var(--shadow-stitch-surface)] backdrop-blur-xl [scrollbar-width:none]"
+          className={cx(
+            'max-w-full justify-self-center overflow-x-auto rounded-full border border-white/10 bg-zinc-900/72 px-2 py-2 shadow-[var(--shadow-stitch-surface)] [scrollbar-width:none]',
+            glassDepth.frosted,
+          )}
         >
           <div className="flex items-center gap-1">
             {NAV_ITEMS.map((item) => {
@@ -42,7 +46,8 @@ export default function TopNav({ currentPath }: TopNavProps) {
                   aria-current={isActive ? 'page' : undefined}
                   data-cursor="link"
                   className={cx(
-                    'inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2.5 font-mono text-[10px] uppercase whitespace-nowrap tracking-[0.32em] transition-[color,border-color,background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+                    'inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2.5 font-mono text-[10px] uppercase whitespace-nowrap transition-[color,border-color,background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+                    tracking.eyebrow,
                     isActive
                       ? 'border-white/10 bg-white text-black shadow-[0_0_18px_rgba(255,255,255,0.16)]'
                       : 'border-transparent text-zinc-400 hover:border-white/10 hover:text-white focus-visible:border-white/10 focus-visible:text-white',
@@ -69,7 +74,10 @@ export default function TopNav({ currentPath }: TopNavProps) {
           </div>
           <ScrambleText
             text="Let's build."
-            className="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-300 transition-colors duration-200 group-hover:text-[var(--accent-primary)] group-focus-visible:text-[var(--accent-primary)]"
+            className={cx(
+              'font-mono text-[10px] uppercase text-zinc-300 transition-colors duration-200 group-hover:text-[var(--accent-primary)] group-focus-visible:text-[var(--accent-primary)]',
+              tracking.eyebrow,
+            )}
           />
         </Link>
 

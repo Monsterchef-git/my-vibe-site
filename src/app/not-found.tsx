@@ -72,7 +72,7 @@ export default function NotFound() {
         </div>
 
         {/* Terminal output */}
-        <div className="mx-auto max-w-md rounded-[1.5rem] border border-zinc-800/60 bg-zinc-950/80 p-5 text-left backdrop-blur-xl">
+        <div className="mx-auto max-w-md rounded-[1.5rem] border border-zinc-800/60 bg-zinc-950/80 p-5 text-left">
           <div className="mb-3 flex items-center gap-2">
             <div className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
             <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/60" />
@@ -105,7 +105,7 @@ export default function NotFound() {
         {/* CTA */}
         <Link
           href="/"
-          className="group mt-10 inline-flex items-center gap-3 rounded-full border border-zinc-800/80 bg-zinc-950/70 px-6 py-3 font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-500 backdrop-blur-xl transition-all duration-300 hover:border-lime-400/40 hover:text-lime-400 hover:shadow-[0_0_20px_rgba(202,253,0,0.1)]"
+          className="group mt-10 inline-flex items-center gap-3 rounded-full border border-zinc-800/80 bg-zinc-950/70 px-6 py-3 font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-500 transition-all duration-300 hover:border-lime-400/40 hover:text-lime-400 hover:shadow-[0_0_20px_rgba(202,253,0,0.1)]"
         >
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-zinc-700 transition-colors group-hover:bg-lime-400 group-hover:shadow-[0_0_8px_#cafd00]" />
           Reconectar _

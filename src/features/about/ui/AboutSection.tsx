@@ -4,6 +4,7 @@ import {
   sectionMicroClassName,
   sectionSupportClassName,
 } from '@/design/tokens/components/sectionStyles';
+import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { SectionChrome } from '@/design/ui';
 import ScrollSectionPrimitive from '@/components/shared/ScrollSectionPrimitive';
 import { cx } from '@/lib/utils/cx';
@@ -74,20 +75,20 @@ export default function AboutSection({
                   i < specRows.length - 1 && 'border-b border-zinc-800/50',
                 )}
               >
-                <Eyebrow as="span" role="dim" className="block tracking-[0.18em]">
+                <Eyebrow as="span" role="dim" className={cx('block', tracking.label)}>
                   {item.key}
                 </Eyebrow>
-                <span className={cx(sectionMicroClassName, 'mt-1 block normal-case tracking-[0.14em] text-zinc-300/76')}>
+                <span className={cx(sectionMicroClassName, 'mt-1 block normal-case text-zinc-300/76')}>
                   {item.value}
                 </span>
               </div>
             ))}
 
             <div className="border-t border-zinc-800/50 pt-4">
-              <Eyebrow as="span" role="dim" className="block tracking-[0.18em]">
+              <Eyebrow as="span" role="dim" className={cx('block', tracking.label)}>
                 AVAILABILITY
               </Eyebrow>
-              <MonoToken kind="status" className="mt-2 inline-block font-mono text-[10px] uppercase tracking-[0.24em]">
+              <MonoToken kind="status" className={cx('mt-2 inline-block font-mono text-[10px] uppercase', tracking.label)}>
                 Private inquiries
               </MonoToken>
             </div>

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import TopNav from '@/components/shared/TopNav';
+import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { DevelopmentSection } from '@/features/development/ui';
 import { GastronomySection } from '@/features/gastronomy/ui';
 import { WorksHero } from '@/features/works/ui';
+import { cx } from '@/lib/utils/cx';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
 const worksSeo = PAGE_SEO.works;
@@ -65,7 +67,10 @@ export default function WorksPage() {
             data-cursor="cta"
             data-cursor-label="Explore"
             data-cursor-tone="lime"
-            className="inline-flex min-h-11 items-center font-mono text-[11px] uppercase tracking-[0.32em] text-lime-300/78 transition-colors duration-300 hover:text-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-lime-200"
+            className={cx(
+              'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-lime-300/78 transition-colors duration-300 hover:text-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-lime-200',
+              tracking.eyebrow,
+            )}
           >
             #Hospitality
           </a>
@@ -78,7 +83,10 @@ export default function WorksPage() {
             data-cursor="cta"
             data-cursor-label="Explore"
             data-cursor-tone="cyan"
-            className="inline-flex min-h-11 items-center font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300/78 transition-colors duration-300 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-cyan-200 md:justify-end md:text-right"
+            className={cx(
+              'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-cyan-300/78 transition-colors duration-300 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-cyan-200 md:justify-end md:text-right',
+              tracking.eyebrow,
+            )}
           >
             #Digital
           </a>
@@ -89,7 +97,6 @@ export default function WorksPage() {
 
       <GastronomySection
         id="works-gastronomy"
-        className="bg-zinc-950/70"
         compact
       />
 
@@ -97,7 +104,7 @@ export default function WorksPage() {
         aria-label="Works narrative bridge"
         className="flex min-h-40 items-center justify-center py-10 md:py-16"
       >
-        <p className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-zinc-500">
+        <p className={cx('text-center font-mono text-[10px] uppercase text-zinc-500', tracking.label)}>
           ready for service →
         </p>
       </section>
@@ -105,7 +112,6 @@ export default function WorksPage() {
       <ErrorBoundary>
         <DevelopmentSection
           id="works-development"
-          className="bg-zinc-950/70"
           compact
         />
       </ErrorBoundary>

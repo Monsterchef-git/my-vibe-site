@@ -1,12 +1,29 @@
 import type { ComponentPropsWithoutRef } from 'react';
-import { sectionClassName } from '@/design/tokens/components/primitiveTokens';
+import {
+  sectionChromedClassName,
+  sectionClassName,
+} from '@/design/tokens/components/primitiveTokens';
 import { cx } from '@/lib/utils/cx';
 
-export type SectionPrimitiveProps = ComponentPropsWithoutRef<'section'>;
+type SectionPrimitiveVariant = 'plain' | 'chromed';
+
+export interface SectionPrimitiveProps extends ComponentPropsWithoutRef<'section'> {
+  variant?: SectionPrimitiveVariant;
+}
 
 export function SectionPrimitive({
+  variant = 'plain',
   className,
   ...props
 }: SectionPrimitiveProps) {
-  return <section className={cx(sectionClassName, className)} {...props} />;
+  return (
+    <section
+      className={cx(
+        sectionClassName,
+        variant === 'chromed' && sectionChromedClassName,
+        className,
+      )}
+      {...props}
+    />
+  );
 }

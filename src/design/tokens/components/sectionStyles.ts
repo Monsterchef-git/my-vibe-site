@@ -1,7 +1,9 @@
+import { tracking } from '@/design/tokens/primitives/atmosphere';
+
 // Single source of truth for eyebrow and section text styles.
 
 export const eyebrowBase =
-  'font-mono text-[11px] uppercase tracking-[0.32em]';
+  `font-mono text-[11px] uppercase ${tracking.eyebrow}`;
 
 export const eyebrowPrimary = `${eyebrowBase} text-zinc-400`;
 export const eyebrowMuted = `${eyebrowBase} text-zinc-500`;
@@ -24,4 +26,4 @@ export const sectionBodyClassName =
 export const sectionSupportClassName =
   'max-w-[34rem] font-mono text-sm leading-7 text-zinc-300/78 md:text-[15px]';
 export const sectionMicroClassName =
-  'font-mono text-[11px] uppercase tracking-[0.28em] text-zinc-500';
+  `font-mono text-[11px] uppercase ${tracking.label} text-zinc-500`;

@@ -64,7 +64,7 @@ export default function AboutPage() {
       </section>
 
       <ErrorBoundary>
-        <AboutSection id="about-profile" className="bg-zinc-950/70" compact />
+        <AboutSection id="about-profile" compact />
       </ErrorBoundary>
     </main>
   );
