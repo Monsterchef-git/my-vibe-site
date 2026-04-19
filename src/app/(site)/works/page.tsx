@@ -11,7 +11,7 @@ const worksSeo = PAGE_SEO.works;
 export const metadata: Metadata = {
   title: worksSeo.title,
   description: worksSeo.description,
-  keywords: worksSeo.keywords,
+  keywords: [...worksSeo.keywords],
   alternates: {
     canonical: worksSeo.path,
   },
@@ -56,19 +56,37 @@ export default function WorksPage() {
         <WorksHero />
       </ErrorBoundary>
 
-      <ErrorBoundary>
-        <ScrollProgressBlock
-          as="div"
-          variant="bridge"
-          scrollTone="lime"
-          className="scroll-progress-bridge mb-12 mt-16 px-0 py-2 md:mt-20"
-        >
-          <p className="scroll-progress-bridge-label pb-3 text-center font-mono text-[10px] uppercase tracking-[0.28em]">
-            KITCHEN CRAFT
-          </p>
-          <div className="scroll-progress-bridge-line h-px w-full bg-gradient-to-r from-lime-400/55 via-lime-400/25 to-transparent" />
-        </ScrollProgressBlock>
-      </ErrorBoundary>
+      <section
+        aria-label="Works filters"
+        className="space-y-8 py-10 md:space-y-10 md:py-12"
+      >
+        <div className="grid gap-3 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-5">
+          <a
+            href="#works-gastronomy"
+            data-cursor="cta"
+            data-cursor-label="Explore"
+            data-cursor-tone="lime"
+            className="inline-flex min-h-11 items-center font-mono text-[11px] uppercase tracking-[0.32em] text-lime-300/78 transition-colors duration-300 hover:text-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-lime-200"
+          >
+            #Hospitality
+          </a>
+          <div
+            aria-hidden="true"
+            className="h-px bg-zinc-800"
+          />
+          <a
+            href="#works-development"
+            data-cursor="cta"
+            data-cursor-label="Explore"
+            data-cursor-tone="cyan"
+            className="inline-flex min-h-11 items-center font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300/78 transition-colors duration-300 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-cyan-200 md:justify-end md:text-right"
+          >
+            #Digital
+          </a>
+        </div>
+      </section>
+
+      <div aria-hidden="true" className="h-24 md:h-40" />
 
       <GastronomySection
         id="works-gastronomy"

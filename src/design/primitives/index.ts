@@ -17,3 +17,8 @@ export {
   type EyebrowRole,
   type EyebrowTone,
 } from '@/design/primitives/Eyebrow';
+export {
+  Hero,
+  type HeroProps,
+  type HeroTone,
+} from '@/design/primitives/Hero';

@@ -2,13 +2,14 @@ import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import { AboutHero, AboutSection } from '@/features/about/ui';
 import TopNav from '@/components/shared/TopNav';
+import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
 const aboutSeo = PAGE_SEO.about;
 export const metadata: Metadata = {
   title: aboutSeo.title,
   description: aboutSeo.description,
-  keywords: aboutSeo.keywords,
+  keywords: [...aboutSeo.keywords],
   alternates: {
     canonical: aboutSeo.path,
   },
@@ -52,6 +53,15 @@ export default function AboutPage() {
       <ErrorBoundary>
         <AboutHero />
       </ErrorBoundary>
+
+      <section
+        aria-label="About intro"
+        className="py-14 md:py-20"
+      >
+        <p className={`${sectionBodyClassName} max-w-[32rem]`}>
+          A way of working shaped by kitchens, now carried into digital.
+        </p>
+      </section>
 
       <ErrorBoundary>
         <AboutSection id="about-profile" className="bg-zinc-950/70" compact />

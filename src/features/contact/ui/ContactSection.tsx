@@ -1,6 +1,6 @@
 'use client';
 
-import { Eyebrow } from '@/design/primitives';
+import { Eyebrow, Hero } from '@/design/primitives';
 import { sectionMicroClassName } from '@/design/tokens/components/sectionStyles';
 import ScrambleText from '@/components/shared/ScrambleText';
 import { cx } from '@/lib/utils/cx';
@@ -22,44 +22,43 @@ interface ContactSectionProps {
  */
 export default function ContactSection({ id = 'contact', className }: ContactSectionProps) {
   return (
-    <footer
+    <section
       id={id}
       className={cx(
-        'relative mx-auto mt-6 min-h-[88svh] w-[calc(100%-1rem)] max-w-[calc(100vw-1rem)] overflow-hidden rounded-[2.75rem] border border-zinc-800/80 md:mt-8 md:min-h-[92svh] md:w-[calc(100%-2rem)] md:max-w-[calc(100vw-2rem)]',
+        'relative -mx-6 md:-mx-24',
         className,
       )}
     >
-      {/* Ambient lime glow — emanates from behind JOHNHERRERA */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_50%_at_12%_58%,rgba(202,253,0,0.10),transparent_58%)]"
-      />
-      {/* Secondary glow — top right, subtle */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_90%_18%,rgba(202,253,0,0.04),transparent_55%)]"
-      />
-
-      {/* Main layout */}
-      <div className="flex min-h-[88svh] flex-col px-5 md:min-h-[92svh] md:px-14">
-
-        {/* ── Top — eyebrow ── */}
-        <div className="flex items-center justify-between gap-4 pt-20 md:pt-24">
-          <Eyebrow as="h1" role="muted" className="whitespace-nowrap">Contact --- John Herrera</Eyebrow>
-          <span className={cx(sectionMicroClassName, 'shrink-0 text-zinc-500')}>
-            Medellín, CO
+      <Hero
+        eyebrow="CONTACT"
+        statement="The pass is open."
+        counterLine="briefs, reservations, collaborations →"
+        tone="lime"
+        anchor={
+          <span className={cx(sectionMicroClassName, 'text-zinc-500')}>
+            Medellin, CO
           </span>
-        </div>
+        }
+      />
 
-        {/* ── Email installation — main visual mass ── */}
-        <div className="flex flex-1 flex-col justify-end pb-16 md:pb-20">
-
+      <section
+        aria-label="Email installation"
+        className="relative px-6 pb-16 pt-8 md:px-24 md:pb-24 md:pt-12"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_50%_at_12%_58%,rgba(202,253,0,0.10),transparent_58%)]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_90%_18%,rgba(202,253,0,0.04),transparent_55%)]"
+        />
+        <div className="relative">
           <a
             href="mailto:chef@johnherrerachef.com"
             aria-label="Send email to chef@johnherrerachef.com"
-            className="group block rounded-[1.75rem] leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="group block leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
-            {/* chef@ — small, indented, dim. Like a label on a container. */}
             <ScrambleText
               as="span"
               text="chef@"
@@ -89,55 +88,47 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               style={{ fontSize: 'clamp(1.5rem, 3.6vw, 3.2rem)' }}
             />
           </a>
-
         </div>
+      </section>
 
-        {/* ── Bottom anchor — stats + social ── */}
-        <div className="border-t border-zinc-900/60 py-8 md:py-10">
-          <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-
-            {/* Social links */}
-            <div className="flex flex-wrap gap-x-8 gap-y-3">
-              {[
-                {
-                  href: 'https://www.instagram.com/johnherrerachef/',
-                  label: 'Instagram',
-                  color: 'hover:text-lime-400 focus-visible:text-lime-300',
-                },
-                {
-                  href: 'https://github.com/Monsterchef-git',
-                  label: 'GitHub',
-                  color: 'hover:text-cyan-400 focus-visible:text-cyan-300',
-                },
-                {
-                  href: 'https://www.linkedin.com/in/john-herrera-chef/',
-                  label: 'LinkedIn',
-                  color: 'hover:text-blue-400 focus-visible:text-blue-300',
-                },
-              ].map(({ href, label, color }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cx(
-                    'flex min-h-11 items-center gap-2 rounded-full px-2 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
-                    color,
-                  )}
-                >
-                  <span className="h-px w-4 bg-zinc-800" />
-                  <Eyebrow as="span" role="primary">{label}</Eyebrow>
-                </a>
-              ))}
-            </div>
-
-            <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-zinc-500 md:text-right">
-              <span>© 2026</span>
-            </div>
+      <footer className="px-6 pb-10 md:px-24 md:pb-14">
+        <div className="space-y-0">
+          {[
+            {
+              href: 'https://www.instagram.com/johnherrerachef/',
+              label: 'Instagram',
+              color: 'text-lime-300 hover:text-lime-200 focus-visible:text-lime-200',
+            },
+            {
+              href: 'https://github.com/Monsterchef-git',
+              label: 'GitHub',
+              color: 'text-lime-300 hover:text-lime-200 focus-visible:text-lime-200',
+            },
+            {
+              href: 'https://www.linkedin.com/in/john-herrera-chef/',
+              label: 'LinkedIn',
+              color: 'text-blue-300 hover:text-blue-200 focus-visible:text-blue-200',
+            },
+          ].map(({ href, label, color }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cx(
+                'flex min-h-14 items-center justify-between border-t border-zinc-900 font-mono text-[11px] uppercase tracking-[0.28em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:min-h-16',
+                color,
+              )}
+            >
+              <span>{label}</span>
+              <span aria-hidden="true" className="text-zinc-600">↗</span>
+            </a>
+          ))}
+          <div className="border-t border-zinc-900 pt-5 font-mono text-[11px] uppercase tracking-[0.28em] text-zinc-500">
+            © 2026
           </div>
         </div>
-
-      </div>
-    </footer>
+      </footer>
+    </section>
   );
 }

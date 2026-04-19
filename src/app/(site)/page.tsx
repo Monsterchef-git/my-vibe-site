@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import TopNav from '@/components/shared/TopNav';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
-import { MonoToken } from '@/design/primitives';
+import { Hero } from '@/design/primitives';
 import ScrollProgressBlock from '@/components/shared/ScrollProgressBlock';
-import HeroTypewriter from '@/features/home/ui/HeroTypewriter';
+import HomeNameScramble from '@/features/home/ui/HomeNameScramble';
 import HomeEditorialSection from '@/features/home/ui/HomeEditorialSection';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
@@ -12,7 +12,7 @@ const homeSeo = PAGE_SEO.home;
 export const metadata: Metadata = {
   title: homeSeo.title,
   description: homeSeo.description,
-  keywords: homeSeo.keywords,
+  keywords: [...homeSeo.keywords],
   alternates: {
     canonical: homeSeo.path,
   },
@@ -57,35 +57,24 @@ export default function Home() {
           id="hero"
           variant="hero"
           scrollTone="lime"
-          className="relative flex min-h-screen items-end pt-40 pb-16 md:pt-44 md:pb-24"
+          className="-mx-6 md:-mx-24"
         >
-          {/* Vertical counterweight — right edge, centered, reads bottom-to-top */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none hidden select-none md:flex md:items-center"
-            style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 10 }}
+          <Hero
+            eyebrow="HOME"
+            statement="Cooked fast. Shipped faster."
+            counterLine="twelve years plating. now shipping interfaces."
+            tone="lime"
+            anchor={
+              <span className="inline-flex items-center gap-2">
+                Scroll
+                <span aria-hidden="true">↓</span>
+              </span>
+            }
           >
-            <span className="-rotate-90 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.36em] text-zinc-600">
-              Chef · Dev · Medellín, CO
-            </span>
-          </div>
-
-          <div className="w-full max-w-6xl space-y-10">
-            <div>
-              <h1 className="sr-only">John Herrera | Chef and Dev in Medellín</h1>
-              <ErrorBoundary>
-                <HeroTypewriter />
-              </ErrorBoundary>
-            </div>
-
-            <p
-              className="border-l border-lime-400/25 pl-6 font-mono text-sm leading-relaxed text-zinc-400"
-              style={{ animation: 'hero-fade-up 0.7s cubic-bezier(0.16,1,0.3,1) 0.8s forwards', opacity: 0 }}
-            >
-              I work between the kitchen and the web, building simple, effective landing pages from{' '}
-              <MonoToken kind="location">Medellín</MonoToken>.
-            </p>
-          </div>
+            <ErrorBoundary>
+              <HomeNameScramble />
+            </ErrorBoundary>
+          </Hero>
         </ScrollProgressBlock>
       </ErrorBoundary>
 

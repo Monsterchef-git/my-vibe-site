@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import TopNav from '@/components/shared/TopNav';
 import { ContactSection } from '@/features/contact/ui';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
@@ -7,7 +8,7 @@ const contactSeo = PAGE_SEO.contact;
 export const metadata: Metadata = {
   title: contactSeo.title,
   description: contactSeo.description,
-  keywords: contactSeo.keywords,
+  keywords: [...contactSeo.keywords],
   alternates: {
     canonical: contactSeo.path,
   },
@@ -48,7 +49,9 @@ export default function ContactPage() {
       />
       <TopNav currentPath="/contact" />
 
-      <ContactSection className="bg-zinc-950/70" />
+      <ErrorBoundary>
+        <ContactSection />
+      </ErrorBoundary>
     </main>
   );
 }
