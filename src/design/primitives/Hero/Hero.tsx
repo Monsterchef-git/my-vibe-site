@@ -40,11 +40,11 @@ export function Hero({
   return (
     <section
       className={cx(
-        'relative flex min-h-svh w-full items-end px-6 pb-10 pt-28 md:px-10 md:pb-14 md:pt-32 lg:px-14 lg:pb-16',
+        'relative flex min-h-svh w-full items-end px-6 pb-10 pt-28 md:px-24 md:pb-14 md:pt-32 lg:pb-16',
         className,
       )}
     >
-      <div className="flex w-full items-end justify-between gap-8">
+      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
         <div className="max-w-[58rem] space-y-6">
           <Eyebrow
             as="p"
@@ -75,7 +75,7 @@ export function Hero({
         </div>
 
         {children ? (
-          <div className="hidden max-w-[40vw] shrink-0 items-end md:flex">
+          <div className="hidden w-full max-w-[40vw] shrink-0 items-end justify-end lg:flex">
             {children}
           </div>
         ) : null}

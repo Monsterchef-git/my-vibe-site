@@ -22,7 +22,11 @@ export default function GastronomySection({
   compact = false,
 }: GastronomySectionProps) {
   return (
-    <ScrollSectionPrimitive id={id} scrollTone="lime" className={cx('space-y-12', className)}>
+    <ScrollSectionPrimitive
+      id={id}
+      scrollTone="lime"
+      className={cx('space-y-12 !overflow-visible', className)}
+    >
       {!compact && (
         <SectionChrome
           index="01"

@@ -366,7 +366,6 @@ export default function HomeIdentityMorph() {
                     'transition-colors duration-300',
                     index === bridgeStep && index === 0 && 'text-lime-300',
                     index === bridgeStep && index === 1 && 'text-cyan-300',
-                    index === bridgeStep && index === 2 && 'text-blue-300',
                     index !== bridgeStep && index < bridgeStep && 'text-zinc-300/80',
                     index > bridgeStep && 'text-zinc-500',
                   )}

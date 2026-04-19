@@ -1,6 +1,6 @@
 'use client';
 
-import { Eyebrow, Hero } from '@/design/primitives';
+import { Hero } from '@/design/primitives';
 import { sectionMicroClassName } from '@/design/tokens/components/sectionStyles';
 import ScrambleText from '@/components/shared/ScrambleText';
 import { cx } from '@/lib/utils/cx';
@@ -43,7 +43,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
 
       <section
         aria-label="Email installation"
-        className="relative px-6 pb-16 pt-8 md:px-24 md:pb-24 md:pt-12"
+        className="relative overflow-hidden px-6 pb-16 pt-8 md:px-24 md:pb-24 md:pt-12"
       >
         <div
           aria-hidden="true"
@@ -57,14 +57,14 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
           <a
             href="mailto:chef@johnherrerachef.com"
             aria-label="Send email to chef@johnherrerachef.com"
-            className="group block leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+            className="group block w-full max-w-full leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
             <ScrambleText
               as="span"
               text="chef@"
               speed={28}
               stagger={32}
-              className="mb-1 ml-[2vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400 transition-colors duration-500 group-hover:text-zinc-200 group-focus-visible:text-zinc-200"
+              className="mb-1 ml-1 block font-mono uppercase tracking-[-0.04em] text-zinc-400 transition-colors duration-500 group-hover:text-zinc-200 group-focus-visible:text-zinc-200 md:ml-[2vw]"
               style={{ fontSize: 'clamp(1.15rem, 2.4vw, 2rem)' }}
             />
 
@@ -74,8 +74,8 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               text="JOHNHERRERA"
               speed={22}
               stagger={28}
-              className="night-glow block font-mono uppercase tracking-[-0.03em] text-[var(--accent-primary)] transition-[text-shadow] duration-500 group-hover:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)] group-focus-visible:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)]"
-              style={{ fontSize: 'clamp(3.25rem, 13vw, 11rem)', lineHeight: 0.9 }}
+              className="night-glow block max-w-full font-mono uppercase tracking-[-0.03em] text-[var(--accent-primary)] transition-[text-shadow] duration-500 group-hover:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)] group-focus-visible:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)]"
+              style={{ fontSize: 'clamp(2.2rem, 9vw, 11rem)', lineHeight: 0.9 }}
             />
 
             {/* chef.com — medium, offset right, fading */}
@@ -84,7 +84,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
               text="chef.com"
               speed={28}
               stagger={36}
-              className="mt-1 ml-[4vw] block font-mono uppercase tracking-[-0.04em] text-zinc-400/88 transition-colors duration-500 group-hover:text-zinc-200 group-focus-visible:text-zinc-200"
+              className="mt-1 ml-2 block font-mono uppercase tracking-[-0.04em] text-zinc-400/88 transition-colors duration-500 group-hover:text-zinc-200 group-focus-visible:text-zinc-200 md:ml-[4vw]"
               style={{ fontSize: 'clamp(1.5rem, 3.6vw, 3.2rem)' }}
             />
           </a>

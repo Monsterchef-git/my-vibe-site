@@ -24,7 +24,6 @@ export default function HomeNameScramble() {
 
   useEffect(() => {
     if (reduceMotion) {
-      setDisplay(TARGET);
       return undefined;
     }
 
