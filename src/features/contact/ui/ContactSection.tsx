@@ -89,7 +89,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         </div>
       </section>
 
-      <footer className="px-6 pb-14 pt-48 md:px-24 md:pb-16 md:pt-64">>
+      <footer className="px-6 pb-14 pt-48 md:px-24 md:pb-16 md:pt-64">
         <div className="space-y-0">
           {[
             {
