@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ScrambleText from '@/components/shared/ScrambleText';
+
 import { glassDepth, tracking } from '@/design/tokens/primitives/atmosphere';
 import { cx } from '@/lib/utils/cx';
 
@@ -72,13 +72,14 @@ export default function TopNav({ currentPath }: TopNavProps) {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent-primary)] opacity-60 motion-reduce:hidden" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent-primary)] shadow-[0_0_10px_var(--accent-primary)]" />
           </div>
-          <ScrambleText
-            text="Let's build."
+          <span
             className={cx(
               'font-mono text-[10px] uppercase text-zinc-300 transition-colors duration-200 group-hover:text-[var(--accent-primary)] group-focus-visible:text-[var(--accent-primary)]',
               tracking.eyebrow,
             )}
-          />
+          >
+            Let's build.
+          </span>
         </Link>
 
       </div>

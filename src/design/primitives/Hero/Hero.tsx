@@ -60,8 +60,8 @@ export function Hero({
         </div>
       ) : null}
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[78rem] flex-col gap-8 px-6 md:px-24 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-        <div className="max-w-[68rem] space-y-6">
+      <div className="relative z-10 flex w-full flex-col gap-8 px-6 md:px-10 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+        <div className="max-w-[56rem] space-y-6">
           <Eyebrow
             as="p"
             tone={toneToEyebrowTone[tone]}
@@ -70,7 +70,7 @@ export function Hero({
             {eyebrow}
           </Eyebrow>
 
-          <h1 className="font-headline text-[clamp(3rem,10vw,8rem)] italic leading-[0.92] text-white">
+          <h1 className="font-headline text-[clamp(2.75rem,8vw,6.5rem)] italic leading-[0.92] text-white">
             {statement}
           </h1>
 
@@ -92,7 +92,7 @@ export function Hero({
         </div>
 
         {showRightSide ? (
-          <div className="hidden w-full shrink-0 items-end justify-end lg:flex lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]">
+          <div className="hidden w-full shrink-0 items-end justify-end lg:flex lg:w-[min(48vw,36rem)] 2xl:w-[min(42rem,40vw)]">
             {children}
           </div>
         ) : null}

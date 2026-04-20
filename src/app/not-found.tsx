@@ -52,11 +52,10 @@ export default function NotFound() {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-lg px-6 text-center">
-        {/* Glitching 404 */}
-        <div className="not-found-glitch-wrapper mb-8">
+        {/* Static 404 */}
+        <div className="mb-8">
           <h1
-            className="glitch-mark text-[clamp(6rem,20vw,12rem)] font-black leading-none tracking-tighter"
-            data-text="404"
+            className="text-[clamp(6rem,20vw,12rem)] font-black leading-none tracking-tighter text-white"
           >
             404
           </h1>

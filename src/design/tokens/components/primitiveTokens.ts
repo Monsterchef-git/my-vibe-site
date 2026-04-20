@@ -11,7 +11,7 @@ export const sectionClassName =
   'relative p-6 md:p-8';
 
 export const sectionChromedClassName =
-  'rounded-[3rem] border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-xl';
+  'border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-xl';
 
 export const cardClassName =
-  'rounded-[2rem] border p-5 md:p-6 shadow-[var(--shadow-stitch-surface)] transition-all duration-300';
+  'border p-5 md:p-6 shadow-[var(--shadow-stitch-surface)] transition-all duration-300';

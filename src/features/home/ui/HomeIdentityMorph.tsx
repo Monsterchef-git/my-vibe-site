@@ -14,7 +14,7 @@ import {
 } from '@/lib/imageAssets';
 import { cx } from '@/lib/utils/cx';
 
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
 const MORPH_START = 0.24;
 const MORPH_END = 0.74;
 const SWITCH_THRESHOLD = 0.52;
@@ -77,55 +77,19 @@ function easeInOutCubic(value: number) {
     : 1 - Math.pow(-2 * value + 2, 3) / 2;
 }
 
-function shouldScramble(character: string) {
-  return /[A-Z0-9]/.test(character);
-}
 
-function getScrambleChar(index: number, bucket: number) {
-  const charIndex = (index * 11 + bucket * 7 + 3) % SCRAMBLE_CHARS.length;
-  return SCRAMBLE_CHARS[charIndex];
-}
-
-function morphWord(from: string, to: string, progress: number) {
-  const maxLength = Math.max(from.length, to.length);
-  const bucket = Math.floor(progress * 18);
-  const scrambleStart = 0.18;
-  const settleStart = 0.58;
-
-  return Array.from({ length: maxLength }, (_, index) => {
-    const fromChar = from[index] ?? '\u00A0';
-    const toChar = to[index] ?? '\u00A0';
-
-    if (progress <= scrambleStart) {
-      return fromChar;
-    }
-
-    if (progress >= 0.9) {
-      return toChar;
-    }
-
-    const leavePoint = 1 - (index + 1) / (maxLength + 1);
-    const settlePoint = index / Math.max(1, to.length);
-
-    if (progress < 0.5 && progress < leavePoint) {
-      return fromChar;
-    }
-
-    if (progress > settleStart && progress > settlePoint) {
-      return toChar;
-    }
-
-    return shouldScramble(fromChar) || shouldScramble(toChar)
-      ? getScrambleChar(index, bucket)
-      : '\u00A0';
-  }).join('');
-}
 
 function getSectionProgress(node: HTMLElement) {
-  const rect = node.getBoundingClientRect();
   const viewportHeight = window.innerHeight || 1;
+  const scrollY = window.scrollY || window.pageYOffset || 0;
+  const sectionTop = node.offsetTop;
+  const sectionHeight = Math.max(node.offsetHeight, viewportHeight);
 
-  return clamp((viewportHeight - rect.top) / (viewportHeight + rect.height));
+  const start = sectionTop - viewportHeight;
+  const end = sectionTop + sectionHeight - viewportHeight;
+  const denominator = Math.max(end - start, 1);
+
+  return clamp((scrollY - start) / denominator);
 }
 
 export default function HomeIdentityMorph() {
@@ -195,9 +159,7 @@ export default function HomeIdentityMorph() {
   }, [reducedMotion, sectionProgress]);
 
   const activeState = STATES[morphProgress >= SWITCH_THRESHOLD ? 1 : 0];
-  const displayWord = reducedMotion
-    ? activeState.word
-    : morphWord(STATES[0].word, STATES[1].word, morphProgress);
+  const displayWord = activeState.word;
   const maxWordLength = useMemo(
     () => Math.max(...STATES.map((state) => state.word.length)),
     [],
@@ -299,15 +261,7 @@ export default function HomeIdentityMorph() {
           />
         </div>
 
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-[1] opacity-[0.04] mix-blend-soft-light"
-          style={{
-            backgroundImage:
-              'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.82\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3CfeColorMatrix type=\'saturate\' values=\'0\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")',
-            backgroundSize: '160px 160px',
-          }}
-        />
+
 
         <div className="pointer-events-none absolute inset-0 z-[2] flex flex-col justify-end px-6 py-10 md:px-24 md:py-14">
           <div className="relative max-w-5xl space-y-5 md:space-y-6">

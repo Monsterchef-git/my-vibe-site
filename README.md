@@ -89,10 +89,6 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 - `NEXT_PUBLIC_GA_ID`: enables direct GA4 installation
 - If GA4 is already sent via GTM, leave `NEXT_PUBLIC_GA_ID` empty to avoid duplicates
 
-Consent mode is default-denied and uses this banner copy:
-
-> We use cookies to improve your experience, analyze traffic, and personalize content. You can accept all cookies or reject non-essential cookies.
-
 Tracked custom events:
 
 - `cta_contact_click`
@@ -114,7 +110,7 @@ Runs on every push and pull request:
 
 1. Configure env vars (`NEXT_PUBLIC_GTM_ID`, optional `NEXT_PUBLIC_GA_ID`).
 2. Run `npm run lint` and `npm run build`.
-3. Verify consent banner and events in GTM/GA debug view.
+3. Verify events in GTM/GA debug view.
 4. Deploy.
 
 ## AI Context

@@ -11,8 +11,8 @@ export const tracking = {
 } as const;
 
 export const glowPreset = {
-  lime: { color: '#cafd00', size: '60vw', opacity: 0.08 },
-  cyan: { color: 'rgb(34 211 238)', size: '60vw', opacity: 0.06 },
+  lime: { color: '#cafd00', size: '60vw', opacity: 0.12 },
+  cyan: { color: 'rgb(34 211 238)', size: '60vw', opacity: 0.1 },
   blue: { color: 'rgb(96 165 250)', size: '60vw', opacity: 0.06 },
   white: { color: '#ffffff', size: '50vw', opacity: 0.04 },
 } as const;

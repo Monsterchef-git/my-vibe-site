@@ -103,7 +103,7 @@ export function SectionCTA({
       href={href}
       data-magnetic="lens"
       className={cx(
-        'group relative isolate mt-10 flex items-center justify-between gap-4 overflow-hidden rounded-[2rem] border border-zinc-800/60 bg-white/[0.02] px-6 py-4 transition-all duration-300',
+        'group relative isolate mt-10 flex items-center justify-between gap-4 overflow-hidden rounded-full border border-zinc-800/60 bg-white/[0.02] px-6 py-4 transition-all duration-300',
         toneClasses.root,
         className,
       )}

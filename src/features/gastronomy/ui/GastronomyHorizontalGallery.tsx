@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   BLUR_CULINARY_PLATING,
   IMAGE_CULINARY_PLATING,
@@ -173,26 +173,12 @@ function GalleryStill({
 }
 
 export default function GastronomyHorizontalGallery() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const scrollDriverRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotionPreference();
 
-  const syncTrackPosition = useEffectEvent(() => {
-    const section = sectionRef.current;
-    const track = trackRef.current;
-
-    if (!section || !track) {
-      return;
-    }
-
-    const overflow = Math.max(track.scrollWidth - window.innerWidth, 0);
-    const scrollableHeight = Math.max(section.offsetHeight - window.innerHeight, 1);
-    const progress = clamp(-section.getBoundingClientRect().top / scrollableHeight, 0, 1);
-
-    track.style.transform = `translate3d(${-overflow * progress}px, 0, 0)`;
-  });
-
   useEffect(() => {
+    console.log('[GAL-EFFECT]', { trackRef: !!trackRef.current, reducedMotion });
     const track = trackRef.current;
 
     if (!track || reducedMotion) {
@@ -204,6 +190,18 @@ export default function GastronomyHorizontalGallery() {
     }
 
     let frame = 0;
+
+    const syncTrackPosition = () => {
+      const section = scrollDriverRef.current;
+      const trackEl = trackRef.current;
+      if (!section || !trackEl) return;
+
+      const overflow = Math.max(trackEl.scrollWidth - window.innerWidth, 0);
+      const scrollableHeight = Math.max(section.offsetHeight - window.innerHeight, 1);
+      const progress = clamp(-section.getBoundingClientRect().top / scrollableHeight, 0, 1);
+
+      trackEl.style.transform = `translate3d(${-overflow * progress}px, 0, 0)`;
+    };
 
     const schedule = () => {
       if (frame !== 0) {
@@ -217,9 +215,10 @@ export default function GastronomyHorizontalGallery() {
     };
 
     const resizeObserver = new ResizeObserver(schedule);
+    const viewport = window.visualViewport;
 
-    if (sectionRef.current) {
-      resizeObserver.observe(sectionRef.current);
+    if (scrollDriverRef.current) {
+      resizeObserver.observe(scrollDriverRef.current);
     }
 
     resizeObserver.observe(track);
@@ -227,6 +226,8 @@ export default function GastronomyHorizontalGallery() {
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     window.addEventListener('load', schedule);
+    viewport?.addEventListener('resize', schedule);
+    viewport?.addEventListener('scroll', schedule);
 
     schedule();
 
@@ -239,6 +240,8 @@ export default function GastronomyHorizontalGallery() {
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       window.removeEventListener('load', schedule);
+      viewport?.removeEventListener('resize', schedule);
+      viewport?.removeEventListener('scroll', schedule);
     };
   }, [reducedMotion]);
 
@@ -256,13 +259,13 @@ export default function GastronomyHorizontalGallery() {
 
       {!reducedMotion ? (
         <div
-          ref={sectionRef}
+          ref={scrollDriverRef}
           data-cursor="drag"
           data-cursor-label="Scroll"
           data-cursor-tone="lime"
           className="hidden h-[360svh] md:block lg:h-[420svh] xl:h-[440svh]"
         >
-          <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+          <div className="sticky top-0 flex h-svh items-center overflow-hidden">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-y-0 left-0 z-[4] w-20 bg-gradient-to-r from-black via-black/82 to-transparent xl:w-28"

@@ -1,81 +1,79 @@
+'use client';
+
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
+import { PROJECTS } from '@/features/development/data/projects';
 import { cx } from '@/lib/utils/cx';
 
-const PROJECTS = [
-  {
-    id: 'blue-moon',
-    number: '01',
-    title: 'Blue Moon Cottage',
-    tags: 'Hospitality · Landing',
-    href: 'https://www.bluemoonhopetown.com',
-  },
-  {
-    id: 'isolution',
-    number: '02',
-    title: 'iSolution Lab',
-    tags: 'Landing · Apple',
-    href: 'https://isolution.com.co',
-  },
-  {
-    id: 'meghans',
-    number: '03',
-    title: "Meghan's Momentum",
-    tags: 'Editorial',
-    href: 'https://www.meghansmomentumstudios.com',
-  },
-  {
-    id: 'spa-lleras',
-    number: '04',
-    title: 'Spa Lleras',
-    tags: 'Landing · Wellness',
-    href: 'https://spalleras.com/',
-  },
-  {
-    id: 'lleras-medical',
-    number: '05',
-    title: 'Lleras Medical',
-    tags: 'Landing · Health',
-    href: 'https://www.llerasmedicallounge.com/',
-  },
-  {
-    id: 'tecnical',
-    number: '06',
-    title: 'tecnical.app',
-    tags: 'SaaS · Next.js',
-    href: 'https://www.tecnical.app',
-  },
-] as const;
-
 export default function WorksList() {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [supportsHover, setSupportsHover] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const syncHoverCapability = () => setSupportsHover(mediaQuery.matches);
+
+    syncHoverCapability();
+    mediaQuery.addEventListener('change', syncHoverCapability);
+
+    return () => mediaQuery.removeEventListener('change', syncHoverCapability);
+  }, []);
+
   return (
-    <div className="space-y-0 border-t border-zinc-900">
-      {PROJECTS.map((project) => (
-        <a
-          key={project.id}
-          href={project.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${project.title} — ${project.tags} (opens in new tab)`}
-          data-cursor="link"
-          data-cursor-label="Open"
-          data-cursor-tone="cyan"
-          className="group block border-b border-zinc-900 py-6 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-8"
-        >
-          <div className="grid gap-4 md:grid-cols-[72px_minmax(0,1fr)_auto] md:items-end md:gap-6">
-            <span className={cx('font-mono text-[10px] uppercase text-zinc-500', tracking.eyebrow)}>
-              {project.number}
-            </span>
+    <div className="relative">
+      {supportsHover ? (
+        <div className="pointer-events-none fixed inset-0 z-0">
+          {PROJECTS.map((project, index) => (
+            <Image
+              key={project.id}
+              src={project.image}
+              alt=""
+              fill
+              sizes="100vw"
+              loading={index < 2 ? 'eager' : 'lazy'}
+              className={cx(
+                'object-cover blur-sm grayscale transition-opacity duration-[400ms]',
+                activeId === project.id ? 'opacity-25 grayscale-0' : 'opacity-0',
+              )}
+            />
+          ))}
+        </div>
+      ) : null}
 
-            <h3 className="font-headline text-[clamp(2rem,5.4vw,4.6rem)] italic leading-[0.9] text-white transition-all duration-300 group-hover:translate-x-1 group-hover:text-cyan-300">
-              {project.title}
-            </h3>
+      <ul className="relative z-10 divide-y divide-zinc-900/60 border-y border-zinc-900/60">
+        {PROJECTS.map((project) => (
+          <li key={project.id}>
+            <a
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} — ${project.imageAlt} (opens in new tab)`}
+              data-cursor="link"
+              data-cursor-mode="lens"
+              data-cursor-label="OPEN"
+              data-cursor-tone="cyan"
+              onMouseEnter={() => setActiveId(project.id)}
+              onMouseLeave={() => setActiveId(null)}
+              className="group block py-10 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-14"
+            >
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-[auto_1fr_auto] md:items-baseline md:gap-8">
+                <span className={cx('font-mono text-[10px] uppercase text-zinc-600', tracking.label)}>
+                  {project.number}
+                </span>
 
-            <span className={cx('font-mono text-[10px] uppercase text-zinc-500 md:text-right', tracking.label)}>
-              {project.tags}
-            </span>
-          </div>
-        </a>
-      ))}
+                <h3 className="font-headline text-[clamp(2rem,5.8vw,4rem)] italic leading-[0.9] text-white transition-all duration-300 group-hover:translate-x-2 group-hover:text-cyan-300">
+                  {project.title}
+                </h3>
+
+                <span className={cx('font-mono text-[10px] uppercase text-zinc-500 md:text-right', tracking.eyebrow)}>
+                  {project.tags.join(' · ')}
+                </span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

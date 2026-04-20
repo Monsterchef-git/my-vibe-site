@@ -1,7 +1,6 @@
 import Script from 'next/script';
 import { Suspense } from 'react';
 import GoogleTrackingEvents from '@/components/GoogleTrackingEvents';
-import TrackingConsent from '@/components/TrackingConsent';
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 const gaId = process.env.NEXT_PUBLIC_GA_ID;
@@ -77,7 +76,6 @@ gtag('config', '${gaId}', { send_page_view: false });`,
       <Suspense fallback={null}>
         <GoogleTrackingEvents gaId={gaId} />
       </Suspense>
-      <TrackingConsent />
     </>
   );
 }
