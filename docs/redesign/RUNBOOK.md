@@ -11,8 +11,9 @@ Step-by-step guide to apply the awwwards redesign. Each step is a discrete actio
 6. ~~S4 — Subtraction~~ ✓ done
 7. ~~S4.5 — Cursor as narrative voice~~ ✓ done
 8. ~~S5 — Polish~~ ✓ done
+9. ~~R1-R3 — Stability Recovery (Addendum)~~ ✓ done
 
-**Status:** All sprints completed. Redesign is live and polished.
+**Status:** All sprints completed including stability recovery. Redesign is live, polished, and fully stabilized.
 
 **Legend:**
 - `[file]` — file you will edit
