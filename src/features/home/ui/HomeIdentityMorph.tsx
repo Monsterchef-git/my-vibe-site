@@ -180,7 +180,7 @@ export default function HomeIdentityMorph() {
         <div
           aria-hidden="true"
           className="absolute inset-x-0 top-0 bottom-[30%] z-[1]"
-          data-cursor="scroll"
+          data-cursor-mode="scroll"
           data-cursor-label="Scroll"
           data-cursor-role={activeState.id === 'development' ? 'dev' : 'chef'}
         />

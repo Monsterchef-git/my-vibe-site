@@ -8,9 +8,11 @@ Step-by-step guide to apply the awwwards redesign. Each step is a discrete actio
 3. ~~S3 — Tokens & decontainerization~~ ✓ done
 4. ~~S3.5 — Post-S3 rescue~~ ✓ done (partial)
 5. ~~S3.5b — Root-cause corrections~~ ✓ done
-6. **S4 — Subtraction** ← you are here
-7. S4.5 — Cursor as narrative voice
-8. S5 — Polish
+6. ~~S4 — Subtraction~~ ✓ done
+7. ~~S4.5 — Cursor as narrative voice~~ ✓ done
+8. ~~S5 — Polish~~ ✓ done
+
+**Status:** All sprints completed. Redesign is live and polished.
 
 **Legend:**
 - `[file]` — file you will edit

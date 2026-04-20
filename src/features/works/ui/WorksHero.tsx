@@ -12,7 +12,7 @@ export default function WorksHero() {
       anchor={
         <a
           href="#works-gastronomy"
-          data-cursor="cta"
+          data-cursor-mode="cta"
           data-cursor-label="Explore"
           data-cursor-role="chef"
           className={cx(

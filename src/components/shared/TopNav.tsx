@@ -24,7 +24,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
         {/* Logo — sin contenedor, glitch en hover */}
         <Link
           href="/"
-          data-cursor="link"
+          data-cursor-mode="link"
           className="group inline-flex min-h-11 min-w-11 items-center justify-center justify-self-start rounded-full leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
           <p className={cx('hover-glitch font-black text-2xl text-white transition-colors duration-[400ms] motion-reduce:transition-none', tracking.dense)}>
@@ -47,7 +47,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? 'page' : undefined}
-                  data-cursor="link"
+                  data-cursor-mode="link"
                   className={cx(
                     'inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2.5 font-mono text-[10px] uppercase whitespace-nowrap transition-[color,border-color,background-color,box-shadow] duration-[500ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black motion-reduce:transition-none',
                     tracking.eyebrow,
@@ -66,7 +66,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
         {/* CTA — sin contenedor, flota libre */}
         <Link
           href="/contact"
-          data-cursor="cta"
+          data-cursor-mode="cta"
           data-cursor-label="Contact"
           data-cursor-tone="lime"
           className="group inline-flex min-h-11 items-center justify-self-start gap-2.5 px-1 transition-colors duration-[500ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:justify-self-end motion-reduce:transition-none"

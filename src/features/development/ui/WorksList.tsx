@@ -49,7 +49,6 @@ export default function WorksList() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${project.title} — ${project.imageAlt} (opens in new tab)`}
-              data-cursor="link"
               data-cursor-mode="lens"
               data-cursor-label="OPEN"
               onMouseEnter={() => setActiveId(project.id)}

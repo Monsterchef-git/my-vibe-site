@@ -260,7 +260,7 @@ export default function GastronomyHorizontalGallery() {
       {!reducedMotion ? (
         <div
           ref={scrollDriverRef}
-          data-cursor="drag"
+          data-cursor-mode="drag"
           data-cursor-label="Scroll"
           className="hidden h-[360svh] md:block lg:h-[420svh] xl:h-[440svh]"
         >

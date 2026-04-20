@@ -66,7 +66,7 @@ export default function WorksPage() {
         <div className="grid gap-3 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-5">
           <a
             href="#works-gastronomy"
-            data-cursor="cta"
+            data-cursor-mode="cta"
             data-cursor-label="Explore"
             data-cursor-role="chef"
             className={cx(
@@ -82,7 +82,7 @@ export default function WorksPage() {
           />
           <a
             href="#works-development"
-            data-cursor="cta"
+            data-cursor-mode="cta"
             data-cursor-label="Explore"
             data-cursor-role="dev"
             className={cx(

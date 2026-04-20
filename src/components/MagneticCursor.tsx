@@ -57,7 +57,8 @@ const getCursorMode = (element: HTMLElement | null): CursorMode => {
     return 'idle';
   }
 
-  return isCursorMode(element.dataset.cursor) ? element.dataset.cursor : 'link';
+  const mode = element.dataset.cursorMode || element.dataset.cursor;
+  return isCursorMode(mode) ? mode : 'link';
 };
 
 const getCursorLabel = (element: HTMLElement | null): string => {
