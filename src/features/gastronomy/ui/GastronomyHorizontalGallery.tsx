@@ -156,7 +156,7 @@ function GalleryStill({
         blurDataURL={frame.blurDataURL}
         loading={frame.priority ? undefined : 'lazy'}
         className={cx(
-          'object-cover transition-[transform,filter,opacity] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:opacity-64 md:grayscale group-hover:scale-[1.035] group-hover:opacity-100 group-hover:grayscale-0 motion-reduce:transition-none',
+          'object-cover transition-[transform,filter,opacity] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:opacity-75 md:grayscale group-hover:scale-[1.05] group-hover:opacity-100 group-hover:grayscale-0 motion-reduce:transition-none',
           frame.imageClassName,
         )}
       />
@@ -178,7 +178,6 @@ export default function GastronomyHorizontalGallery() {
   const reducedMotion = useReducedMotionPreference();
 
   useEffect(() => {
-    console.log('[GAL-EFFECT]', { trackRef: !!trackRef.current, reducedMotion });
     const track = trackRef.current;
 
     if (!track || reducedMotion) {
@@ -196,9 +195,15 @@ export default function GastronomyHorizontalGallery() {
       const trackEl = trackRef.current;
       if (!section || !trackEl) return;
 
-      const overflow = Math.max(trackEl.scrollWidth - window.innerWidth, 0);
-      const scrollableHeight = Math.max(section.offsetHeight - window.innerHeight, 1);
-      const progress = clamp(-section.getBoundingClientRect().top / scrollableHeight, 0, 1);
+      const rect = section.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      const overflow = Math.max(trackEl.scrollWidth - viewportWidth, 0);
+      const scrollableHeight = section.offsetHeight - viewportHeight;
+      
+      // Progress 0 when top of driver hits top of viewport
+      const progress = clamp(-rect.top / Math.max(scrollableHeight, 1), 0, 1);
 
       trackEl.style.transform = `translate3d(${-overflow * progress}px, 0, 0)`;
     };

@@ -19,6 +19,29 @@ const MORPH_START = 0.24;
 const MORPH_END = 0.74;
 const SWITCH_THRESHOLD = 0.52;
 const BRIDGE_LABELS = ['KITCHEN CRAFT', 'DIGITAL CRAFT'] as const;
+const SCRAMBLE_CHARS = 'ABCDEFGHIKLMNOPQRSTVXYZ0123456789';
+
+function getScrambledWord(p: number, from: string, to: string) {
+  const length = Math.max(from.length, to.length);
+  const result = [];
+
+  for (let i = 0; i < length; i++) {
+    // Stagger the scramble per character
+    const charP = clamp((p - i * 0.08) / 0.75);
+
+    if (charP <= 0) {
+      result.push(from[i] || '');
+    } else if (charP >= 1) {
+      result.push(to[i] || '');
+    } else {
+      // Deterministic scramble based on progress
+      const charIndex = Math.floor((charP * 100 + i * 2) % SCRAMBLE_CHARS.length);
+      result.push(SCRAMBLE_CHARS[charIndex]);
+    }
+  }
+
+  return result.join('');
+}
 
 const STATES = [
   {
@@ -80,16 +103,14 @@ function easeInOutCubic(value: number) {
 
 
 function getSectionProgress(node: HTMLElement) {
-  const viewportHeight = window.innerHeight || 1;
-  const scrollY = window.scrollY || window.pageYOffset || 0;
-  const sectionTop = node.offsetTop;
-  const sectionHeight = Math.max(node.offsetHeight, viewportHeight);
+  const rect = node.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const sectionHeight = rect.height;
 
-  const start = sectionTop - viewportHeight;
-  const end = sectionTop + sectionHeight - viewportHeight;
-  const denominator = Math.max(end - start, 1);
-
-  return clamp((scrollY - start) / denominator);
+  // Progress 0 when top enters bottom of viewport, 1 when bottom leaves top of viewport
+  // But here we want the sticky track's relative progress.
+  const progress = -rect.top / (sectionHeight - viewportHeight);
+  return clamp(progress);
 }
 
 export default function HomeIdentityMorph() {
@@ -159,7 +180,18 @@ export default function HomeIdentityMorph() {
   }, [reducedMotion, sectionProgress]);
 
   const activeState = STATES[morphProgress >= SWITCH_THRESHOLD ? 1 : 0];
-  const displayWord = activeState.word;
+
+  const displayWord = useMemo(() => {
+    if (reducedMotion) return activeState.word;
+
+    // Scramble window: 0.35 to 0.65
+    if (morphProgress < 0.35) return STATES[0].word;
+    if (morphProgress > 0.65) return STATES[1].word;
+
+    const p = mapRange(morphProgress, 0.35, 0.65);
+    return getScrambledWord(p, STATES[0].word, STATES[1].word);
+  }, [morphProgress, reducedMotion, activeState.word]);
+
   const maxWordLength = useMemo(
     () => Math.max(...STATES.map((state) => state.word.length)),
     [],
