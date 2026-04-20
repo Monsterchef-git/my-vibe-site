@@ -6,7 +6,6 @@ import {
 } from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { SectionChrome } from '@/design/ui';
-import ScrollSectionPrimitive from '@/components/shared/ScrollSectionPrimitive';
 import { cx } from '@/lib/utils/cx';
 
 interface AboutSectionProps {
@@ -29,11 +28,15 @@ export default function AboutSection({
   compact = false,
 }: AboutSectionProps) {
   return (
-    <ScrollSectionPrimitive
+    <section
       id={id}
-      scrollTone="white"
+      data-scroll-tone="white"
       data-cursor-role="chef"
-      className={cx(compact ? 'overflow-hidden pt-4 md:pt-6' : 'overflow-hidden pt-32 md:pt-52 pb-32 md:pb-52', className)}
+      className={cx(
+        'relative w-full overflow-hidden',
+        compact ? 'pt-4 md:pt-6' : 'py-32 md:py-52',
+        className
+      )}
     >
       {!compact && (
         <SectionChrome
@@ -96,6 +99,6 @@ export default function AboutSection({
           </div>
         </div>
       </div>
-    </ScrollSectionPrimitive>
+    </section>
   );
 }

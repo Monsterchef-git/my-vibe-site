@@ -51,17 +51,24 @@ export function Hero({
         className,
       )}
     >
-      {showBackdropSide ? (
+      {hasSide ? (
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-0 lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]"
+          className={cx(
+            'pointer-events-none absolute inset-0 z-0',
+            // sidePosition="background" stays background on all tiers
+            // sidePosition="right" is backdrop on md, flex-auto on lg+
+            sidePosition === 'background'
+              ? 'lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]'
+              : 'hidden md:block lg:hidden'
+          )}
         >
           {children}
         </div>
       ) : null}
 
-      <div className="relative z-10 flex w-full flex-col gap-8 px-6 md:px-10 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-        <div className="max-w-[56rem] space-y-6">
+      <div className="relative z-10 mx-auto flex w-full max-w-[78rem] flex-col gap-8 px-6 md:px-10 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+        <div className="max-w-[68rem] space-y-6">
           <Eyebrow
             as="p"
             tone={toneToEyebrowTone[tone]}

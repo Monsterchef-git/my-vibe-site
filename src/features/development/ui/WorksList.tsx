@@ -24,14 +24,14 @@ export default function WorksList() {
     <div className="relative">
       {supportsHover ? (
         <div className="pointer-events-none fixed inset-0 z-0">
-          {PROJECTS.map((project, index) => (
+          {PROJECTS.map((project) => (
             <Image
               key={project.id}
               src={project.image}
               alt=""
               fill
               sizes="100vw"
-              loading={index < 2 ? 'eager' : 'lazy'}
+              loading="lazy"
               className={cx(
                 'object-cover blur-sm grayscale transition-opacity duration-[700ms] motion-reduce:transition-none',
                 activeId === project.id ? 'opacity-25 grayscale-0' : 'opacity-0',

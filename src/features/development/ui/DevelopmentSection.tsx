@@ -1,5 +1,4 @@
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
-import ScrollSectionPrimitive from '@/components/shared/ScrollSectionPrimitive';
 import { SectionChrome } from '@/design/ui';
 import {
   sectionBodyClassName,
@@ -21,11 +20,15 @@ export default function DevelopmentSection({
   compact = false,
 }: DevelopmentSectionProps) {
   return (
-    <ScrollSectionPrimitive 
-      id={id} 
-      scrollTone="cyan" 
+    <section
+      id={id}
+      data-scroll-tone="cyan"
       data-cursor-role="dev"
-      className={cx('space-y-10 pt-32 md:pt-52 pb-32 md:pb-52', className)}
+      className={cx(
+        'relative w-full overflow-hidden',
+        compact ? 'pt-4 md:pt-6' : 'space-y-10 py-32 md:py-52',
+        className
+      )}
     >
       {!compact && (
         <SectionChrome
@@ -52,6 +55,6 @@ export default function DevelopmentSection({
       <ErrorBoundary>
         <WorksList />
       </ErrorBoundary>
-    </ScrollSectionPrimitive>
+    </section>
   );
 }
