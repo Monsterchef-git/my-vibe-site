@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { cx } from '@/lib/utils/cx';
+import { useAnimationFrame } from '@/lib/utils/useAnimationFrame';
 
 const INTERACTIVE_SELECTOR = [
   '[data-cursor]',
@@ -98,8 +99,7 @@ const getCursorTone = (element: HTMLElement | null): CursorTone => {
 
 const getStickiness = (element: HTMLElement | null) =>
   element?.dataset.cursorStick === 'true';
-
-export default function MagneticCursor() {
+const MagneticCursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const shellRef = useRef<HTMLSpanElement>(null);
   const dotRef = useRef<HTMLSpanElement>(null);
@@ -120,6 +120,174 @@ export default function MagneticCursor() {
   const lastPointerRef = useRef({ x: 0, y: 0 });
   const [enabled, setEnabled] = useState(false);
 
+  const render = useCallback(() => {
+    const cursor = cursorRef.current;
+    const shell = shellRef.current;
+    const dot = dotRef.current;
+    const label = labelRef.current;
+
+    if (!cursor || !shell || !dot || !label || !enabledRef.current) {
+      return;
+    }
+
+    const activeElement = activeElementRef.current?.isConnected
+      ? activeElementRef.current
+      : null;
+    const hoveredElement = hoveredElementRef.current?.isConnected
+      ? hoveredElementRef.current
+      : null;
+    const mode = getCursorMode(activeElement);
+    const tone = getCursorTone(activeElement ?? hoveredElement);
+    const labelText = getCursorLabel(activeElement);
+    const rgb = TONE_RGB[tone];
+    const pointer = pointerRef.current;
+    const hasLabel = labelText.length > 0;
+    const isPressed = pressedRef.current;
+
+    let targetX = pointer.x;
+    let targetY = pointer.y;
+    let targetWidth = BASE_SIZE;
+    let targetHeight = BASE_SIZE;
+    let easing = BASE_EASING;
+
+    if (activeElement) {
+      const rect = activeElement.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const stickyBoost = getStickiness(activeElement) ? 0.14 : 0;
+
+      if (mode === 'lens') {
+        const localX = rect.width > 0 ? pointer.x - rect.left : 0;
+        const localY = rect.height > 0 ? pointer.y - rect.top : 0;
+        const lensOffsetX = rect.width > 0 ? ((localX / rect.width) - 0.5) * 18 : 0;
+        const lensOffsetY = rect.height > 0 ? ((localY / rect.height) - 0.5) * 12 : 0;
+
+        targetWidth = clamp(rect.width * 0.34, 96, 184);
+        targetHeight = clamp(rect.height * 0.2, 68, 116);
+        targetX = pointer.x + (centerX - pointer.x) * (0.22 + stickyBoost) + lensOffsetX * 0.34;
+        targetY = pointer.y + (centerY - pointer.y) * (0.18 + stickyBoost * 0.4) + lensOffsetY * 0.34;
+        easing = 0.14;
+      } else if (mode === 'cta') {
+        targetWidth = clamp(rect.width + 28, 72, 196);
+        targetHeight = clamp(rect.height + 18, 42, 64);
+        targetX = pointer.x + (centerX - pointer.x) * (0.46 + stickyBoost);
+        targetY = pointer.y + (centerY - pointer.y) * (0.46 + stickyBoost);
+        easing = 0.18;
+      } else if (mode === 'drag') {
+        targetWidth = clamp(rect.width * 0.46, 108, 184);
+        targetHeight = clamp(rect.height * 0.16, 48, 74);
+        targetX = pointer.x + (centerX - pointer.x) * (0.3 + stickyBoost);
+        targetY = pointer.y + (centerY - pointer.y) * (0.26 + stickyBoost * 0.5);
+        easing = 0.15;
+      } else if (mode === 'scroll') {
+        targetWidth = hasLabel ? clamp(labelText.length * 11 + 42, 92, 136) : 96;
+        targetHeight = 36;
+        targetX = pointer.x;
+        targetY = pointer.y;
+        easing = 0.2;
+      } else if (mode === 'portrait') {
+        targetWidth = clamp(rect.width * 0.4, 200, 320);
+        targetHeight = clamp(rect.height * 0.3, 200, 320);
+        targetX = pointer.x;
+        targetY = pointer.y;
+        easing = 0.12;
+      } else if (mode === 'keyword') {
+        targetWidth = 110;
+        targetHeight = 44;
+        targetX = pointer.x;
+        targetY = pointer.y;
+        easing = 0.22;
+      } else {
+        targetWidth = clamp(rect.width + 18, 54, 168);
+        targetHeight = clamp(rect.height + 12, 36, 56);
+        targetX = pointer.x + (centerX - pointer.x) * (0.38 + stickyBoost);
+        targetY = pointer.y + (centerY - pointer.y) * (0.38 + stickyBoost);
+        easing = 0.17;
+      }
+    }
+
+    currentRef.current.x += (targetX - currentRef.current.x) * easing;
+    currentRef.current.y += (targetY - currentRef.current.y) * easing;
+    sizeRef.current.width += (targetWidth - sizeRef.current.width) * 0.2;
+    sizeRef.current.height += (targetHeight - sizeRef.current.height) * 0.2;
+
+    speedRef.current += (
+      Math.hypot(velocityRef.current.x, velocityRef.current.y) - speedRef.current
+    ) * 0.2;
+
+    const targetAngle = speedRef.current > 0.2
+      ? (Math.atan2(velocityRef.current.y, velocityRef.current.x) * 180) / Math.PI
+      : 0;
+    const maxStretch = mode === 'lens' || mode === 'portrait' ? 0.08 : mode === 'idle' ? 0.04 : 0.14;
+    const stretch = clamp(speedRef.current / 26, 0, maxStretch);
+
+    angleRef.current += (targetAngle - angleRef.current) * 0.18;
+    stretchRef.current += (stretch - stretchRef.current) * 0.18;
+
+    const width = sizeRef.current.width * (isPressed ? 0.94 : 1);
+    const height = sizeRef.current.height * (isPressed ? 0.92 : 1);
+    const scaleX = 1 + stretchRef.current;
+    const scaleY = 1 - stretchRef.current * 0.42;
+
+    cursor.style.opacity = visibleRef.current ? '1' : '0';
+    cursor.style.width = `${width}px`;
+    cursor.style.height = `${height}px`;
+    cursor.style.transform = `translate3d(${currentRef.current.x - width / 2}px, ${
+      currentRef.current.y - height / 2
+    }px, 0)`;
+
+    shell.style.borderRadius = mode === 'lens' || mode === 'portrait' ? '28px' : '999px';
+    shell.style.transform = `rotate(${angleRef.current}deg) scale(${scaleX}, ${scaleY})`;
+
+    if (mode === 'idle') {
+      shell.style.borderColor = `rgba(${rgb}, 0.2)`;
+      shell.style.background = 'rgba(10, 10, 10, 0.08)';
+      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.1), 0 0 18px rgba(${rgb}, 0.08)`;
+    } else if (mode === 'scroll') {
+      shell.style.borderColor = `rgba(${rgb}, 0.72)`;
+      shell.style.background = 'rgba(10, 10, 10, 0.18)';
+      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.16), 0 0 28px rgba(${rgb}, 0.18), inset 0 0 22px rgba(${rgb}, 0.06)`;
+    } else if (mode === 'cta') {
+      shell.style.borderColor = `rgba(${rgb}, 0.9)`;
+      shell.style.background = `rgba(${rgb}, 0.08)`;
+      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.18), 0 0 34px rgba(${rgb}, 0.22), inset 0 0 20px rgba(${rgb}, 0.08)`;
+    } else if (mode === 'lens') {
+      shell.style.borderColor = `rgba(${rgb}, 0.72)`;
+      shell.style.background = 'rgba(10, 10, 10, 0.04)';
+      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 42px rgba(0, 0, 0, 0.24)`;
+    } else if (mode === 'drag') {
+      shell.style.borderColor = `rgba(${rgb}, 0.8)`;
+      shell.style.background = 'rgba(10, 10, 10, 0.12)';
+      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 16px 34px rgba(0, 0, 0, 0.24)`;
+    } else if (mode === 'portrait') {
+      shell.style.borderColor = `rgba(${rgb}, 0.15)`;
+      shell.style.background = `rgba(${rgb}, 0.02)`;
+      shell.style.boxShadow = `0 0 60px 10px rgba(${rgb}, 0.12)`;
+      cursor.style.filter = 'blur(12px)';
+    } else if (mode === 'keyword') {
+      shell.style.borderColor = `rgba(${rgb}, 0.85)`;
+      shell.style.background = 'rgba(10, 10, 10, 0.45)';
+      shell.style.boxShadow = `0 0 24px rgba(${rgb}, 0.32), inset 0 0 12px rgba(${rgb}, 0.12)`;
+    } else {
+      shell.style.borderColor = `rgba(${rgb}, 0.82)`;
+      shell.style.background = 'rgba(10, 10, 10, 0.12)';
+      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 0 26px rgba(${rgb}, 0.14)`;
+      cursor.style.filter = 'none';
+    }
+
+    dot.style.opacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
+    dot.style.background = `rgba(${rgb}, 1)`;
+    dot.style.boxShadow = `0 0 14px rgba(${rgb}, 0.72)`;
+
+    label.textContent = labelText.toUpperCase();
+    label.style.opacity = hasLabel && mode !== 'idle' ? '1' : '0';
+    label.style.color = `rgba(${rgb}, ${mode === 'cta' || mode === 'keyword' ? '1' : '0.88'})`;
+    label.style.fontWeight = mode === 'keyword' ? '900' : '400';
+    label.style.letterSpacing = hasLabel && (mode === 'scroll' || mode === 'keyword') ? '0.26em' : hasLabel ? '0.32em' : '0.24em';
+  }, []);
+
+  useAnimationFrame(render);
+
   useEffect(() => {
     const cursor = cursorRef.current;
     const shell = shellRef.current;
@@ -134,198 +302,6 @@ export default function MagneticCursor() {
       '(min-width: 768px) and (hover: hover) and (pointer: fine)',
     );
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const render = () => {
-      frameRef.current = null;
-
-      if (!enabledRef.current) {
-        return;
-      }
-
-      const activeElement = activeElementRef.current?.isConnected
-        ? activeElementRef.current
-        : null;
-      const hoveredElement = hoveredElementRef.current?.isConnected
-        ? hoveredElementRef.current
-        : null;
-      const mode = getCursorMode(activeElement);
-      const tone = getCursorTone(activeElement ?? hoveredElement);
-      const labelText = getCursorLabel(activeElement);
-      const rgb = TONE_RGB[tone];
-      const pointer = pointerRef.current;
-      const hasLabel = labelText.length > 0;
-      const isPressed = pressedRef.current;
-
-      let targetX = pointer.x;
-      let targetY = pointer.y;
-      let targetWidth = BASE_SIZE;
-      let targetHeight = BASE_SIZE;
-      let easing = BASE_EASING;
-
-      if (activeElement) {
-        const rect = activeElement.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const stickyBoost = getStickiness(activeElement) ? 0.14 : 0;
-
-        if (mode === 'lens') {
-          const localX = rect.width > 0 ? pointer.x - rect.left : 0;
-          const localY = rect.height > 0 ? pointer.y - rect.top : 0;
-          const lensOffsetX = rect.width > 0 ? ((localX / rect.width) - 0.5) * 18 : 0;
-          const lensOffsetY = rect.height > 0 ? ((localY / rect.height) - 0.5) * 12 : 0;
-
-          targetWidth = clamp(rect.width * 0.34, 96, 184);
-          targetHeight = clamp(rect.height * 0.2, 68, 116);
-          targetX = pointer.x + (centerX - pointer.x) * (0.22 + stickyBoost) + lensOffsetX * 0.34;
-          targetY = pointer.y + (centerY - pointer.y) * (0.18 + stickyBoost * 0.4) + lensOffsetY * 0.34;
-          easing = 0.14;
-        } else if (mode === 'cta') {
-          targetWidth = clamp(rect.width + 28, 72, 196);
-          targetHeight = clamp(rect.height + 18, 42, 64);
-          targetX = pointer.x + (centerX - pointer.x) * (0.46 + stickyBoost);
-          targetY = pointer.y + (centerY - pointer.y) * (0.46 + stickyBoost);
-          easing = 0.18;
-        } else if (mode === 'drag') {
-          targetWidth = clamp(rect.width * 0.46, 108, 184);
-          targetHeight = clamp(rect.height * 0.16, 48, 74);
-          targetX = pointer.x + (centerX - pointer.x) * (0.3 + stickyBoost);
-          targetY = pointer.y + (centerY - pointer.y) * (0.26 + stickyBoost * 0.5);
-          easing = 0.15;
-        } else if (mode === 'scroll') {
-          targetWidth = hasLabel ? clamp(labelText.length * 11 + 42, 92, 136) : 96;
-          targetHeight = 36;
-          targetX = pointer.x;
-          targetY = pointer.y;
-          easing = 0.2;
-        } else if (mode === 'portrait') {
-          targetWidth = clamp(rect.width * 0.4, 200, 320);
-          targetHeight = clamp(rect.height * 0.3, 200, 320);
-          targetX = pointer.x;
-          targetY = pointer.y;
-          easing = 0.12;
-        } else if (mode === 'keyword') {
-          targetWidth = 110;
-          targetHeight = 44;
-          targetX = pointer.x;
-          targetY = pointer.y;
-          easing = 0.22;
-        } else {
-          targetWidth = clamp(rect.width + 18, 54, 168);
-          targetHeight = clamp(rect.height + 12, 36, 56);
-          targetX = pointer.x + (centerX - pointer.x) * (0.38 + stickyBoost);
-          targetY = pointer.y + (centerY - pointer.y) * (0.38 + stickyBoost);
-          easing = 0.17;
-        }
-      }
-
-      currentRef.current.x += (targetX - currentRef.current.x) * easing;
-      currentRef.current.y += (targetY - currentRef.current.y) * easing;
-      sizeRef.current.width += (targetWidth - sizeRef.current.width) * 0.2;
-      sizeRef.current.height += (targetHeight - sizeRef.current.height) * 0.2;
-
-      speedRef.current += (
-        Math.hypot(velocityRef.current.x, velocityRef.current.y) - speedRef.current
-      ) * 0.2;
-
-      const targetAngle = speedRef.current > 0.2
-        ? (Math.atan2(velocityRef.current.y, velocityRef.current.x) * 180) / Math.PI
-        : 0;
-      const maxStretch = mode === 'lens' || mode === 'portrait' ? 0.08 : mode === 'idle' ? 0.04 : 0.14;
-      const stretch = clamp(speedRef.current / 26, 0, maxStretch);
-
-      angleRef.current += (targetAngle - angleRef.current) * 0.18;
-      stretchRef.current += (stretch - stretchRef.current) * 0.18;
-
-      const width = sizeRef.current.width * (isPressed ? 0.94 : 1);
-      const height = sizeRef.current.height * (isPressed ? 0.92 : 1);
-      const scaleX = 1 + stretchRef.current;
-      const scaleY = 1 - stretchRef.current * 0.42;
-
-      cursor.style.opacity = visibleRef.current ? '1' : '0';
-      cursor.style.width = `${width}px`;
-      cursor.style.height = `${height}px`;
-      cursor.style.transform = `translate3d(${currentRef.current.x - width / 2}px, ${
-        currentRef.current.y - height / 2
-      }px, 0)`;
-
-      shell.style.borderRadius = mode === 'lens' || mode === 'portrait' ? '28px' : '999px';
-      shell.style.transform = `rotate(${angleRef.current}deg) scale(${scaleX}, ${scaleY})`;
-
-      if (mode === 'idle') {
-        shell.style.borderColor = `rgba(${rgb}, 0.2)`;
-        shell.style.background = 'rgba(10, 10, 10, 0.08)';
-        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.1), 0 0 18px rgba(${rgb}, 0.08)`;
-      } else if (mode === 'scroll') {
-        shell.style.borderColor = `rgba(${rgb}, 0.72)`;
-        shell.style.background = 'rgba(10, 10, 10, 0.18)';
-        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.16), 0 0 28px rgba(${rgb}, 0.18), inset 0 0 22px rgba(${rgb}, 0.06)`;
-      } else if (mode === 'cta') {
-        shell.style.borderColor = `rgba(${rgb}, 0.9)`;
-        shell.style.background = `rgba(${rgb}, 0.08)`;
-        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.18), 0 0 34px rgba(${rgb}, 0.22), inset 0 0 20px rgba(${rgb}, 0.08)`;
-      } else if (mode === 'lens') {
-        shell.style.borderColor = `rgba(${rgb}, 0.72)`;
-        shell.style.background = 'rgba(10, 10, 10, 0.04)';
-        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 42px rgba(0, 0, 0, 0.24)`;
-      } else if (mode === 'drag') {
-        shell.style.borderColor = `rgba(${rgb}, 0.8)`;
-        shell.style.background = 'rgba(10, 10, 10, 0.12)';
-        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 16px 34px rgba(0, 0, 0, 0.24)`;
-      } else if (mode === 'portrait') {
-        shell.style.borderColor = `rgba(${rgb}, 0.15)`;
-        shell.style.background = `rgba(${rgb}, 0.02)`;
-        shell.style.boxShadow = `0 0 60px 10px rgba(${rgb}, 0.12)`;
-        cursor.style.filter = 'blur(12px)';
-      } else if (mode === 'keyword') {
-        shell.style.borderColor = `rgba(${rgb}, 0.85)`;
-        shell.style.background = 'rgba(10, 10, 10, 0.45)';
-        shell.style.boxShadow = `0 0 24px rgba(${rgb}, 0.32), inset 0 0 12px rgba(${rgb}, 0.12)`;
-      } else {
-        shell.style.borderColor = `rgba(${rgb}, 0.82)`;
-        shell.style.background = 'rgba(10, 10, 10, 0.12)';
-        shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 0 26px rgba(${rgb}, 0.14)`;
-        cursor.style.filter = 'none';
-      }
-
-      dot.style.opacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
-      dot.style.background = `rgba(${rgb}, 1)`;
-      dot.style.boxShadow = `0 0 14px rgba(${rgb}, 0.72)`;
-
-      label.textContent = labelText.toUpperCase();
-      label.style.opacity = hasLabel && mode !== 'idle' ? '1' : '0';
-      label.style.color = `rgba(${rgb}, ${mode === 'cta' || mode === 'keyword' ? '1' : '0.88'})`;
-      label.style.fontWeight = mode === 'keyword' ? '900' : '400';
-      label.style.letterSpacing = hasLabel && (mode === 'scroll' || mode === 'keyword') ? '0.26em' : hasLabel ? '0.32em' : '0.24em';
-
-      const settledX = Math.abs(targetX - currentRef.current.x) < 0.2;
-      const settledY = Math.abs(targetY - currentRef.current.y) < 0.2;
-      const settledWidth = Math.abs(targetWidth - sizeRef.current.width) < 0.2;
-      const settledHeight = Math.abs(targetHeight - sizeRef.current.height) < 0.2;
-      const isSettled = settledX && settledY && settledWidth && settledHeight;
-      const isIdle = !visibleRef.current && !activeElement && !pressedRef.current;
-
-      if (isIdle && isSettled && speedRef.current < 0.05) {
-        velocityRef.current = { x: 0, y: 0 };
-        speedRef.current = 0;
-        stretchRef.current = 0;
-        return;
-      }
-
-      frameRef.current = window.requestAnimationFrame(render);
-    };
-
-    const startLoop = () => {
-      if (frameRef.current == null) {
-        frameRef.current = window.requestAnimationFrame(render);
-      }
-    };
-
-    const stopLoop = () => {
-      if (frameRef.current != null) {
-        window.cancelAnimationFrame(frameRef.current);
-        frameRef.current = null;
-      }
-    };
 
     const resetCursor = () => {
       activeElementRef.current = null;
@@ -353,7 +329,6 @@ export default function MagneticCursor() {
     };
 
     const updateEnabled = () => {
-      // If prefers-reduced-motion: reduce is true, cursor falls back to the system cursor
       const nextEnabled = desktopQuery.matches && !reducedMotionQuery.matches;
 
       enabledRef.current = nextEnabled;
@@ -361,7 +336,6 @@ export default function MagneticCursor() {
       document.body.classList.toggle('magnetic-cursor-active', nextEnabled);
 
       if (!nextEnabled) {
-        stopLoop();
         resetCursor();
       }
     };
@@ -405,7 +379,6 @@ export default function MagneticCursor() {
       }
 
       updateInteractiveTarget(event.target);
-      startLoop();
     };
 
     const handlePointerLeave = () => {
@@ -417,7 +390,6 @@ export default function MagneticCursor() {
 
     const handlePointerDown = () => {
       pressedRef.current = true;
-      startLoop();
     };
 
     const handlePointerUp = () => {
@@ -436,7 +408,6 @@ export default function MagneticCursor() {
     document.documentElement.addEventListener('mouseleave', handlePointerLeave);
 
     return () => {
-      stopLoop();
       document.body.classList.remove('magnetic-cursor-active');
       desktopQuery.removeEventListener('change', updateEnabled);
       reducedMotionQuery.removeEventListener('change', updateEnabled);
@@ -473,3 +444,4 @@ export default function MagneticCursor() {
     </div>
   );
 }
+export default MagneticCursor;

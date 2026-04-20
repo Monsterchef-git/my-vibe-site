@@ -38,8 +38,9 @@ export function Hero({
   anchor,
   children,
   sidePosition = 'right',
+  align = 'start',
   className,
-}: HeroProps) {
+}: HeroProps & { align?: 'start' | 'center' | 'end' }) {
   const hasSide = Boolean(children);
   const showBackdropSide = hasSide && sidePosition === 'background';
   const showRightSide = hasSide && sidePosition === 'right';
@@ -47,7 +48,10 @@ export function Hero({
   return (
     <section
       className={cx(
-        'relative flex min-h-svh w-full items-end pb-10 pt-28 md:pb-14 md:pt-32 lg:pb-16',
+        'relative flex min-h-svh w-full pb-10 pt-28 md:pb-14 md:pt-32 lg:pb-16',
+        align === 'center' && 'items-center',
+        align === 'end' && 'items-end',
+        align === 'start' && 'items-start',
         className,
       )}
     >
