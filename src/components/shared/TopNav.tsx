@@ -27,7 +27,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
           data-cursor="link"
           className="group inline-flex min-h-11 min-w-11 items-center justify-center justify-self-start rounded-full leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
         >
-          <p className={cx('hover-glitch font-black text-2xl text-white transition-colors duration-150', tracking.dense)}>
+          <p className={cx('hover-glitch font-black text-2xl text-white transition-colors duration-[400ms] motion-reduce:transition-none', tracking.dense)}>
             JH.
           </p>
         </Link>
@@ -49,7 +49,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
                   aria-current={isActive ? 'page' : undefined}
                   data-cursor="link"
                   className={cx(
-                    'inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2.5 font-mono text-[10px] uppercase whitespace-nowrap transition-[color,border-color,background-color,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+                    'inline-flex min-h-11 items-center justify-center rounded-full border px-4 py-2.5 font-mono text-[10px] uppercase whitespace-nowrap transition-[color,border-color,background-color,box-shadow] duration-[500ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black motion-reduce:transition-none',
                     tracking.eyebrow,
                     isActive
                       ? 'border-white/10 bg-white text-black shadow-[0_0_18px_rgba(255,255,255,0.16)]'
@@ -69,7 +69,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
           data-cursor="cta"
           data-cursor-label="Contact"
           data-cursor-tone="lime"
-          className="group inline-flex min-h-11 items-center justify-self-start gap-2.5 px-1 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:justify-self-end"
+          className="group inline-flex min-h-11 items-center justify-self-start gap-2.5 px-1 transition-colors duration-[500ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:justify-self-end motion-reduce:transition-none"
         >
           <div className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent-primary)] opacity-60 motion-reduce:hidden" />
@@ -77,7 +77,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
           </div>
           <span
             className={cx(
-              'font-mono text-[10px] uppercase text-zinc-300 transition-colors duration-200 group-hover:text-[var(--accent-primary)] group-focus-visible:text-[var(--accent-primary)]',
+              'font-mono text-[10px] uppercase text-zinc-300 transition-colors duration-[500ms] group-hover:text-[var(--accent-primary)] group-focus-visible:text-[var(--accent-primary)] motion-reduce:transition-none',
               tracking.eyebrow,
             )}
           >

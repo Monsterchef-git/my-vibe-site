@@ -42,7 +42,7 @@ export default function AboutNameStamp() {
       <p
         aria-hidden="true"
         className={cx(
-          'absolute left-0 top-0 font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-500 transition-[opacity,transform,letter-spacing] duration-[560ms] ease-[cubic-bezier(0.16,1,0.3,1)]',
+          'absolute left-0 top-0 font-mono text-[10px] uppercase tracking-[0.42em] text-zinc-500 transition-[opacity,transform,letter-spacing] duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
           stampVisible
             ? 'translate-y-0 opacity-100 tracking-[0.42em]'
             : '-translate-y-3 opacity-0 tracking-[0.18em]',
@@ -54,7 +54,7 @@ export default function AboutNameStamp() {
       <div
         aria-label="John Herrera"
         className={cx(
-          'space-y-0 pt-7 transition-[opacity,transform,filter] duration-[760ms] ease-[cubic-bezier(0.16,1,0.3,1)]',
+          'space-y-0 pt-7 transition-[opacity,transform,filter] duration-[1000ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
           lockupVisible ? 'translate-y-0 opacity-100 blur-0' : 'translate-y-8 opacity-0 blur-sm',
         )}
       >

@@ -33,7 +33,7 @@ export default function AboutSection({
       id={id}
       scrollTone="white"
       data-cursor-role="chef"
-      className={cx(compact ? 'overflow-hidden pt-4 md:pt-6' : 'overflow-hidden pt-20 md:pt-8', className)}
+      className={cx(compact ? 'overflow-hidden pt-4 md:pt-6' : 'overflow-hidden pt-32 md:pt-52 pb-32 md:pb-52', className)}
     >
       {!compact && (
         <SectionChrome

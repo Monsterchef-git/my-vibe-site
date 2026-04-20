@@ -443,15 +443,15 @@ export default function MagneticCursor() {
     >
       <span
         ref={shellRef}
-        className="absolute inset-0 rounded-full border border-transparent transition-[border-color,background-color,box-shadow] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        className="absolute inset-0 rounded-full border border-transparent transition-[border-color,background-color,box-shadow] duration-[500ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
       />
       <span
         ref={labelRef}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.32em] transition-opacity duration-150"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.32em] transition-opacity duration-[400ms] motion-reduce:transition-none"
       />
       <span
         ref={dotRef}
-        className="absolute left-1/2 top-1/2 h-[4px] w-[4px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-150"
+        className="absolute left-1/2 top-1/2 h-[4px] w-[4px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-[400ms] motion-reduce:transition-none"
       />
     </div>
   );

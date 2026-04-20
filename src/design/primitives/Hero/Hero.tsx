@@ -70,7 +70,7 @@ export function Hero({
             {eyebrow}
           </Eyebrow>
 
-          <h1 className="font-headline text-[clamp(2.75rem,8vw,6.5rem)] italic leading-[0.92] text-white">
+          <h1 className="font-headline text-[clamp(2.75rem,12vw,6.5rem)] italic leading-[0.92] text-white">
             {statement}
           </h1>
 

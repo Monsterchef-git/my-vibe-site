@@ -142,7 +142,7 @@ function GalleryStill({
   return (
     <figure
       className={cx(
-        'group relative shrink-0 isolate overflow-hidden rounded-[2.5rem] border border-white/8 bg-black/40 shadow-[0_32px_120px_rgba(0,0,0,0.45)]',
+        'group relative shrink-0 isolate overflow-hidden rounded-2xl border border-white/8 bg-black/40 shadow-[0_32px_120px_rgba(0,0,0,0.45)]',
         className,
       )}
     >
@@ -156,7 +156,7 @@ function GalleryStill({
         blurDataURL={frame.blurDataURL}
         loading={frame.priority ? undefined : 'lazy'}
         className={cx(
-          'object-cover transition-[transform,filter,opacity] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:opacity-64 md:grayscale group-hover:scale-[1.035] group-hover:opacity-100 group-hover:grayscale-0',
+          'object-cover transition-[transform,filter,opacity] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] md:opacity-64 md:grayscale group-hover:scale-[1.035] group-hover:opacity-100 group-hover:grayscale-0 motion-reduce:transition-none',
           frame.imageClassName,
         )}
       />

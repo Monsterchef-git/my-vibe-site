@@ -103,34 +103,34 @@ export function SectionCTA({
       href={href}
       data-magnetic="lens"
       className={cx(
-        'group relative isolate mt-10 flex items-center justify-between gap-4 overflow-hidden rounded-full border border-zinc-800/60 bg-white/[0.02] px-6 py-4 transition-all duration-300',
+        'group relative isolate mt-10 flex items-center justify-between gap-4 overflow-hidden rounded-full border border-zinc-800/60 bg-white/[0.02] px-6 py-4 transition-all duration-[700ms] motion-reduce:transition-none',
         toneClasses.root,
         className,
       )}
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.025),transparent_58%,rgba(255,255,255,0.05))] opacity-80 transition-opacity duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.025),transparent_58%,rgba(255,255,255,0.05))] opacity-80 transition-opacity duration-[700ms] group-hover:opacity-100 motion-reduce:transition-none"
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 z-[1] h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/14 bg-white/[0.08] opacity-0 shadow-[0_0_22px_rgba(255,255,255,0.06)] transition-opacity duration-200 group-hover:opacity-100"
+        className="pointer-events-none absolute left-0 top-0 z-[1] h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/14 bg-white/[0.08] opacity-0 shadow-[0_0_22px_rgba(255,255,255,0.06)] transition-opacity duration-[500ms] group-hover:opacity-100 motion-reduce:transition-none"
         style={lensStyle}
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 z-[1] h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.12] opacity-0 mix-blend-screen transition-opacity duration-200 group-hover:opacity-100"
+        className="pointer-events-none absolute left-0 top-0 z-[1] h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.12] opacity-0 mix-blend-screen transition-opacity duration-[500ms] group-hover:opacity-100 motion-reduce:transition-none"
         style={lensStyle}
       />
       <Eyebrow
         as="span"
-        className={cx('relative z-10 shrink-0 transition-colors duration-300', toneClasses.label)}
+        className={cx('relative z-10 shrink-0 transition-colors duration-[700ms] motion-reduce:transition-none', toneClasses.label)}
       >
         {label}
       </Eyebrow>
       <span
         className={cx(
-          'relative z-10 shrink-0 font-mono text-sm text-zinc-700 transition-all duration-300 group-hover:translate-x-1',
+          'relative z-10 shrink-0 font-mono text-sm text-zinc-700 transition-all duration-[700ms] group-hover:translate-x-1 motion-reduce:transition-none',
           toneClasses.arrow,
         )}
       >

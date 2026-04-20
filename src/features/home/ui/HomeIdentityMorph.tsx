@@ -273,7 +273,7 @@ export default function HomeIdentityMorph() {
             <h2
               aria-label={activeState.word}
               className={cx(
-                'inline-block font-headline italic leading-[0.8] tracking-[-0.03em] transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] [text-shadow:0_10px_50px_rgba(0,0,0,0.78)]',
+                'inline-block font-headline italic leading-[0.8] tracking-[-0.03em] transition-colors duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] [text-shadow:0_10px_50px_rgba(0,0,0,0.78)] motion-reduce:transition-none',
                 activeState.wordClassName,
               )}
               style={{
@@ -297,13 +297,13 @@ export default function HomeIdentityMorph() {
 
               <div
                 aria-hidden="true"
-                className={cx('hidden md:block md:h-12 md:w-px transition-colors duration-300', activeState.dividerClassName)}
+                className={cx('hidden md:block md:h-12 md:w-px transition-colors duration-[700ms] motion-reduce:transition-none', activeState.dividerClassName)}
               />
 
               <Link
                 href={activeState.href}
                 className={cx(
-                  'pointer-events-auto inline-flex min-h-11 items-center rounded-full border border-white/15 bg-black/35 px-4 font-mono text-[11px] uppercase text-white/90 transition-[border-color,color,background-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black [text-shadow:0_6px_34px_rgba(0,0,0,0.95)]',
+                  'pointer-events-auto inline-flex min-h-11 items-center rounded-full border border-white/15 bg-black/35 px-4 font-mono text-[11px] uppercase text-white/90 transition-[border-color,color,background-color] duration-[500ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black [text-shadow:0_6px_34px_rgba(0,0,0,0.95)] motion-reduce:transition-none',
                   tracking.label,
                   activeState.linkClassName,
                 )}
@@ -320,7 +320,7 @@ export default function HomeIdentityMorph() {
                 <span
                   key={label}
                   className={cx(
-                    'transition-colors duration-300',
+                    'transition-colors duration-[700ms] motion-reduce:transition-none',
                     index === bridgeStep && index === 0 && 'text-lime-300',
                     index === bridgeStep && index === 1 && 'text-cyan-300',
                     index !== bridgeStep && index < bridgeStep && 'text-zinc-300/80',

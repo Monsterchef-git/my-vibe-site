@@ -8,7 +8,7 @@ export const primitiveToneClassNames: Record<PrimitiveTone, string> = {
 };
 
 export const sectionClassName =
-  'relative p-6 md:p-8';
+  'relative px-6 py-24 md:px-8 md:py-40';
 
 export const sectionChromedClassName =
   'border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-xl';

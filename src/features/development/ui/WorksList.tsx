@@ -33,7 +33,7 @@ export default function WorksList() {
               sizes="100vw"
               loading={index < 2 ? 'eager' : 'lazy'}
               className={cx(
-                'object-cover blur-sm grayscale transition-opacity duration-[400ms]',
+                'object-cover blur-sm grayscale transition-opacity duration-[700ms] motion-reduce:transition-none',
                 activeId === project.id ? 'opacity-25 grayscale-0' : 'opacity-0',
               )}
             />
@@ -54,14 +54,14 @@ export default function WorksList() {
               data-cursor-label="OPEN"
               onMouseEnter={() => setActiveId(project.id)}
               onMouseLeave={() => setActiveId(null)}
-              className="group block py-10 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-14"
+              className="group block py-10 transition-colors duration-[700ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-14 motion-reduce:transition-none"
             >
               <div className="grid grid-cols-1 gap-5 md:grid-cols-[auto_1fr_auto] md:items-baseline md:gap-8">
                 <span className={cx('font-mono text-[10px] uppercase text-zinc-600', tracking.label)}>
                   {project.number}
                 </span>
 
-                <h3 className="font-headline text-[clamp(2rem,5.8vw,4rem)] italic leading-[0.9] text-white transition-all duration-300 group-hover:translate-x-2 group-hover:text-cyan-300">
+                <h3 className="font-headline text-[clamp(2rem,5.8vw,4rem)] italic leading-[0.9] text-white transition-all duration-[700ms] group-hover:translate-x-2 group-hover:text-cyan-300 motion-reduce:transition-none">
                   {project.title}
                 </h3>
 

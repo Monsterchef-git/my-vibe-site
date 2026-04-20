@@ -61,7 +61,7 @@ export default function WorksPage() {
 
       <section
         aria-label="Works filters"
-        className="space-y-8 px-6 py-24 md:space-y-10 md:px-24 md:py-32"
+        className="space-y-8 px-6 py-32 md:space-y-10 md:px-24 md:py-48"
       >
         <div className="grid gap-3 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-5">
           <a
@@ -95,7 +95,7 @@ export default function WorksPage() {
         </div>
       </section>
 
-      <div aria-hidden="true" className="h-40 md:h-56" />
+      <div aria-hidden="true" className="h-48 md:h-72" />
 
       <GastronomySection
         id="works-gastronomy"
@@ -104,7 +104,7 @@ export default function WorksPage() {
 
       <section
         aria-label="Works narrative bridge"
-        className="flex min-h-40 items-center justify-center px-6 py-24 md:px-24 md:py-32"
+        className="flex min-h-40 items-center justify-center px-6 py-32 md:px-24 md:py-48"
       >
         <p className={cx('text-center font-mono text-[10px] uppercase text-zinc-500', tracking.label)}>
           ready for <CulinaryTerm term="service">service</CulinaryTerm> →

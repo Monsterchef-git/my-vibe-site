@@ -25,7 +25,7 @@ export default function DevelopmentSection({
       id={id} 
       scrollTone="cyan" 
       data-cursor-role="dev"
-      className={cx('space-y-10', className)}
+      className={cx('space-y-10 pt-32 md:pt-52 pb-32 md:pb-52', className)}
     >
       {!compact && (
         <SectionChrome
