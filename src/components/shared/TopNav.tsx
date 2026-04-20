@@ -15,7 +15,10 @@ interface TopNavProps {
 
 export default function TopNav({ currentPath }: TopNavProps) {
   return (
-    <header className="fixed inset-x-0 top-0 z-[150] px-6 py-5 md:px-10 md:py-8">
+    <header 
+      data-cursor-role="bridge"
+      className="fixed inset-x-0 top-0 z-[150] px-6 py-5 md:px-10 md:py-8"
+    >
       <div className="grid gap-3 lg:grid-cols-[auto_1fr_auto] lg:items-center">
 
         {/* Logo — sin contenedor, glitch en hover */}

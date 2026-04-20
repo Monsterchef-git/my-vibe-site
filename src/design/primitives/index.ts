@@ -23,3 +23,7 @@ export {
   type HeroTone,
 } from '@/design/primitives/Hero';
 export { AmbientGlow } from '@/design/primitives/AmbientGlow';
+export {
+  CulinaryTerm,
+  type AllowedCulinaryTerm,
+} from '@/design/primitives/CulinaryTerm/CulinaryTerm';

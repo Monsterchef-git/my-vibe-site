@@ -1,5 +1,5 @@
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
-import { MonoToken } from '@/design/primitives';
+import { MonoToken, CulinaryTerm } from '@/design/primitives';
 import {
   sectionBodyClassName,
   sectionIntroClassName,
@@ -51,7 +51,7 @@ export default function GastronomySection({
               <br />
               Timing.
               <br />
-              Service.
+              <CulinaryTerm term="service">Service</CulinaryTerm>.
               <br />
               Atmosphere.
             </p>

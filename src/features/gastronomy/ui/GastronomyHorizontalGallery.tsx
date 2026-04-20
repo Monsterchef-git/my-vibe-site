@@ -262,7 +262,6 @@ export default function GastronomyHorizontalGallery() {
           ref={scrollDriverRef}
           data-cursor="drag"
           data-cursor-label="Scroll"
-          data-cursor-tone="lime"
           className="hidden h-[360svh] md:block lg:h-[420svh] xl:h-[440svh]"
         >
           <div className="sticky top-0 flex h-svh items-center overflow-hidden">

@@ -1,6 +1,6 @@
 'use client';
 
-import { AmbientGlow, Hero } from '@/design/primitives';
+import { AmbientGlow, Hero, CulinaryTerm } from '@/design/primitives';
 import { sectionMicroClassName } from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import ScrambleText from '@/components/shared/ScrambleText';
@@ -19,10 +19,11 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         'relative',
         className,
       )}
+      data-cursor-role="service"
     >
       <Hero
         eyebrow="CONTACT"
-        statement="The pass is open."
+        statement={<CulinaryTerm term="pass">The pass is open.</CulinaryTerm>}
         counterLine="briefs, reservations, collaborations →"
         tone="lime"
         anchor={

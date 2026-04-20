@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Hero } from '@/design/primitives';
+import { Hero, CulinaryTerm } from '@/design/primitives';
 import {
   BLUR_ABOUT_PORTRAIT,
   IMAGE_ABOUT_PORTRAIT,
@@ -9,12 +9,16 @@ export default function AboutHero() {
   return (
     <Hero
       eyebrow="ABOUT"
-      statement="Mise en place for the web."
+      statement={<CulinaryTerm term="mise en place">Mise en place for the web.</CulinaryTerm>}
       counterLine="the kitchen taught me the rest."
       tone="white"
       sidePosition="background"
     >
-      <div className="relative h-[80svh] w-full lg:h-full">
+      <div 
+        data-cursor-mode="portrait"
+        data-cursor-label="THE CHEF"
+        className="relative h-[80svh] w-full lg:h-full"
+      >
         <Image
           src={IMAGE_ABOUT_PORTRAIT}
           alt="Portrait of John Herrera"

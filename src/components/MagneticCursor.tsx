@@ -14,11 +14,20 @@ const INTERACTIVE_SELECTOR = [
   '[data-magnetic]',
 ].join(',');
 
-const CURSOR_MODES = ['idle', 'link', 'cta', 'lens', 'drag', 'scroll'] as const;
+const CURSOR_MODES = ['idle', 'link', 'cta', 'lens', 'drag', 'scroll', 'portrait', 'keyword'] as const;
 const CURSOR_TONES = ['neutral', 'lime', 'cyan', 'blue', 'white'] as const;
+const CURSOR_ROLES = ['chef', 'dev', 'bridge', 'service'] as const;
 
 type CursorMode = (typeof CURSOR_MODES)[number];
 type CursorTone = (typeof CURSOR_TONES)[number];
+type CursorRole = (typeof CURSOR_ROLES)[number];
+
+const ROLE_MAP: Record<CursorRole, { tone: CursorTone; label: string }> = {
+  chef: { tone: 'lime', label: 'TASTE' },
+  dev: { tone: 'cyan', label: 'SHIP' },
+  bridge: { tone: 'white', label: '→' },
+  service: { tone: 'lime', label: 'PLATE' },
+};
 
 const BASE_SIZE = 18;
 const BASE_EASING = 0.22;
@@ -40,6 +49,9 @@ const isCursorMode = (value: string | undefined): value is CursorMode =>
 const isCursorTone = (value: string | undefined): value is CursorTone =>
   CURSOR_TONES.includes(value as CursorTone);
 
+const isCursorRole = (value: string | undefined): value is CursorRole =>
+  CURSOR_ROLES.includes(value as CursorRole);
+
 const getCursorMode = (element: HTMLElement | null): CursorMode => {
   if (!element) {
     return 'idle';
@@ -48,8 +60,18 @@ const getCursorMode = (element: HTMLElement | null): CursorMode => {
   return isCursorMode(element.dataset.cursor) ? element.dataset.cursor : 'link';
 };
 
-const getCursorLabel = (element: HTMLElement | null) =>
-  element?.dataset.cursorLabel?.trim() ?? '';
+const getCursorLabel = (element: HTMLElement | null): string => {
+  if (element?.dataset.cursorLabel) {
+    return element.dataset.cursorLabel.trim();
+  }
+
+  const role = element?.closest<HTMLElement>('[data-cursor-role]')?.dataset.cursorRole;
+  if (isCursorRole(role)) {
+    return ROLE_MAP[role].label;
+  }
+
+  return '';
+};
 
 const getCursorTone = (element: HTMLElement | null): CursorTone => {
   if (!element) {
@@ -60,7 +82,16 @@ const getCursorTone = (element: HTMLElement | null): CursorTone => {
     ?? element.closest<HTMLElement>('[data-cursor-tone]')?.dataset.cursorTone
     ?? element.closest<HTMLElement>('[data-scroll-tone]')?.dataset.scrollTone;
 
-  return isCursorTone(explicitTone) ? explicitTone : 'neutral';
+  if (isCursorTone(explicitTone)) {
+    return explicitTone;
+  }
+
+  const role = element.closest<HTMLElement>('[data-cursor-role]')?.dataset.cursorRole;
+  if (isCursorRole(role)) {
+    return ROLE_MAP[role].tone;
+  }
+
+  return 'neutral';
 };
 
 const getStickiness = (element: HTMLElement | null) =>
@@ -164,6 +195,18 @@ export default function MagneticCursor() {
           targetX = pointer.x;
           targetY = pointer.y;
           easing = 0.2;
+        } else if (mode === 'portrait') {
+          targetWidth = clamp(rect.width * 0.4, 200, 320);
+          targetHeight = clamp(rect.height * 0.3, 200, 320);
+          targetX = pointer.x;
+          targetY = pointer.y;
+          easing = 0.12;
+        } else if (mode === 'keyword') {
+          targetWidth = 110;
+          targetHeight = 44;
+          targetX = pointer.x;
+          targetY = pointer.y;
+          easing = 0.22;
         } else {
           targetWidth = clamp(rect.width + 18, 54, 168);
           targetHeight = clamp(rect.height + 12, 36, 56);
@@ -185,7 +228,7 @@ export default function MagneticCursor() {
       const targetAngle = speedRef.current > 0.2
         ? (Math.atan2(velocityRef.current.y, velocityRef.current.x) * 180) / Math.PI
         : 0;
-      const maxStretch = mode === 'lens' ? 0.08 : mode === 'idle' ? 0.04 : 0.14;
+      const maxStretch = mode === 'lens' || mode === 'portrait' ? 0.08 : mode === 'idle' ? 0.04 : 0.14;
       const stretch = clamp(speedRef.current / 26, 0, maxStretch);
 
       angleRef.current += (targetAngle - angleRef.current) * 0.18;
@@ -203,7 +246,7 @@ export default function MagneticCursor() {
         currentRef.current.y - height / 2
       }px, 0)`;
 
-      shell.style.borderRadius = mode === 'lens' ? '28px' : '999px';
+      shell.style.borderRadius = mode === 'lens' || mode === 'portrait' ? '28px' : '999px';
       shell.style.transform = `rotate(${angleRef.current}deg) scale(${scaleX}, ${scaleY})`;
 
       if (mode === 'idle') {
@@ -226,10 +269,20 @@ export default function MagneticCursor() {
         shell.style.borderColor = `rgba(${rgb}, 0.8)`;
         shell.style.background = 'rgba(10, 10, 10, 0.12)';
         shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 16px 34px rgba(0, 0, 0, 0.24)`;
+      } else if (mode === 'portrait') {
+        shell.style.borderColor = `rgba(${rgb}, 0.15)`;
+        shell.style.background = `rgba(${rgb}, 0.02)`;
+        shell.style.boxShadow = `0 0 60px 10px rgba(${rgb}, 0.12)`;
+        cursor.style.filter = 'blur(12px)';
+      } else if (mode === 'keyword') {
+        shell.style.borderColor = `rgba(${rgb}, 0.85)`;
+        shell.style.background = 'rgba(10, 10, 10, 0.45)';
+        shell.style.boxShadow = `0 0 24px rgba(${rgb}, 0.32), inset 0 0 12px rgba(${rgb}, 0.12)`;
       } else {
         shell.style.borderColor = `rgba(${rgb}, 0.82)`;
         shell.style.background = 'rgba(10, 10, 10, 0.12)';
         shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 0 26px rgba(${rgb}, 0.14)`;
+        cursor.style.filter = 'none';
       }
 
       dot.style.opacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
@@ -238,8 +291,9 @@ export default function MagneticCursor() {
 
       label.textContent = labelText.toUpperCase();
       label.style.opacity = hasLabel && mode !== 'idle' ? '1' : '0';
-      label.style.color = `rgba(${rgb}, ${mode === 'cta' ? '1' : '0.88'})`;
-      label.style.letterSpacing = hasLabel && mode === 'scroll' ? '0.26em' : hasLabel ? '0.32em' : '0.24em';
+      label.style.color = `rgba(${rgb}, ${mode === 'cta' || mode === 'keyword' ? '1' : '0.88'})`;
+      label.style.fontWeight = mode === 'keyword' ? '900' : '400';
+      label.style.letterSpacing = hasLabel && (mode === 'scroll' || mode === 'keyword') ? '0.26em' : hasLabel ? '0.32em' : '0.24em';
 
       frameRef.current = window.requestAnimationFrame(render);
     };
@@ -283,6 +337,7 @@ export default function MagneticCursor() {
     };
 
     const updateEnabled = () => {
+      // If prefers-reduced-motion: reduce is true, cursor falls back to the system cursor
       const nextEnabled = desktopQuery.matches && !reducedMotionQuery.matches;
 
       enabledRef.current = nextEnabled;

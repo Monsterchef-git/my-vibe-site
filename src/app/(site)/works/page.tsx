@@ -5,6 +5,7 @@ import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { DevelopmentSection } from '@/features/development/ui';
 import { GastronomySection } from '@/features/gastronomy/ui';
 import { WorksHero } from '@/features/works/ui';
+import { CulinaryTerm } from '@/design/primitives';
 import { cx } from '@/lib/utils/cx';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
@@ -45,6 +46,7 @@ export default function WorksPage() {
   return (
     <main
       id="main-content"
+      data-cursor-role="dev"
       className="relative z-0 min-h-screen bg-[#0a0a0a] pb-32 pt-28 text-white md:pt-32"
     >
       <script
@@ -66,7 +68,7 @@ export default function WorksPage() {
             href="#works-gastronomy"
             data-cursor="cta"
             data-cursor-label="Explore"
-            data-cursor-tone="lime"
+            data-cursor-role="chef"
             className={cx(
               'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-lime-300/78 transition-colors duration-300 hover:text-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-lime-200',
               tracking.eyebrow,
@@ -82,7 +84,7 @@ export default function WorksPage() {
             href="#works-development"
             data-cursor="cta"
             data-cursor-label="Explore"
-            data-cursor-tone="cyan"
+            data-cursor-role="dev"
             className={cx(
               'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-cyan-300/78 transition-colors duration-300 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-cyan-200 md:justify-end md:text-right',
               tracking.eyebrow,
@@ -105,7 +107,7 @@ export default function WorksPage() {
         className="flex min-h-40 items-center justify-center px-6 py-24 md:px-24 md:py-32"
       >
         <p className={cx('text-center font-mono text-[10px] uppercase text-zinc-500', tracking.label)}>
-          ready for service →
+          ready for <CulinaryTerm term="service">service</CulinaryTerm> →
         </p>
       </section>
 

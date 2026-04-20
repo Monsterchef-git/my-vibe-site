@@ -21,7 +21,12 @@ export default function DevelopmentSection({
   compact = false,
 }: DevelopmentSectionProps) {
   return (
-    <ScrollSectionPrimitive id={id} scrollTone="cyan" className={cx('space-y-10', className)}>
+    <ScrollSectionPrimitive 
+      id={id} 
+      scrollTone="cyan" 
+      data-cursor-role="dev"
+      className={cx('space-y-10', className)}
+    >
       {!compact && (
         <SectionChrome
           index="02"

@@ -52,7 +52,6 @@ export default function WorksList() {
               data-cursor="link"
               data-cursor-mode="lens"
               data-cursor-label="OPEN"
-              data-cursor-tone="cyan"
               onMouseEnter={() => setActiveId(project.id)}
               onMouseLeave={() => setActiveId(null)}
               className="group block py-10 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-14"

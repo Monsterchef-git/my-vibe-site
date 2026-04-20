@@ -1,4 +1,4 @@
-import { Eyebrow, MonoToken } from '@/design/primitives';
+import { Eyebrow, MonoToken, CulinaryTerm } from '@/design/primitives';
 import {
   sectionBodyClassName,
   sectionMicroClassName,
@@ -20,7 +20,7 @@ const specRows = [
   { key: 'CUISINE', value: 'Contemporary tropical' },
   { key: 'TOOLS', value: 'Next.js · Tailwind · AI' },
   { key: 'FOCUS', value: 'Brand sites · SEO · visual direction' },
-  { key: 'APPROACH', value: 'Service-led · editorial · clear' },
+  { key: 'APPROACH', value: <span><CulinaryTerm term="service">Service</CulinaryTerm>-led · editorial · clear</span> },
 ];
 
 export default function AboutSection({
@@ -32,6 +32,7 @@ export default function AboutSection({
     <ScrollSectionPrimitive
       id={id}
       scrollTone="white"
+      data-cursor-role="chef"
       className={cx(compact ? 'overflow-hidden pt-4 md:pt-6' : 'overflow-hidden pt-20 md:pt-8', className)}
     >
       {!compact && (
@@ -52,7 +53,7 @@ export default function AboutSection({
         <div className="grid gap-6 md:grid-cols-2">
           <p className={sectionBodyClassName}>
             I spent more than a decade in kitchens, learning how to work with pace,
-            pressure, and service without losing clarity.
+            pressure, and <CulinaryTerm term="service">service</CulinaryTerm> without losing clarity.
           </p>
           <p className={sectionSupportClassName}>
             Today that same way of thinking informs the digital side of my work: brand

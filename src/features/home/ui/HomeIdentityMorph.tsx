@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { AmbientGlow } from '@/design/primitives';
+import { AmbientGlow, CulinaryTerm } from '@/design/primitives';
 import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import {
@@ -35,7 +35,7 @@ const STATES = [
       <>
         Kitchen craft.
         <br />
-        Service, structure, taste.
+        <CulinaryTerm term="service">Service</CulinaryTerm>, structure, taste.
       </>
     ),
     href: '/works#works-gastronomy',
@@ -182,7 +182,7 @@ export default function HomeIdentityMorph() {
           className="absolute inset-x-0 top-0 bottom-[30%] z-[1]"
           data-cursor="scroll"
           data-cursor-label="Scroll"
-          data-cursor-tone={activeState.id === 'development' ? 'cyan' : 'lime'}
+          data-cursor-role={activeState.id === 'development' ? 'dev' : 'chef'}
         />
 
         <div

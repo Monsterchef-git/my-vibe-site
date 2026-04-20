@@ -5,6 +5,7 @@ import { Hero } from '@/design/primitives';
 import ScrollProgressBlock from '@/components/shared/ScrollProgressBlock';
 import HomeNameScramble from '@/features/home/ui/HomeNameScramble';
 import HomeEditorialSection from '@/features/home/ui/HomeEditorialSection';
+import { CulinaryTerm } from '@/design/primitives';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
 const homeSeo = PAGE_SEO.home;
@@ -43,7 +44,11 @@ export default function Home() {
   };
 
   return (
-    <main id="main-content" className="relative z-0 min-h-screen signal-static-bg bg-[#0a0a0a] text-white">
+    <main 
+      id="main-content" 
+      data-cursor-role="chef"
+      className="relative z-0 min-h-screen signal-static-bg bg-[#0a0a0a] text-white"
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -61,7 +66,7 @@ export default function Home() {
           <Hero
             eyebrow="HOME"
             statement="Cooked fast. Shipped faster."
-            counterLine="twelve years plating. now shipping interfaces."
+            counterLine={<span>twelve years <CulinaryTerm term="plating">plating</CulinaryTerm>. now shipping interfaces.</span>}
             tone="lime"
             anchor={
               <span className="inline-flex items-center gap-2">
