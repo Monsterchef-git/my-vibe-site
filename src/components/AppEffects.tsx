@@ -1,15 +1,19 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import BackgroundTerminal from '@/components/BackgroundTerminal';
 import LenisProvider from '@/components/LenisProvider';
 import MagneticCursor from '@/components/MagneticCursor';
 import ScrollReveal from '@/components/shared/ScrollReveal';
 
 export default function AppEffects() {
+  const pathname = usePathname();
+  const showBackgroundTerminal = pathname === '/';
+
   return (
     <>
       <LenisProvider />
-      <BackgroundTerminal />
+      {showBackgroundTerminal ? <BackgroundTerminal /> : null}
       <MagneticCursor />
       <ScrollReveal />
     </>

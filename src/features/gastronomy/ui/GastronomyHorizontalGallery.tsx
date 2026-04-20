@@ -162,10 +162,6 @@ function GalleryStill({
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[1] grainy-bg opacity-50"
-      />
-      <div
-        aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(0,0,0,0.16)_0%,rgba(0,0,0,0.03)_28%,rgba(0,0,0,0.12)_56%,rgba(0,0,0,0.82)_100%)]"
       />
     </figure>
@@ -178,16 +174,6 @@ export default function GastronomyHorizontalGallery() {
   const reducedMotion = useReducedMotionPreference();
 
   useEffect(() => {
-    const track = trackRef.current;
-
-    if (!track || reducedMotion) {
-      if (track) {
-        track.style.transform = 'translate3d(0, 0, 0)';
-      }
-
-      return;
-    }
-
     let frame = 0;
 
     const syncTrackPosition = () => {
@@ -202,16 +188,13 @@ export default function GastronomyHorizontalGallery() {
       const overflow = Math.max(trackEl.scrollWidth - viewportWidth, 0);
       const scrollableHeight = section.offsetHeight - viewportHeight;
       
-      // Progress 0 when top of driver hits top of viewport
       const progress = clamp(-rect.top / Math.max(scrollableHeight, 1), 0, 1);
 
       trackEl.style.transform = `translate3d(${-overflow * progress}px, 0, 0)`;
     };
 
     const schedule = () => {
-      if (frame !== 0) {
-        return;
-      }
+      if (frame !== 0) return;
 
       frame = window.requestAnimationFrame(() => {
         frame = 0;
@@ -219,14 +202,25 @@ export default function GastronomyHorizontalGallery() {
       });
     };
 
+    const track = trackRef.current;
+    const driver = scrollDriverRef.current;
+
+    if (!track || reducedMotion) {
+      if (track) {
+        track.style.transform = 'translate3d(0, 0, 0)';
+      }
+      return;
+    }
+
     const resizeObserver = new ResizeObserver(schedule);
     const viewport = window.visualViewport;
 
-    if (scrollDriverRef.current) {
-      resizeObserver.observe(scrollDriverRef.current);
+    if (driver) {
+      resizeObserver.observe(driver);
     }
-
-    resizeObserver.observe(track);
+    if (track) {
+      resizeObserver.observe(track);
+    }
 
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);

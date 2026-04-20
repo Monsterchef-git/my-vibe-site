@@ -109,7 +109,7 @@ function getSectionProgress(node: HTMLElement) {
 
   // Progress 0 when top enters bottom of viewport, 1 when bottom leaves top of viewport
   // But here we want the sticky track's relative progress.
-  const progress = -rect.top / (sectionHeight - viewportHeight);
+  const progress = -rect.top / Math.max(sectionHeight - viewportHeight, 1);
   return clamp(progress);
 }
 
@@ -129,29 +129,26 @@ export default function HomeIdentityMorph() {
   }, []);
 
   useEffect(() => {
-    const node = rootRef.current;
-    if (!node) {
-      return undefined;
-    }
-
     let frame = 0;
 
     const schedule = () => {
-      if (frame !== 0) {
-        return;
-      }
+      if (frame !== 0) return;
 
       frame = window.requestAnimationFrame(() => {
         frame = 0;
-
-        if (rootRef.current) {
-          setSectionProgress(getSectionProgress(rootRef.current));
+        const node = rootRef.current;
+        if (node) {
+          setSectionProgress(getSectionProgress(node));
         }
       });
     };
 
+    const node = rootRef.current;
     const resizeObserver = new ResizeObserver(schedule);
-    resizeObserver.observe(node);
+    
+    if (node) {
+      resizeObserver.observe(node);
+    }
 
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
@@ -163,7 +160,6 @@ export default function HomeIdentityMorph() {
       if (frame !== 0) {
         window.cancelAnimationFrame(frame);
       }
-
       resizeObserver.disconnect();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);

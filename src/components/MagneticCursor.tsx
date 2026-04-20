@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { cx } from '@/lib/utils/cx';
 
 const INTERACTIVE_SELECTOR = [
   '[data-cursor]',
@@ -296,6 +297,20 @@ export default function MagneticCursor() {
       label.style.fontWeight = mode === 'keyword' ? '900' : '400';
       label.style.letterSpacing = hasLabel && (mode === 'scroll' || mode === 'keyword') ? '0.26em' : hasLabel ? '0.32em' : '0.24em';
 
+      const settledX = Math.abs(targetX - currentRef.current.x) < 0.2;
+      const settledY = Math.abs(targetY - currentRef.current.y) < 0.2;
+      const settledWidth = Math.abs(targetWidth - sizeRef.current.width) < 0.2;
+      const settledHeight = Math.abs(targetHeight - sizeRef.current.height) < 0.2;
+      const isSettled = settledX && settledY && settledWidth && settledHeight;
+      const isIdle = !visibleRef.current && !activeElement && !pressedRef.current;
+
+      if (isIdle && isSettled && speedRef.current < 0.05) {
+        velocityRef.current = { x: 0, y: 0 };
+        speedRef.current = 0;
+        stretchRef.current = 0;
+        return;
+      }
+
       frameRef.current = window.requestAnimationFrame(render);
     };
 
@@ -438,9 +453,10 @@ export default function MagneticCursor() {
     <div
       ref={cursorRef}
       aria-hidden="true"
-      className={`pointer-events-none fixed left-0 top-0 z-[260] opacity-0 ${
-        enabled ? 'block' : 'hidden'
-      }`}
+      className={cx(
+        'pointer-events-none fixed left-0 top-0 z-[260] transition-[transform,opacity] duration-300',
+        enabled ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
+      )}
     >
       <span
         ref={shellRef}

@@ -3,17 +3,25 @@ import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
+const isDevelopment = process.env.NODE_ENV === 'development';
+const scriptSrc = isDevelopment
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com"
+  : "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com";
+const connectSrc = isDevelopment
+  ? "connect-src 'self' ws: wss: https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com"
+  : "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com";
+
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+  scriptSrc,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com",
+  connectSrc,
   "frame-src https://www.googletagmanager.com",
   'upgrade-insecure-requests',
 ].join('; ');
