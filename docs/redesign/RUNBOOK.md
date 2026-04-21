@@ -12,8 +12,10 @@ Step-by-step guide to apply the awwwards redesign. Each step is a discrete actio
 7. ~~S4.5 — Cursor as narrative voice~~ ✓ done
 8. ~~S5 — Polish~~ ✓ done
 9. ~~R1-R3 — Stability Recovery (Addendum)~~ ✓ done
+10. ~~S3.6 — Pulido tras el rescue~~ ✓ aplicado
+11. **S3.6.9 — Addendum post-aplicación** ← en curso (aire lateral + cursor idle + copy tecnical + bleed portrait)
 
-**Status:** All sprints completed including stability recovery. Redesign is live, polished, and fully stabilized.
+**Status:** Core redesign live. S3.6 cierra las desviaciones identificadas en el audit de 2026-04-20: código muerto de D7, spec de D9, unificación de padding D10, bugs funcionales (gastronomy gallery + CHEF morph) y optimización del cursor en dev.
 
 **Legend:**
 - `[file]` — file you will edit
@@ -860,6 +862,572 @@ If any page feels disconnected, revisit S2 microcopy.
 ```
 git commit -m "feat(s5): polish — motion, rhythm, mobile type, perf"
 ```
+
+---
+
+## Sprint 3.6 — Pulido tras el rescue
+
+**Objetivo:** cerrar al 100% D7, D9, D10; arreglar 2 bugs funcionales (gastronomy horizontal scroll y CHEF morph) y matar el lag del cursor en dev.
+
+**Orden de ejecución:** 3.6.0 → 3.6.1 → 3.6.2 → 3.6.3 → 3.6.4 → 3.6.5 → 3.6.6 → 3.6.7. No saltar. Cada paso es un commit.
+
+**Pre-requisito:** rama limpia. Ejecutar `git status` antes de empezar. Si hay cambios sin commitear del rescue anterior, commitearlos primero (`chore(rescue): alignment + gradient fixes`).
+
+---
+
+### Step 3.6.0 · Snapshot de referencia
+
+**Goal:** tener evidencia visual antes de tocar nada, para comparar al final.
+
+1. Arrancar dev server limpio: `pnpm dev` (o `npm run dev`).
+2. Esperar a ver `✓ Ready`.
+3. Abrir en navegador los 4 pages (`/`, `/works`, `/about`, `/contact`) y tomar screenshots a 1440×900 y 375×812 — guardar en `docs/redesign/snapshots/pre-s36/`.
+4. En DevTools → Performance, grabar 5 segundos de hover **sin mover el cursor** en `/`. Exportar el `.json` → `docs/redesign/snapshots/pre-s36/cursor-idle-baseline.json`.
+
+✓ 8 screenshots + 1 trace guardados.
+⚠ Si el trace muestra <60fps idle, confirma el diagnóstico del cursor. Guárdalo, lo necesitas para comparar al final.
+
+**Commit:** no aplica (sólo snapshots, no-op en `src/`).
+
+---
+
+### Step 3.6.1 · Podar código muerto (cierra D7)
+
+**Goal:** eliminar `chromed` de `SectionPrimitive` y borrar `CardPrimitive`.
+
+**Files:**
+- `src/design/primitives/SectionPrimitive/SectionPrimitive.tsx` (o donde viva hoy)
+- `src/design/primitives/SectionPrimitive/index.ts`
+- `src/design/tokens/components/*` (cualquier `sectionChromedClassName`)
+- `src/design/primitives/CardPrimitive/` → borrar carpeta completa
+- `src/design/primitives/index.ts` → remover export de `CardPrimitive`
+
+1. Grep antes de tocar: `grep -rn "variant=\"chromed\"" src/` y `grep -rn "CardPrimitive" src/`. Si algún resultado está en `src/app/` o `src/features/`, DETENTE — hay consumers vivos que no detectó el audit. Flaggear y revisar.
+2. En `SectionPrimitive.tsx`: eliminar la rama `variant === 'chromed'` y su classname. Dejar sólo la variante `bare` (o la única que quede). Si `variant` era la única prop que diferenciaba, simplificar la signature.
+3. Borrar el token `sectionChromedClassName` de `src/design/tokens/components/sectionStyles.ts`.
+4. Borrar `src/design/primitives/CardPrimitive/` completo.
+5. Quitar export en el barrel: `src/design/primitives/index.ts`.
+6. `pnpm typecheck` (o `tsc --noEmit`). Deben pasar 0 errores.
+
+✓ `grep -rn "chromed\|CardPrimitive" src/` devuelve vacío.
+✓ Build de dev sigue compilando.
+⚠ Si `sectionStyles.ts` exporta otros classnames referenciados, NO borres el archivo entero.
+
+**Commit:** `refactor(d7): remove chromed variant and CardPrimitive dead code`
+
+---
+
+### Step 3.6.2 · Token único de horizontal padding (cierra D10)
+
+**Goal:** un solo valor de padding horizontal en todo el site (TopNav + Hero + secciones), declarado como token.
+
+**Decisión del token (elegir uno y respetarlo):**
+- **Opción A — edge-to-edge real:** `px-6 md:px-10` (24px → 40px). Ya lo usan TopNav y Hero.
+- **Opción B — más aire:** `px-6 md:px-12` (24px → 48px).
+
+Recomendado: **Opción A**. Consistente con lo que ya está en TopNav/Hero tras el rescue.
+
+**Files:**
+- `src/design/tokens/semantic/layout.ts` (crear si no existe)
+- `src/components/shared/TopNav.tsx`
+- `src/design/primitives/Hero/Hero.tsx`
+- `src/app/(site)/works/page.tsx`
+- `src/app/(site)/about/page.tsx`
+- `src/features/gastronomy/ui/GastronomySection.tsx`
+- `src/features/development/ui/DevelopmentSection.tsx`
+- Cualquier otro `px-6 md:px-24` en secciones.
+
+1. Crear `src/design/tokens/semantic/layout.ts`:
+   ```ts
+   // Single source of truth for page-level horizontal padding.
+   // Must match TopNav, Hero, and any full-width section edge.
+   export const pageGutterClassName = 'px-6 md:px-10';
+   ```
+2. Grep: `grep -rn "md:px-24" src/` → lista todas las ocurrencias. Reemplazar cada una por `pageGutterClassName` (import + uso con `cx()`). Ojo: algunas son `md:px-24 md:py-*` — preserva la parte vertical.
+3. En `Hero.tsx`: el contenedor de contenido ya usa `px-6 md:px-10`; reemplaza el string literal por el token importado.
+4. En `TopNav.tsx`: mismo reemplazo.
+5. En secciones (`WorksFilters`, `GastronomySection` intro, `DevelopmentSection` intro, `AboutSection`, bridges): reemplazo mecánico.
+6. Levantar dev, comparar ejes X de:
+   - `JH.` logo en TopNav
+   - Eyebrow del Hero (`HOME`, `WORKS`, `ABOUT`, `CONTACT`)
+   - Primer item de la primera sección post-Hero
+   Deben estar exactamente alineados en desktop. Si alguno se desvía, falta reemplazar.
+
+✓ En 1440px, inspector muestra `padding-left: 40px` en nav, hero y secciones.
+✓ En mobile (375), todo a `padding-left: 24px`.
+⚠ Bridges internos (`text-center` decorativos) pueden conservar padding custom — no los toques si visualmente están OK.
+
+**Commit:** `refactor(d10): unify horizontal padding via pageGutterClassName token`
+
+---
+
+### Step 3.6.3 · Portrait width vw-based (cierra D9)
+
+**Goal:** portrait se adapta al viewport (`min(55vw, 40rem)`) en desktop, no con anchos fijos en rem.
+
+**Files:**
+- `src/features/about/ui/AboutHero.tsx`
+- `src/design/primitives/Hero/Hero.tsx` (verificar slot width del sidePosition="background")
+
+1. En `Hero.tsx`, localizar el slot de `sidePosition === 'background'`. Debe usar:
+   ```
+   lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]
+   ```
+   Si ya está así, skip a paso 2. Si no, ajustar.
+2. En `AboutHero.tsx`, actualizar el `sizes` de `<Image>`:
+   ```tsx
+   sizes="(min-width: 1024px) min(55vw, 40rem), 100vw"
+   ```
+   (Era `(min-width: 1536px) 42rem, (min-width: 1024px) 40rem, 100vw`.)
+3. Mantener todo lo demás intacto (gradientes, `object-[center_18%]`, placeholder blur).
+4. Dev test: en 1024, 1280, 1440, 1920 px de ancho, el portrait debe respirar y bleed a la derecha sin romper el texto.
+
+✓ A 1280px, el portrait ocupa ~704px (55vw). A 1920px, clampea a 640px (40rem = 640px).
+✓ Next/Image sirve la resolución correcta (verificar en Network tab → no carga el 3840w siempre).
+⚠ Si el statement del Hero colisiona con el portrait en 1024–1200, sube el `max-w` del texto a `56rem` pero no más.
+
+**Commit:** `fix(d9): portrait width adapts to viewport via min(55vw, 40rem)`
+
+---
+
+### Step 3.6.4 · Verificar y arreglar Gastronomy horizontal scroll
+
+**Goal:** confirmar que la galería horizontal recibe `transform` al scrollear. Si no, arreglar.
+
+**File:** `src/features/gastronomy/ui/GastronomyHorizontalGallery.tsx`
+
+1. `git log -p src/features/gastronomy/ui/GastronomyHorizontalGallery.tsx` — confirmar que ya no aparece `useEffectEvent` (fue removido en el rescue).
+2. Arrancar dev. Navegar a `/works`. Scroll hasta que `#works-gastronomy` esté al tope del viewport. Seguir scrolleando.
+3. Abrir DevTools → Elements, seleccionar el track:
+   ```js
+   $0 = document.querySelector('[class*="360svh"] .flex.min-w-max')
+   ```
+   En Console: `$0.style.transform` mientras sigues scrolleando. Debe mostrar `translate3d(-Xpx, 0px, 0px)` donde X crece con el scroll.
+4. Si el transform queda vacío (`""`) o no cambia → bug. Diagnóstico rápido:
+   - `console.log` dentro del `useEffect` para ver si mounta.
+   - Verificar que `scrollDriverRef` y `trackRef` estén attacheados al DOM correcto (ambos deben devolver un `HTMLDivElement`).
+   - Si el `useEffect` no corre nunca: problema de HMR → reiniciar dev server completo (`kill`, `pnpm dev`).
+5. Si se confirma bug vivo, el fix canónico es el que ya está aplicado (RAF manual + scroll listener). No reintroducir `useEffectEvent` — en la versión de React del proyecto es canary y no siempre está disponible en el client bundle de Next 16 webpack.
+6. Test visual: al final del scroll de la sección, la última imagen debe quedar visible. Al principio, la primera. A mitad, la tercera-cuarta.
+
+✓ `$0.style.transform` crece linealmente con el scroll.
+✓ Al final de la sección, el transform está en `~-overflow px` (máximo).
+⚠ Si en mobile no se ve nada, es correcto: en móvil se muestra el stack vertical (`space-y-4`), no el track horizontal. Verificar que el branch `md:hidden` sí renderiza en <768px.
+
+**Commit:** `fix(gastronomy): ensure horizontal scroll track updates on scroll` (sólo si hubo cambio).
+
+---
+
+### Step 3.6.5 · Verificar y arreglar CHEF → DEV morph
+
+**Goal:** confirmar que el morph anima con el scroll dentro de `HomeEditorialSection`.
+
+**Files:**
+- `src/features/home/ui/HomeIdentityMorph.tsx`
+- `src/features/home/ui/HomeEditorialSection.tsx`
+
+1. Arrancar dev en `/`. Scroll lento desde el hero hacia abajo.
+2. A partir de `MORPH_START = 0.24` del progress de la sección, el word `CHEF` debe empezar a scramblearse hacia `DEV`. A `0.52` hace el switch. A `0.74` ya está fijo en `DEV`.
+3. Debug:
+   ```js
+   // En Console, con la sección de editorial a la vista:
+   const s = document.querySelector('[aria-label*="Kitchen craft"]')
+   s.getBoundingClientRect()  // top debe ir de +viewport a -190svh
+   ```
+4. Si el word no cambia al scrollear:
+   - Abrir `HomeIdentityMorph.tsx`.
+   - Añadir temporal: `console.log('progress', sectionProgress)` en el render. Scroll y observar que va de 0 a 1.
+   - Si queda en 0 constante → `rootRef` no está conectado al wrapper correcto (`HomeEditorialSection` debe tener `h-[190svh] md:h-[220svh]` y el `rootRef` apuntar ahí o a un contenedor interno con esa altura).
+   - Si va de 0 a 1 pero el word no cambia → bug en el switch logic (`SWITCH_THRESHOLD`, scramble interval).
+5. Quitar `console.log` antes de commitear.
+
+✓ CHEF se scramblea a DEV mientras scrolleas el editorial section.
+✓ Al terminar la sección, DEV (cyan) está pintado con `night-glow-cyan`.
+⚠ Con `prefers-reduced-motion`, el morph debe hacer un switch instantáneo en 0.5, sin scramble. Verificar en DevTools → Rendering → Emulate.
+
+**Commit:** `fix(home): CHEF→DEV morph scroll math correction` (sólo si hubo cambio).
+
+---
+
+### Step 3.6.6 · Optimización del cursor (core del fix de lag en dev)
+
+**Goal:** bajar el costo por frame del `MagneticCursor` para que no ralentice dev. Sin cambios visuales perceptibles.
+
+**File:** `src/components/MagneticCursor.tsx`
+
+**Estrategia:** 3 cambios localizados. Todos optativos; aplicar en orden y medir después de cada uno.
+
+#### 3.6.6.a · Gatear el RAF por actividad
+
+1. Añadir un ref `dirtyRef = useRef(true)` arriba, junto a los otros refs.
+2. En el `render` callback, al final (después de todas las asignaciones), si el estado está completamente estable (speed < 0.01, size deltas < 0.5, sin pointer move reciente) → `dirtyRef.current = false` y early-return en el siguiente frame.
+3. En cada handler que cambia estado (`handlePointerMove`, `handlePointerDown`, `handlePointerUp`, `updateEnabled`, `resetCursor`, cambio de `activeElement`): setear `dirtyRef.current = true`.
+4. Al principio del `render`: `if (!dirtyRef.current) return;`
+5. Ejemplo mínimo del check final:
+   ```ts
+   const settled =
+     Math.abs(targetX - currentRef.current.x) < 0.15 &&
+     Math.abs(targetY - currentRef.current.y) < 0.15 &&
+     Math.abs(targetWidth - sizeRef.current.width) < 0.5 &&
+     Math.abs(targetHeight - sizeRef.current.height) < 0.5 &&
+     speedRef.current < 0.02 &&
+     stretchRef.current < 0.005;
+   if (settled) dirtyRef.current = false;
+   ```
+
+✓ Grabar 5s de perf panel con cursor quieto → antes vs después: debe caer de ~60 frames activos/s a ~0–2.
+
+#### 3.6.6.b · Cachear `getBoundingClientRect`
+
+1. Añadir `activeRectRef = useRef<DOMRect | null>(null)`.
+2. En `updateInteractiveTarget`, después de setear `activeElementRef.current`: `activeRectRef.current = activeElementRef.current?.getBoundingClientRect() ?? null;`.
+3. Añadir listener `window.addEventListener('scroll', invalidateRect, { passive: true })` y `resize` que invaliden `activeRectRef.current = activeElementRef.current?.getBoundingClientRect() ?? null` (throttle con RAF).
+4. En el `render`, usar `activeRectRef.current` en lugar de `activeElement.getBoundingClientRect()`.
+5. Limpiar listeners en el cleanup del useEffect.
+
+✓ En perf panel, `getBoundingClientRect` ya no aparece como hot path.
+
+#### 3.6.6.c · Diff de estilos antes de escribir
+
+1. Añadir `lastStyleRef = useRef({ borderColor: '', background: '', boxShadow: '', filter: '', /* ... */ })`.
+2. Antes de cada `shell.style.X = Y`, comparar con `lastStyleRef.current.X`. Si son iguales, skip.
+3. Al escribir, actualizar `lastStyleRef.current.X = Y`.
+4. Opcional: quitar `cursor.style.filter = 'blur(12px)'` del modo `portrait`. Sustituir por `opacity: 0.7` + `box-shadow` más amplio. El blur CSS sobre un fixed repintado por frame es el efecto más caro del componente.
+
+✓ Perf panel: style-recalcs por frame bajan de ~10 a ~1–2 en régimen estable.
+
+**Validación final:** repetir el trace de 5s de Step 3.6.0. Comparar FPS idle antes vs después. Objetivo: idle consistente a 60fps, sin drops.
+
+**Commit:** `perf(cursor): gate RAF by dirty flag, cache rect, diff styles`
+
+---
+
+### Step 3.6.7 · Dev toggle del cursor (escape hatch)
+
+**Goal:** atajo de teclado para apagar el cursor en desarrollo sin tocar código.
+
+**File:** `src/components/MagneticCursor.tsx`
+
+1. En el `useEffect` principal, añadir un listener `keydown`:
+   ```ts
+   const onKey = (e: KeyboardEvent) => {
+     if (e.metaKey && e.shiftKey && e.key.toLowerCase() === 'c') {
+       const body = document.body;
+       body.classList.toggle('magnetic-cursor-active');
+       if (!body.classList.contains('magnetic-cursor-active')) {
+         resetCursor();
+       }
+     }
+   };
+   window.addEventListener('keydown', onKey);
+   // cleanup: removeEventListener
+   ```
+2. CSS: cuando `body` NO tenga la clase `magnetic-cursor-active`, el `cursor` fixed no recibe pointer events y se oculta. Ya hay lógica similar — verificar que `resetCursor` lo esconde correctamente.
+3. Documentar el atajo en `AGENTS.md` bajo una sección nueva "Dev shortcuts".
+
+✓ `Cmd+Shift+C` toggle el cursor. En off, el cursor nativo del SO aparece y el RAF del magnetic cursor no hace trabajo útil.
+⚠ No debe interferir con Chrome DevTools (`Cmd+Opt+C` inspector). Revisar que el keybind no colisiona.
+
+**Commit:** `feat(cursor): Cmd+Shift+C dev toggle`
+
+---
+
+### Step 3.6.8 · Validación final y snapshot comparativo
+
+1. Repetir los 8 screenshots del Step 3.6.0, guardarlos en `docs/redesign/snapshots/post-s36/`.
+2. Diff visual (eyeballing) entre `pre-s36` y `post-s36`:
+   - Hero copy idéntico.
+   - Alineación vertical de edges (TopNav ↔ Hero ↔ primera sección) = perfecta en todos los viewports.
+   - Portrait de About respira y bleedea a la derecha.
+   - Gallery de gastronomy scrollea horizontal.
+   - CHEF→DEV morph anima.
+   - Cursor sin lag en dev.
+3. Lighthouse en `/` a ver si no regresamos (LCP, CLS, Performance).
+4. Actualizar `S0-alignment.md` marcando D7, D9, D10 como **closed** en la checklist "Definition of done".
+
+**Commit final:** `chore(s36): close alignment audit — D7/D9/D10 complete, perf unlocked`
+
+---
+
+### Definition of done (S3.6)
+
+- [ ] `chromed` variant y `CardPrimitive` fuera del repo. `grep` devuelve vacío.
+- [ ] `pageGutterClassName` token existe y se usa en TopNav + Hero + todas las secciones.
+- [ ] Portrait de About usa `min(55vw, 40rem)` en desktop.
+- [ ] Gastronomy horizontal gallery scrollea y aplica transform al track.
+- [ ] CHEF → DEV morph anima durante el scroll del editorial section.
+- [ ] Cursor en dev corre idle a 60fps estable (baseline vs post comparados).
+- [ ] `Cmd+Shift+C` toggle el cursor.
+- [ ] 8 screenshots post-s36 archivados.
+- [ ] S0-alignment.md actualizado con D7/D9/D10 closed.
+
+---
+
+## Sprint 3.6.9 — Addendum post-aplicación
+
+**Contexto:** tras aplicar S3.6 completo, quedaron 4 notas del audit visual. Este sprint las cierra.
+
+**Orden:** 3.6.9.1 → 3.6.9.2 → 3.6.9.3 → 3.6.9.4. Pasos cortos, un commit cada uno.
+
+---
+
+### Step 3.6.9.1 · About — aire lateral del statement
+
+**Síntoma:** en `/about` el statement "Mise en place for the web." se lee pegado al borde izquierdo.
+
+**Causa:** `pageGutterClassName = 'px-6 md:px-10'` deja 40px en desktop — insuficiente para un `<h1>` a `clamp(2.75rem, 12vw, 6.5rem)`.
+
+**Fix (recomendado — opción A del reporte):** subir el token global.
+
+**File:** `src/design/tokens/semantic/layout.ts`
+
+```diff
+- export const pageGutterClassName = 'px-6 md:px-10';
++ export const pageGutterClassName = 'px-6 md:px-16';
+```
+
+1. Guardar. Dev recompila solo.
+2. Verificar en 4 páginas (`/`, `/works`, `/about`, `/contact`) que TopNav, Hero y primera sección siguen **alineados en el mismo eje X** — sólo que corrido de 40px a 64px.
+3. En mobile (<768px) no cambia nada (`px-6` = 24px intacto).
+
+✓ A 1280px: eyebrow `ABOUT` a 64px del borde, statement respira.
+✓ TopNav, Hero eyebrow y primera sección en el mismo eje X.
+⚠ Si el JH. logo del nav te parece "muy centrado" tras el cambio, es señal de que 64px es demasiado para tu taste — bajar a `md:px-12` (48px) como compromiso.
+⚠ Si secciones con `md:py-*` específico quedan raras por la nueva relación aspect, ajustar `py-*` localmente, no el token.
+
+**Commit:** `style(layout): bump page gutter to md:px-16 for hero breathing room`
+
+---
+
+### Step 3.6.9.2 · Cursor — cortar RAF idle + quantizar + podar shadow
+
+**Síntoma:** el cursor sigue ralentizando dev tras S3.6.6.
+
+**Causa raíz:** el RAF chain de `useAnimationFrame` corre 60fps aunque `render` retorne temprano por `!dirty`. Además los strings de `transform` difieren en decimales imperceptibles, el `diff` nunca acierta, y el `box-shadow` del modo `portrait` tiene 94px de spread que fuerza repaint de un área enorme.
+
+**Files:**
+- `src/lib/utils/useAnimationFrame.ts`
+- `src/components/MagneticCursor.tsx`
+
+#### 3.6.9.2.a · Hacer que `useAnimationFrame` pueda pausarse
+
+Reemplazar el hook completo:
+
+```ts
+// src/lib/utils/useAnimationFrame.ts
+import { useCallback, useEffect, useRef } from 'react';
+
+/**
+ * Frame loop that can pause itself.
+ * Callback returns `false` to stop the chain; external callers use the returned
+ * `start` fn to resume (pointer move, scroll, hover state change, etc).
+ */
+export function useAnimationFrame(callback: (time: number) => boolean | void) {
+  const idRef = useRef<number | null>(null);
+  const runningRef = useRef(false);
+  const cbRef = useRef(callback);
+  cbRef.current = callback;
+
+  const tick = (time: number) => {
+    const keepAlive = cbRef.current(time);
+    if (keepAlive === false) {
+      runningRef.current = false;
+      idRef.current = null;
+      return;
+    }
+    idRef.current = window.requestAnimationFrame(tick);
+  };
+
+  const start = useCallback(() => {
+    if (runningRef.current) return;
+    runningRef.current = true;
+    idRef.current = window.requestAnimationFrame(tick);
+  }, []);
+
+  useEffect(() => {
+    start();
+    return () => {
+      if (idRef.current !== null) cancelAnimationFrame(idRef.current);
+      runningRef.current = false;
+      idRef.current = null;
+    };
+  }, [start]);
+
+  return start;
+}
+```
+
+#### 3.6.9.2.b · `MagneticCursor` — retorna `false` al settled + start() en handlers
+
+En `src/components/MagneticCursor.tsx`:
+
+1. Capturar el `start` del hook:
+   ```ts
+   const startFrameLoop = useAnimationFrame(render);
+   ```
+
+2. En `render`, cambiar el final:
+   ```diff
+   - if (settled) {
+   -   dirtyRef.current = false;
+   - }
+   + if (settled) {
+   +   dirtyRef.current = false;
+   +   return false; // stop RAF chain
+   + }
+   + return true;
+   ```
+
+3. En cada handler que setea `dirtyRef.current = true`, añadir `startFrameLoop()` justo después. Handlers afectados: `handlePointerMove`, `handlePointerDown`, `handlePointerUp`, `updateEnabled`, `resetCursor`, `updateInteractiveTarget`, `refreshActiveRect`.
+
+#### 3.6.9.2.c · Quantizar valores para que el diff de estilos realmente atrape
+
+En `render`, antes de construir los strings de transform, cuantizar:
+
+```ts
+const qx = Math.round(currentRef.current.x * 10) / 10;
+const qy = Math.round(currentRef.current.y * 10) / 10;
+const qAngle = Math.round(angleRef.current * 10) / 10;
+const qScaleX = Math.round((1 + stretchRef.current) * 1000) / 1000;
+const qScaleY = Math.round((1 - stretchRef.current * 0.42) * 1000) / 1000;
+const qW = Math.round(width * 10) / 10;
+const qH = Math.round(height * 10) / 10;
+
+const nextCursorTransform = `translate3d(${qx - qW / 2}px, ${qy - qH / 2}px, 0)`;
+const nextShellTransform = `rotate(${qAngle}deg) scale(${qScaleX}, ${qScaleY})`;
+const nextCursorWidth = `${qW}px`;
+const nextCursorHeight = `${qH}px`;
+```
+
+#### 3.6.9.2.d · Podar el shadow gigante del portrait + dot write condicional
+
+En `render`:
+
+1. Bajar el shadow del modo `portrait` (línea ~323):
+   ```diff
+   - nextShellShadow = `0 0 78px 16px rgba(${rgb}, 0.16)`;
+   + nextShellShadow = `0 0 36px 6px rgba(${rgb}, 0.14)`;
+   ```
+2. `label.textContent` sólo si cambió (línea ~334):
+   ```diff
+   - label.textContent = labelText.toUpperCase();
+   + const nextText = labelText.toUpperCase();
+   + if (label.textContent !== nextText) {
+   +   label.textContent = nextText;
+   + }
+   ```
+
+**Validación:**
+- DevTools → Performance → grabar 5s con cursor quieto sobre fondo neutro en `/`. Objetivo: **0 frames activos** tras ~150ms de inactividad (RAF chain detenida).
+- Mover cursor: debe reanimar fluido.
+- Hover sobre portrait en `/about`: shadow visible pero más compacto, sin stutter.
+- Idle en `/about` con cursor sobre el portrait y luego quitar puntero: ~300ms después RAF se apaga.
+
+✓ Chrome perf panel sin tareas periódicas del `render` en idle.
+✓ `node.style.*` writes bajan de ~17/frame a ~0/frame en régimen estable.
+⚠ Si el cursor se "queda pegado" tras mover rápido, un handler se te olvidó llamar `startFrameLoop()` — revisar los 7 que listamos.
+⚠ En Safari, el diff de `transform` a veces no encaja igual — si hay jitter en Safari, bajar la precisión de quantize a `Math.round(x * 4) / 4` (0.25px).
+
+**Commit:** `perf(cursor): pausable RAF + quantized transforms + trimmed portrait shadow`
+
+---
+
+### Step 3.6.9.3 · About — quitar copy de tecnical.app
+
+**Síntoma:** el párrafo de About menciona "and lead the landing experience for tecnical.app" — ya no corresponde.
+
+**File:** `src/features/about/ui/AboutSection.tsx`
+
+1. Localizar el párrafo (líneas ~61–66):
+   ```tsx
+   <p className={sectionSupportClassName}>
+     Today that same way of thinking informs the digital side of my work: brand
+     sites, visual systems, and a more editorial approach to structure. I work as
+     Creative Chef at <MonoToken kind="project">Wink Eventos</MonoToken> and lead
+     the landing experience for <MonoToken kind="project">tecnical.app</MonoToken>.
+   </p>
+   ```
+2. Reemplazar por:
+   ```tsx
+   <p className={sectionSupportClassName}>
+     Today that same way of thinking informs the digital side of my work: brand
+     sites, visual systems, and a more editorial approach to structure. I work as
+     Creative Chef at <MonoToken kind="project">Wink Eventos</MonoToken>.
+   </p>
+   ```
+3. **No tocar** las otras apariciones de `tecnical.app` en el repo:
+   - `src/app/layout.tsx:109` → JSON-LD `affiliation`
+   - `src/components/BackgroundTerminal.tsx:25,61` → sigue siendo proyecto listado en terminal
+   - `src/features/development/data/projects.ts:60` → sigue en el Works list
+   - `CONTEXT.md:181` → histórico; actualizar sólo si quieres retirar esa afiliación del contexto narrativo del proyecto.
+
+✓ `grep -n "tecnical\.app" src/features/about/` devuelve vacío.
+✓ El párrafo sigue gramaticalmente cerrado con el punto tras Wink Eventos.
+
+**Commit:** `copy(about): remove tecnical.app landing mention`
+
+---
+
+### Step 3.6.9.4 · Portrait de About — bleed intencional (cierra D9)
+
+**Síntoma:** el portrait está contenido dentro del Hero; D9 pide que sangre por debajo.
+
+**Causa:** el slot `sidePosition="background"` usa `lg:inset-y-0` que fuerza alto = alto del `<section>` del Hero.
+
+**Files:**
+- `src/design/primitives/Hero/Hero.tsx`
+- `src/app/(site)/about/page.tsx`
+- (opcional) `src/features/about/ui/AboutHero.tsx` si la foto queda cortada raro tras el bleed.
+
+1. En `Hero.tsx`, localizar el bloque del slot backdrop (~línea 66):
+   ```diff
+   - sidePosition === 'background'
+   -   ? 'lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]'
+   -   : 'hidden md:block lg:hidden'
+   + sidePosition === 'background'
+   +   ? 'lg:top-0 lg:-bottom-[12vh] lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]'
+   +   : 'hidden md:block lg:hidden'
+   ```
+2. El Hero ya NO debe recortar el overflow. Verificar que `<section>` del Hero **no** tiene `overflow-hidden` ni `overflow-clip` activos. Si los tiene, quitarlos.
+3. En `src/app/(site)/about/page.tsx`, prevenir desbordes horizontales parásitos y dejar el bleed vertical intencional:
+   ```diff
+   - className="relative z-0 min-h-screen bg-[#0a0a0a] pb-16 pt-28 text-white md:pt-32"
+   + className="relative z-0 min-h-screen overflow-x-clip bg-[#0a0a0a] pb-16 pt-28 text-white md:pt-32"
+   ```
+4. La sección `About intro` (`py-40 md:py-56`) puede sentirse pisada por la foto que ahora cruza el límite. Subir el padding sólo en About si hace falta:
+   ```diff
+   - className={cx(pageGutterClassName, 'py-40 md:py-56')}
+   + className={cx(pageGutterClassName, 'py-48 md:py-64')}
+   ```
+5. (Opcional) en `AboutHero.tsx` el gradiente inferior `h-1/3 bg-gradient-to-b from-transparent to-black/80` vive dentro del slot. Con el bleed de 12vh hacia abajo el gradiente también baja, fundiendo mejor la foto en el fondo negro. Si prefieres que el fade termine exactamente en el borde del Hero, cambiar `h-1/3` por `h-[45%]` — más drama.
+
+**Verificación:**
+- A 1440×900, scroll a `/about`. La cara del retrato sobresale por debajo del Hero cruzando a la sección `About intro`. El gradiente inferior suaviza la transición.
+- Inspector → `overflow` del `<main>`: `clip` en el eje X; el vertical sigue `visible`.
+- DevTools → **Force scroll horizontal** con rueda: el `<main>` no debe generar scrollbar horizontal incluso si algún hijo sobresale.
+
+✓ Portrait bleed visible por debajo del Hero.
+✓ Sin scroll horizontal en ninguna viewport.
+✓ Intro copy no queda encimada por la foto (el gradiente + padding extra la protegen).
+⚠ Si el gradiente inferior del AboutHero se nota cortado (porque el slot ahora es más alto), subirlo a `h-[40%]` o `h-2/5`.
+⚠ En tabletas (md, <lg) el slot está oculto por CSS (`hidden md:block lg:hidden` no aplica aquí porque usamos `background`); la foto en mobile sigue siendo el layout stackeado con gradient de abajo — no tocar.
+
+**Commit:** `fix(about)(d9): portrait bleeds past hero bottom edge`
+
+---
+
+### Definition of done (S3.6.9)
+
+- [ ] `pageGutterClassName` actualizado (px-6 md:px-16 o md:px-12 según taste).
+- [ ] `useAnimationFrame` admite pausa.
+- [ ] `MagneticCursor` retorna `false` en settled y los 7 handlers llaman `startFrameLoop()`.
+- [ ] Valores de transform quantizados; `label.textContent` escribe condicional.
+- [ ] Shadow del portrait reducido.
+- [ ] Perf trace: 0 frames activos en idle del cursor después de 300ms.
+- [ ] Párrafo de About sin mención a tecnical.app.
+- [ ] Portrait sangra 12vh por debajo del Hero en lg+.
+- [ ] `overflow-x-clip` en `<main>` de about.
+- [ ] Sin scroll horizontal en ningún viewport.
 
 ---
 

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import Eyebrow, { type EyebrowTone } from '@/design/primitives/Eyebrow';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
+import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { cx } from '@/lib/utils/cx';
 
 export type HeroTone = 'lime' | 'cyan' | 'blue' | 'white';
@@ -42,7 +43,6 @@ export function Hero({
   className,
 }: HeroProps & { align?: 'start' | 'center' | 'end' }) {
   const hasSide = Boolean(children);
-  const showBackdropSide = hasSide && sidePosition === 'background';
   const showRightSide = hasSide && sidePosition === 'right';
 
   return (
@@ -63,7 +63,7 @@ export function Hero({
             // sidePosition="background" stays background on all tiers
             // sidePosition="right" is backdrop on md, flex-auto on lg+
             sidePosition === 'background'
-              ? 'lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]'
+              ? 'lg:top-0 lg:-bottom-[12vh] lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]'
               : 'hidden md:block lg:hidden'
           )}
         >
@@ -71,7 +71,10 @@ export function Hero({
         </div>
       ) : null}
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[78rem] flex-col gap-8 px-6 md:px-10 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+      <div className={cx(
+        'relative z-10 mx-auto flex w-full max-w-[78rem] flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-10',
+        pageGutterClassName,
+      )}>
         <div className="max-w-[68rem] space-y-6">
           <Eyebrow
             as="p"

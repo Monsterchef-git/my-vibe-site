@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { glassDepth, tracking } from '@/design/tokens/primitives/atmosphere';
+import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { cx } from '@/lib/utils/cx';
 
 const NAV_ITEMS = [
@@ -17,7 +18,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
   return (
     <header 
       data-cursor-role="bridge"
-      className="fixed inset-x-0 top-0 z-[150] px-6 py-5 md:px-10 md:py-8"
+      className={cx('fixed inset-x-0 top-0 z-[150] py-5 md:py-8', pageGutterClassName)}
     >
       <div className="grid gap-3 lg:grid-cols-[auto_1fr_auto] lg:items-center">
 
@@ -80,7 +81,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
               tracking.eyebrow,
             )}
           >
-            Let's build.
+            Let&apos;s build.
           </span>
         </Link>
 

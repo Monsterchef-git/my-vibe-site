@@ -24,7 +24,7 @@ export default function AboutHero() {
           alt="Portrait of John Herrera"
           width={1240}
           height={1400}
-          sizes="(min-width: 1536px) 42rem, (min-width: 1024px) 40rem, 100vw"
+          sizes="(min-width: 1024px) min(55vw, 40rem), 100vw"
           placeholder="blur"
           blurDataURL={BLUR_ABOUT_PORTRAIT}
           priority

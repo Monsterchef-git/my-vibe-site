@@ -3,10 +3,6 @@ export {
   type SectionPrimitiveProps,
 } from '@/design/primitives/SectionPrimitive';
 export {
-  CardPrimitive,
-  type CardPrimitiveProps,
-} from '@/design/primitives/CardPrimitive';
-export {
   default as MonoToken,
   type MonoTokenKind,
   type MonoTokenProps,

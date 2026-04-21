@@ -3,6 +3,7 @@
 import { AmbientGlow, Hero, CulinaryTerm } from '@/design/primitives';
 import { sectionMicroClassName } from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
+import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import ScrambleText from '@/components/shared/ScrambleText';
 import { cx } from '@/lib/utils/cx';
 
@@ -35,7 +36,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
 
       <section
         aria-label="Email installation"
-        className="relative px-6 py-32 md:px-24 md:py-48"
+        className={cx('relative py-32 md:py-48', pageGutterClassName)}
       >
         <AmbientGlow
           tone="lime"
@@ -89,7 +90,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         </div>
       </section>
 
-      <footer className="px-6 pb-14 pt-48 md:px-24 md:pb-16 md:pt-64">
+      <footer className={cx('pb-14 pt-48 md:pb-16 md:pt-64', pageGutterClassName)}>
         <div className="space-y-0">
           {[
             {

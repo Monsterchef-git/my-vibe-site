@@ -125,6 +125,10 @@ Siempre priorizar los primitives existentes para evitar duplicación de código:
 - Si la estructura actual del proyecto no coincide con la definida en este archivo, proponer un plan de migración claro y ejecutarlo paso a paso (siempre pedir confirmación del usuario antes de mover archivos grandes).
 - Al terminar tareas importantes, resumir los cambios realizados en la estructura del proyecto.
 
+## 8. Dev shortcuts
+
+- `Cmd+Shift+C` en desarrollo hace toggle del `MagneticCursor` (`magnetic-cursor-active` on/off) para debug de rendimiento.
+
 **Nunca:**
 
 - Crear componentes duplicados fuera de los primitives.

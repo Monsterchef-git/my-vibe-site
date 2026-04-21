@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import TopNav from '@/components/shared/TopNav';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
+import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { DevelopmentSection } from '@/features/development/ui';
 import { GastronomySection } from '@/features/gastronomy/ui';
 import { WorksHero } from '@/features/works/ui';
@@ -61,7 +62,7 @@ export default function WorksPage() {
 
       <section
         aria-label="Works filters"
-        className="space-y-8 px-6 py-32 md:space-y-10 md:px-24 md:py-48"
+        className={cx('space-y-8 py-32 md:space-y-10 md:py-48', pageGutterClassName)}
       >
         <div className="grid gap-3 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-5">
           <a
@@ -104,7 +105,7 @@ export default function WorksPage() {
 
       <section
         aria-label="Works narrative bridge"
-        className="flex min-h-40 items-center justify-center px-6 py-32 md:px-24 md:py-48"
+        className={cx('flex min-h-40 items-center justify-center py-32 md:py-48', pageGutterClassName)}
       >
         <p className={cx('text-center font-mono text-[10px] uppercase text-zinc-500', tracking.label)}>
           ready for <CulinaryTerm term="service">service</CulinaryTerm> →

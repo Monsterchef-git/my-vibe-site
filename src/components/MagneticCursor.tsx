@@ -33,6 +33,7 @@ const ROLE_MAP: Record<CursorRole, { tone: CursorTone; label: string }> = {
 
 const BASE_SIZE = 18;
 const BASE_EASING = 0.22;
+const POINTER_SETTLE_DELAY_MS = 96;
 
 const TONE_RGB: Record<CursorTone, string> = {
   neutral: '161, 161, 170',
@@ -99,17 +100,62 @@ const getCursorTone = (element: HTMLElement | null): CursorTone => {
 
 const getStickiness = (element: HTMLElement | null) =>
   element?.dataset.cursorStick === 'true';
+
+type StyleSnapshot = {
+  cursorOpacity: string;
+  cursorWidth: string;
+  cursorHeight: string;
+  cursorTransform: string;
+  cursorFilter: string;
+  shellBorderRadius: string;
+  shellTransform: string;
+  shellBorderColor: string;
+  shellBackground: string;
+  shellBoxShadow: string;
+  dotOpacity: string;
+  dotBackground: string;
+  dotBoxShadow: string;
+  labelOpacity: string;
+  labelColor: string;
+  labelWeight: string;
+  labelLetterSpacing: string;
+};
+
+const DEFAULT_STYLE_SNAPSHOT: StyleSnapshot = {
+  cursorOpacity: '',
+  cursorWidth: '',
+  cursorHeight: '',
+  cursorTransform: '',
+  cursorFilter: '',
+  shellBorderRadius: '',
+  shellTransform: '',
+  shellBorderColor: '',
+  shellBackground: '',
+  shellBoxShadow: '',
+  dotOpacity: '',
+  dotBackground: '',
+  dotBoxShadow: '',
+  labelOpacity: '',
+  labelColor: '',
+  labelWeight: '',
+  labelLetterSpacing: '',
+};
+
 const MagneticCursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const shellRef = useRef<HTMLSpanElement>(null);
   const dotRef = useRef<HTMLSpanElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
-  const frameRef = useRef<number | null>(null);
   const enabledRef = useRef(false);
+  const dirtyRef = useRef(true);
   const visibleRef = useRef(false);
   const pressedRef = useRef(false);
+  const userEnabledRef = useRef(true);
   const activeElementRef = useRef<HTMLElement | null>(null);
+  const activeRectRef = useRef<DOMRect | null>(null);
   const hoveredElementRef = useRef<HTMLElement | null>(null);
+  const lastMoveTsRef = useRef(0);
+  const lastStyleRef = useRef<StyleSnapshot>({ ...DEFAULT_STYLE_SNAPSHOT });
   const pointerRef = useRef({ x: 0, y: 0 });
   const currentRef = useRef({ x: 0, y: 0 });
   const sizeRef = useRef({ width: BASE_SIZE, height: BASE_SIZE });
@@ -121,15 +167,20 @@ const MagneticCursor = () => {
   const [enabled, setEnabled] = useState(false);
 
   const render = useCallback(() => {
+    if (!dirtyRef.current) {
+      return false;
+    }
+
     const cursor = cursorRef.current;
     const shell = shellRef.current;
     const dot = dotRef.current;
     const label = labelRef.current;
 
     if (!cursor || !shell || !dot || !label || !enabledRef.current) {
-      return;
+      return false;
     }
 
+    const now = performance.now();
     const activeElement = activeElementRef.current?.isConnected
       ? activeElementRef.current
       : null;
@@ -149,9 +200,13 @@ const MagneticCursor = () => {
     let targetWidth = BASE_SIZE;
     let targetHeight = BASE_SIZE;
     let easing = BASE_EASING;
+    let rect: DOMRect | null = null;
 
     if (activeElement) {
-      const rect = activeElement.getBoundingClientRect();
+      rect = activeRectRef.current ?? activeElement.getBoundingClientRect();
+      if (!activeRectRef.current) {
+        activeRectRef.current = rect;
+      }
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const stickyBoost = getStickiness(activeElement) ? 0.14 : 0;
@@ -226,67 +281,126 @@ const MagneticCursor = () => {
 
     const width = sizeRef.current.width * (isPressed ? 0.94 : 1);
     const height = sizeRef.current.height * (isPressed ? 0.92 : 1);
-    const scaleX = 1 + stretchRef.current;
-    const scaleY = 1 - stretchRef.current * 0.42;
-
-    cursor.style.opacity = visibleRef.current ? '1' : '0';
-    cursor.style.width = `${width}px`;
-    cursor.style.height = `${height}px`;
-    cursor.style.transform = `translate3d(${currentRef.current.x - width / 2}px, ${
-      currentRef.current.y - height / 2
+    const qx = Math.round(currentRef.current.x * 10) / 10;
+    const qy = Math.round(currentRef.current.y * 10) / 10;
+    const qAngle = Math.round(angleRef.current * 10) / 10;
+    const qScaleX = Math.round((1 + stretchRef.current) * 1000) / 1000;
+    const qScaleY = Math.round((1 - stretchRef.current * 0.42) * 1000) / 1000;
+    const qW = Math.round(width * 10) / 10;
+    const qH = Math.round(height * 10) / 10;
+    const nextCursorOpacity = visibleRef.current ? '1' : '0';
+    const nextCursorWidth = `${qW}px`;
+    const nextCursorHeight = `${qH}px`;
+    const nextCursorTransform = `translate3d(${qx - qW / 2}px, ${
+      qy - qH / 2
     }px, 0)`;
+    const nextCursorFilter = mode === 'portrait' ? 'none' : 'none';
+    const nextShellRadius = mode === 'lens' || mode === 'portrait' ? '28px' : '999px';
+    const nextShellTransform = `rotate(${qAngle}deg) scale(${qScaleX}, ${qScaleY})`;
 
-    shell.style.borderRadius = mode === 'lens' || mode === 'portrait' ? '28px' : '999px';
-    shell.style.transform = `rotate(${angleRef.current}deg) scale(${scaleX}, ${scaleY})`;
+    let nextShellBorderColor = `rgba(${rgb}, 0.82)`;
+    let nextShellBackground = 'rgba(10, 10, 10, 0.12)';
+    let nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 0 26px rgba(${rgb}, 0.14)`;
 
     if (mode === 'idle') {
-      shell.style.borderColor = `rgba(${rgb}, 0.2)`;
-      shell.style.background = 'rgba(10, 10, 10, 0.08)';
-      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.1), 0 0 18px rgba(${rgb}, 0.08)`;
+      nextShellBorderColor = `rgba(${rgb}, 0.2)`;
+      nextShellBackground = 'rgba(10, 10, 10, 0.08)';
+      nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.1), 0 0 18px rgba(${rgb}, 0.08)`;
     } else if (mode === 'scroll') {
-      shell.style.borderColor = `rgba(${rgb}, 0.72)`;
-      shell.style.background = 'rgba(10, 10, 10, 0.18)';
-      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.16), 0 0 28px rgba(${rgb}, 0.18), inset 0 0 22px rgba(${rgb}, 0.06)`;
+      nextShellBorderColor = `rgba(${rgb}, 0.72)`;
+      nextShellBackground = 'rgba(10, 10, 10, 0.18)';
+      nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.16), 0 0 28px rgba(${rgb}, 0.18), inset 0 0 22px rgba(${rgb}, 0.06)`;
     } else if (mode === 'cta') {
-      shell.style.borderColor = `rgba(${rgb}, 0.9)`;
-      shell.style.background = `rgba(${rgb}, 0.08)`;
-      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.18), 0 0 34px rgba(${rgb}, 0.22), inset 0 0 20px rgba(${rgb}, 0.08)`;
+      nextShellBorderColor = `rgba(${rgb}, 0.9)`;
+      nextShellBackground = `rgba(${rgb}, 0.08)`;
+      nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.18), 0 0 34px rgba(${rgb}, 0.22), inset 0 0 20px rgba(${rgb}, 0.08)`;
     } else if (mode === 'lens') {
-      shell.style.borderColor = `rgba(${rgb}, 0.72)`;
-      shell.style.background = 'rgba(10, 10, 10, 0.04)';
-      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 42px rgba(0, 0, 0, 0.24)`;
+      nextShellBorderColor = `rgba(${rgb}, 0.72)`;
+      nextShellBackground = 'rgba(10, 10, 10, 0.04)';
+      nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 42px rgba(0, 0, 0, 0.24)`;
     } else if (mode === 'drag') {
-      shell.style.borderColor = `rgba(${rgb}, 0.8)`;
-      shell.style.background = 'rgba(10, 10, 10, 0.12)';
-      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 16px 34px rgba(0, 0, 0, 0.24)`;
+      nextShellBorderColor = `rgba(${rgb}, 0.8)`;
+      nextShellBackground = 'rgba(10, 10, 10, 0.12)';
+      nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 16px 34px rgba(0, 0, 0, 0.24)`;
     } else if (mode === 'portrait') {
-      shell.style.borderColor = `rgba(${rgb}, 0.15)`;
-      shell.style.background = `rgba(${rgb}, 0.02)`;
-      shell.style.boxShadow = `0 0 60px 10px rgba(${rgb}, 0.12)`;
-      cursor.style.filter = 'blur(12px)';
+      nextShellBorderColor = `rgba(${rgb}, 0.2)`;
+      nextShellBackground = `rgba(${rgb}, 0.04)`;
+      nextShellShadow = `0 0 36px 6px rgba(${rgb}, 0.14)`;
     } else if (mode === 'keyword') {
-      shell.style.borderColor = `rgba(${rgb}, 0.85)`;
-      shell.style.background = 'rgba(10, 10, 10, 0.45)';
-      shell.style.boxShadow = `0 0 24px rgba(${rgb}, 0.32), inset 0 0 12px rgba(${rgb}, 0.12)`;
-    } else {
-      shell.style.borderColor = `rgba(${rgb}, 0.82)`;
-      shell.style.background = 'rgba(10, 10, 10, 0.12)';
-      shell.style.boxShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 0 26px rgba(${rgb}, 0.14)`;
-      cursor.style.filter = 'none';
+      nextShellBorderColor = `rgba(${rgb}, 0.85)`;
+      nextShellBackground = 'rgba(10, 10, 10, 0.45)';
+      nextShellShadow = `0 0 24px rgba(${rgb}, 0.32), inset 0 0 12px rgba(${rgb}, 0.12)`;
     }
 
-    dot.style.opacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
-    dot.style.background = `rgba(${rgb}, 1)`;
-    dot.style.boxShadow = `0 0 14px rgba(${rgb}, 0.72)`;
+    const nextDotOpacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
+    const nextDotBackground = `rgba(${rgb}, 1)`;
+    const nextDotShadow = `0 0 14px rgba(${rgb}, 0.72)`;
 
-    label.textContent = labelText.toUpperCase();
-    label.style.opacity = hasLabel && mode !== 'idle' ? '1' : '0';
-    label.style.color = `rgba(${rgb}, ${mode === 'cta' || mode === 'keyword' ? '1' : '0.88'})`;
-    label.style.fontWeight = mode === 'keyword' ? '900' : '400';
-    label.style.letterSpacing = hasLabel && (mode === 'scroll' || mode === 'keyword') ? '0.26em' : hasLabel ? '0.32em' : '0.24em';
+    const nextText = labelText.toUpperCase();
+    if (label.textContent !== nextText) {
+      label.textContent = nextText;
+    }
+    const nextLabelOpacity = hasLabel && mode !== 'idle' ? '1' : '0';
+    const nextLabelColor = `rgba(${rgb}, ${mode === 'cta' || mode === 'keyword' ? '1' : '0.88'})`;
+    const nextLabelWeight = mode === 'keyword' ? '900' : '400';
+    const nextLabelSpacing =
+      hasLabel && (mode === 'scroll' || mode === 'keyword')
+        ? '0.26em'
+        : hasLabel
+          ? '0.32em'
+          : '0.24em';
+
+    const applyStyle = <K extends keyof StyleSnapshot>(
+      key: K,
+      node: HTMLElement,
+      property: keyof CSSStyleDeclaration,
+      value: StyleSnapshot[K],
+    ) => {
+      if (lastStyleRef.current[key] === value) {
+        return;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (node.style as any)[property] = value;
+      lastStyleRef.current[key] = value;
+    };
+
+    applyStyle('cursorOpacity', cursor, 'opacity', nextCursorOpacity);
+    applyStyle('cursorWidth', cursor, 'width', nextCursorWidth);
+    applyStyle('cursorHeight', cursor, 'height', nextCursorHeight);
+    applyStyle('cursorTransform', cursor, 'transform', nextCursorTransform);
+    applyStyle('cursorFilter', cursor, 'filter', nextCursorFilter);
+    applyStyle('shellBorderRadius', shell, 'borderRadius', nextShellRadius);
+    applyStyle('shellTransform', shell, 'transform', nextShellTransform);
+    applyStyle('shellBorderColor', shell, 'borderColor', nextShellBorderColor);
+    applyStyle('shellBackground', shell, 'background', nextShellBackground);
+    applyStyle('shellBoxShadow', shell, 'boxShadow', nextShellShadow);
+    applyStyle('dotOpacity', dot, 'opacity', nextDotOpacity);
+    applyStyle('dotBackground', dot, 'background', nextDotBackground);
+    applyStyle('dotBoxShadow', dot, 'boxShadow', nextDotShadow);
+    applyStyle('labelOpacity', label, 'opacity', nextLabelOpacity);
+    applyStyle('labelColor', label, 'color', nextLabelColor);
+    applyStyle('labelWeight', label, 'fontWeight', nextLabelWeight);
+    applyStyle('labelLetterSpacing', label, 'letterSpacing', nextLabelSpacing);
+
+    const pointerSettled = now - lastMoveTsRef.current > POINTER_SETTLE_DELAY_MS;
+    const settled =
+      pointerSettled &&
+      Math.abs(targetX - currentRef.current.x) < 0.15 &&
+      Math.abs(targetY - currentRef.current.y) < 0.15 &&
+      Math.abs(targetWidth - sizeRef.current.width) < 0.5 &&
+      Math.abs(targetHeight - sizeRef.current.height) < 0.5 &&
+      speedRef.current < 0.02 &&
+      stretchRef.current < 0.005;
+
+    if (settled) {
+      dirtyRef.current = false;
+      return false;
+    }
+    return true;
   }, []);
 
-  useAnimationFrame(render);
+  const startFrameLoop = useAnimationFrame(render);
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -301,10 +415,13 @@ const MagneticCursor = () => {
     const desktopQuery = window.matchMedia(
       '(min-width: 768px) and (hover: hover) and (pointer: fine)',
     );
+    // Respect reduced-motion users by disabling the custom cursor entirely.
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let rectFrame = 0;
 
     const resetCursor = () => {
       activeElementRef.current = null;
+      activeRectRef.current = null;
       hoveredElementRef.current = null;
       visibleRef.current = false;
       pressedRef.current = false;
@@ -313,6 +430,9 @@ const MagneticCursor = () => {
       speedRef.current = 0;
       angleRef.current = 0;
       stretchRef.current = 0;
+      dirtyRef.current = true;
+      startFrameLoop();
+      lastStyleRef.current = { ...DEFAULT_STYLE_SNAPSHOT };
       cursor.style.opacity = '0';
       cursor.style.width = `${BASE_SIZE}px`;
       cursor.style.height = `${BASE_SIZE}px`;
@@ -329,9 +449,11 @@ const MagneticCursor = () => {
     };
 
     const updateEnabled = () => {
-      const nextEnabled = desktopQuery.matches && !reducedMotionQuery.matches;
+      const nextEnabled = desktopQuery.matches && !reducedMotionQuery.matches && userEnabledRef.current;
 
       enabledRef.current = nextEnabled;
+      dirtyRef.current = true;
+      startFrameLoop();
       setEnabled(nextEnabled);
       document.body.classList.toggle('magnetic-cursor-active', nextEnabled);
 
@@ -341,9 +463,12 @@ const MagneticCursor = () => {
     };
 
     const updateInteractiveTarget = (target: EventTarget | null) => {
+      dirtyRef.current = true;
+      startFrameLoop();
       if (!(target instanceof Element)) {
         hoveredElementRef.current = null;
         activeElementRef.current = null;
+        activeRectRef.current = null;
         return;
       }
 
@@ -352,6 +477,20 @@ const MagneticCursor = () => {
 
       hoveredElementRef.current = hoveredTarget;
       activeElementRef.current = interactiveTarget instanceof HTMLElement ? interactiveTarget : null;
+      activeRectRef.current = activeElementRef.current?.getBoundingClientRect() ?? null;
+    };
+
+    const refreshActiveRect = () => {
+      dirtyRef.current = true;
+      startFrameLoop();
+      if (rectFrame !== 0) {
+        return;
+      }
+
+      rectFrame = window.requestAnimationFrame(() => {
+        rectFrame = 0;
+        activeRectRef.current = activeElementRef.current?.getBoundingClientRect() ?? null;
+      });
     };
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -377,23 +516,45 @@ const MagneticCursor = () => {
         pointerRef.current = { x: nextX, y: nextY };
         lastPointerRef.current = { x: nextX, y: nextY };
       }
+      lastMoveTsRef.current = performance.now();
+      dirtyRef.current = true;
+      startFrameLoop();
 
       updateInteractiveTarget(event.target);
     };
 
     const handlePointerLeave = () => {
       activeElementRef.current = null;
+      activeRectRef.current = null;
       hoveredElementRef.current = null;
       visibleRef.current = false;
       velocityRef.current = { x: 0, y: 0 };
+      dirtyRef.current = true;
     };
 
     const handlePointerDown = () => {
       pressedRef.current = true;
+      dirtyRef.current = true;
+      startFrameLoop();
     };
 
     const handlePointerUp = () => {
       pressedRef.current = false;
+      dirtyRef.current = true;
+      startFrameLoop();
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!(event.metaKey && event.shiftKey && event.key.toLowerCase() === 'c')) {
+        return;
+      }
+
+      userEnabledRef.current = !userEnabledRef.current;
+      updateEnabled();
+
+      if (!userEnabledRef.current) {
+        resetCursor();
+      }
     };
 
     updateEnabled();
@@ -404,21 +565,34 @@ const MagneticCursor = () => {
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
     window.addEventListener('pointerup', handlePointerUp, { passive: true });
     window.addEventListener('pointercancel', handlePointerUp, { passive: true });
+    window.addEventListener('scroll', refreshActiveRect, { passive: true });
+    window.addEventListener('resize', refreshActiveRect);
+    window.visualViewport?.addEventListener('resize', refreshActiveRect);
+    window.visualViewport?.addEventListener('scroll', refreshActiveRect);
+    window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('blur', handlePointerLeave);
     document.documentElement.addEventListener('mouseleave', handlePointerLeave);
 
     return () => {
       document.body.classList.remove('magnetic-cursor-active');
+      if (rectFrame !== 0) {
+        window.cancelAnimationFrame(rectFrame);
+      }
       desktopQuery.removeEventListener('change', updateEnabled);
       reducedMotionQuery.removeEventListener('change', updateEnabled);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerUp);
+      window.removeEventListener('scroll', refreshActiveRect);
+      window.removeEventListener('resize', refreshActiveRect);
+      window.visualViewport?.removeEventListener('resize', refreshActiveRect);
+      window.visualViewport?.removeEventListener('scroll', refreshActiveRect);
+      window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('blur', handlePointerLeave);
       document.documentElement.removeEventListener('mouseleave', handlePointerLeave);
     };
-  }, []);
+  }, [startFrameLoop]);
 
   return (
     <div

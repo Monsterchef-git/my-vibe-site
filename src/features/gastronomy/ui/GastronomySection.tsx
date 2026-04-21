@@ -5,6 +5,7 @@ import {
   sectionIntroClassName,
   sectionTitleClassName,
 } from '@/design/tokens/components/sectionStyles';
+import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { SectionChrome } from '@/design/ui';
 import GastronomyHorizontalGallery from '@/features/gastronomy/ui/GastronomyHorizontalGallery';
 import { cx } from '@/lib/utils/cx';
@@ -27,7 +28,7 @@ export default function GastronomySection({
       data-cursor-role="chef"
       className={cx('relative', className)}
     >
-      <div className="px-6 pb-40 md:px-10 md:pb-52">
+      <div className={cx(pageGutterClassName, 'pb-40 md:pb-52')}>
         {!compact && (
           <SectionChrome
             index="01"

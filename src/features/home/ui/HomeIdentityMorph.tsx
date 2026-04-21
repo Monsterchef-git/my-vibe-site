@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { AmbientGlow, CulinaryTerm } from '@/design/primitives';
 import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
+import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import {
   BLUR_BLUE_MOON,
   BLUR_CULINARY_PLATING,
@@ -291,7 +292,7 @@ export default function HomeIdentityMorph() {
 
 
 
-        <div className="pointer-events-none absolute inset-0 z-[2] flex flex-col justify-end px-6 py-10 md:px-24 md:py-14">
+        <div className={cx('pointer-events-none absolute inset-0 z-[2] flex flex-col justify-end py-10 md:py-14', pageGutterClassName)}>
           <div className="relative max-w-5xl space-y-5 md:space-y-6">
             <div
               aria-hidden="true"

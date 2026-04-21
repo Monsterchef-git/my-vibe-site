@@ -61,8 +61,7 @@ export default function AboutSection({
           <p className={sectionSupportClassName}>
             Today that same way of thinking informs the digital side of my work: brand
             sites, visual systems, and a more editorial approach to structure. I work as
-            Creative Chef at <MonoToken kind="project">Wink Eventos</MonoToken> and lead
-            the landing experience for <MonoToken kind="project">tecnical.app</MonoToken>.
+            Creative Chef at <MonoToken kind="project">Wink Eventos</MonoToken>.
           </p>
         </div>
 
