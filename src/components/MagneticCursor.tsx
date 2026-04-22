@@ -16,7 +16,7 @@ const INTERACTIVE_SELECTOR = [
   '[data-magnetic]',
 ].join(',');
 
-const CURSOR_MODES = ['idle', 'link', 'cta', 'lens', 'drag', 'scroll', 'portrait', 'keyword'] as const;
+const CURSOR_MODES = ['idle', 'link', 'cta', 'lens', 'scroll'] as const;
 const CURSOR_TONES = ['neutral', 'lime', 'cyan', 'blue', 'white'] as const;
 const CURSOR_ROLES = ['chef', 'dev', 'bridge', 'service'] as const;
 
@@ -32,7 +32,7 @@ const ROLE_MAP: Record<CursorRole, { tone: CursorTone; label: string }> = {
 };
 
 const BASE_SIZE = 18;
-const BASE_EASING = 0.22;
+const BASE_EASING = 0.35;
 const POINTER_SETTLE_DELAY_MS = 96;
 
 const TONE_RGB: Record<CursorTone, string> = {
@@ -106,7 +106,6 @@ type StyleSnapshot = {
   cursorWidth: string;
   cursorHeight: string;
   cursorTransform: string;
-  cursorFilter: string;
   shellBorderRadius: string;
   shellTransform: string;
   shellBorderColor: string;
@@ -126,7 +125,6 @@ const DEFAULT_STYLE_SNAPSHOT: StyleSnapshot = {
   cursorWidth: '',
   cursorHeight: '',
   cursorTransform: '',
-  cursorFilter: '',
   shellBorderRadius: '',
   shellTransform: '',
   shellBorderColor: '',
@@ -161,8 +159,6 @@ const MagneticCursor = () => {
   const sizeRef = useRef({ width: BASE_SIZE, height: BASE_SIZE });
   const velocityRef = useRef({ x: 0, y: 0 });
   const speedRef = useRef(0);
-  const angleRef = useRef(0);
-  const stretchRef = useRef(0);
   const lastPointerRef = useRef({ x: 0, y: 0 });
   const [enabled, setEnabled] = useState(false);
 
@@ -225,39 +221,21 @@ const MagneticCursor = () => {
       } else if (mode === 'cta') {
         targetWidth = clamp(rect.width + 28, 72, 196);
         targetHeight = clamp(rect.height + 18, 42, 64);
-        targetX = pointer.x + (centerX - pointer.x) * (0.46 + stickyBoost);
-        targetY = pointer.y + (centerY - pointer.y) * (0.46 + stickyBoost);
-        easing = 0.18;
-      } else if (mode === 'drag') {
-        targetWidth = clamp(rect.width * 0.46, 108, 184);
-        targetHeight = clamp(rect.height * 0.16, 48, 74);
-        targetX = pointer.x + (centerX - pointer.x) * (0.3 + stickyBoost);
-        targetY = pointer.y + (centerY - pointer.y) * (0.26 + stickyBoost * 0.5);
-        easing = 0.15;
+        targetX = pointer.x + (centerX - pointer.x) * (0.55 + stickyBoost);
+        targetY = pointer.y + (centerY - pointer.y) * (0.55 + stickyBoost);
+        easing = 0.22;
       } else if (mode === 'scroll') {
         targetWidth = hasLabel ? clamp(labelText.length * 11 + 42, 92, 136) : 96;
         targetHeight = 36;
         targetX = pointer.x;
         targetY = pointer.y;
         easing = 0.2;
-      } else if (mode === 'portrait') {
-        targetWidth = clamp(rect.width * 0.4, 200, 320);
-        targetHeight = clamp(rect.height * 0.3, 200, 320);
-        targetX = pointer.x;
-        targetY = pointer.y;
-        easing = 0.12;
-      } else if (mode === 'keyword') {
-        targetWidth = 110;
-        targetHeight = 44;
-        targetX = pointer.x;
-        targetY = pointer.y;
-        easing = 0.22;
       } else {
         targetWidth = clamp(rect.width + 18, 54, 168);
         targetHeight = clamp(rect.height + 12, 36, 56);
-        targetX = pointer.x + (centerX - pointer.x) * (0.38 + stickyBoost);
-        targetY = pointer.y + (centerY - pointer.y) * (0.38 + stickyBoost);
-        easing = 0.17;
+        targetX = pointer.x + (centerX - pointer.x) * (0.55 + stickyBoost);
+        targetY = pointer.y + (centerY - pointer.y) * (0.55 + stickyBoost);
+        easing = 0.24;
       }
     }
 
@@ -270,22 +248,10 @@ const MagneticCursor = () => {
       Math.hypot(velocityRef.current.x, velocityRef.current.y) - speedRef.current
     ) * 0.2;
 
-    const targetAngle = speedRef.current > 0.2
-      ? (Math.atan2(velocityRef.current.y, velocityRef.current.x) * 180) / Math.PI
-      : 0;
-    const maxStretch = mode === 'lens' || mode === 'portrait' ? 0.08 : mode === 'idle' ? 0.04 : 0.14;
-    const stretch = clamp(speedRef.current / 26, 0, maxStretch);
-
-    angleRef.current += (targetAngle - angleRef.current) * 0.18;
-    stretchRef.current += (stretch - stretchRef.current) * 0.18;
-
     const width = sizeRef.current.width * (isPressed ? 0.94 : 1);
     const height = sizeRef.current.height * (isPressed ? 0.92 : 1);
     const qx = Math.round(currentRef.current.x * 10) / 10;
     const qy = Math.round(currentRef.current.y * 10) / 10;
-    const qAngle = Math.round(angleRef.current * 10) / 10;
-    const qScaleX = Math.round((1 + stretchRef.current) * 1000) / 1000;
-    const qScaleY = Math.round((1 - stretchRef.current * 0.42) * 1000) / 1000;
     const qW = Math.round(width * 10) / 10;
     const qH = Math.round(height * 10) / 10;
     const nextCursorOpacity = visibleRef.current ? '1' : '0';
@@ -294,9 +260,8 @@ const MagneticCursor = () => {
     const nextCursorTransform = `translate3d(${qx - qW / 2}px, ${
       qy - qH / 2
     }px, 0)`;
-    const nextCursorFilter = mode === 'portrait' ? 'none' : 'none';
-    const nextShellRadius = mode === 'lens' || mode === 'portrait' ? '28px' : '999px';
-    const nextShellTransform = `rotate(${qAngle}deg) scale(${qScaleX}, ${qScaleY})`;
+    const nextShellRadius = mode === 'lens' ? '28px' : '999px';
+    const nextShellTransform = 'none';
 
     let nextShellBorderColor = `rgba(${rgb}, 0.82)`;
     let nextShellBackground = 'rgba(10, 10, 10, 0.12)';
@@ -318,18 +283,6 @@ const MagneticCursor = () => {
       nextShellBorderColor = `rgba(${rgb}, 0.72)`;
       nextShellBackground = 'rgba(10, 10, 10, 0.04)';
       nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 42px rgba(0, 0, 0, 0.24)`;
-    } else if (mode === 'drag') {
-      nextShellBorderColor = `rgba(${rgb}, 0.8)`;
-      nextShellBackground = 'rgba(10, 10, 10, 0.12)';
-      nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.14), 0 16px 34px rgba(0, 0, 0, 0.24)`;
-    } else if (mode === 'portrait') {
-      nextShellBorderColor = `rgba(${rgb}, 0.2)`;
-      nextShellBackground = `rgba(${rgb}, 0.04)`;
-      nextShellShadow = `0 0 36px 6px rgba(${rgb}, 0.14)`;
-    } else if (mode === 'keyword') {
-      nextShellBorderColor = `rgba(${rgb}, 0.85)`;
-      nextShellBackground = 'rgba(10, 10, 10, 0.45)';
-      nextShellShadow = `0 0 24px rgba(${rgb}, 0.32), inset 0 0 12px rgba(${rgb}, 0.12)`;
     }
 
     const nextDotOpacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
@@ -341,10 +294,10 @@ const MagneticCursor = () => {
       label.textContent = nextText;
     }
     const nextLabelOpacity = hasLabel && mode !== 'idle' ? '1' : '0';
-    const nextLabelColor = `rgba(${rgb}, ${mode === 'cta' || mode === 'keyword' ? '1' : '0.88'})`;
-    const nextLabelWeight = mode === 'keyword' ? '900' : '400';
+    const nextLabelColor = `rgba(${rgb}, ${mode === 'cta' ? '1' : '0.88'})`;
+    const nextLabelWeight = mode === 'cta' ? '900' : '400';
     const nextLabelSpacing =
-      hasLabel && (mode === 'scroll' || mode === 'keyword')
+      hasLabel && mode === 'scroll'
         ? '0.26em'
         : hasLabel
           ? '0.32em'
@@ -369,7 +322,6 @@ const MagneticCursor = () => {
     applyStyle('cursorWidth', cursor, 'width', nextCursorWidth);
     applyStyle('cursorHeight', cursor, 'height', nextCursorHeight);
     applyStyle('cursorTransform', cursor, 'transform', nextCursorTransform);
-    applyStyle('cursorFilter', cursor, 'filter', nextCursorFilter);
     applyStyle('shellBorderRadius', shell, 'borderRadius', nextShellRadius);
     applyStyle('shellTransform', shell, 'transform', nextShellTransform);
     applyStyle('shellBorderColor', shell, 'borderColor', nextShellBorderColor);
@@ -391,7 +343,8 @@ const MagneticCursor = () => {
       Math.abs(targetWidth - sizeRef.current.width) < 0.5 &&
       Math.abs(targetHeight - sizeRef.current.height) < 0.5 &&
       speedRef.current < 0.02 &&
-      stretchRef.current < 0.005;
+      Math.abs(velocityRef.current.x) < 0.02 &&
+      Math.abs(velocityRef.current.y) < 0.02;
 
     if (settled) {
       dirtyRef.current = false;
@@ -428,8 +381,6 @@ const MagneticCursor = () => {
       sizeRef.current = { width: BASE_SIZE, height: BASE_SIZE };
       velocityRef.current = { x: 0, y: 0 };
       speedRef.current = 0;
-      angleRef.current = 0;
-      stretchRef.current = 0;
       dirtyRef.current = true;
       startFrameLoop();
       lastStyleRef.current = { ...DEFAULT_STYLE_SNAPSHOT };
@@ -530,6 +481,7 @@ const MagneticCursor = () => {
       visibleRef.current = false;
       velocityRef.current = { x: 0, y: 0 };
       dirtyRef.current = true;
+      startFrameLoop();
     };
 
     const handlePointerDown = () => {
@@ -568,7 +520,6 @@ const MagneticCursor = () => {
     window.addEventListener('scroll', refreshActiveRect, { passive: true });
     window.addEventListener('resize', refreshActiveRect);
     window.visualViewport?.addEventListener('resize', refreshActiveRect);
-    window.visualViewport?.addEventListener('scroll', refreshActiveRect);
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('blur', handlePointerLeave);
     document.documentElement.addEventListener('mouseleave', handlePointerLeave);
@@ -587,7 +538,6 @@ const MagneticCursor = () => {
       window.removeEventListener('scroll', refreshActiveRect);
       window.removeEventListener('resize', refreshActiveRect);
       window.visualViewport?.removeEventListener('resize', refreshActiveRect);
-      window.visualViewport?.removeEventListener('scroll', refreshActiveRect);
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('blur', handlePointerLeave);
       document.documentElement.removeEventListener('mouseleave', handlePointerLeave);
@@ -605,7 +555,7 @@ const MagneticCursor = () => {
     >
       <span
         ref={shellRef}
-        className="absolute inset-0 rounded-full border border-transparent transition-[border-color,background-color,box-shadow] duration-[500ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+        className="absolute inset-0 rounded-full border border-transparent transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
       />
       <span
         ref={labelRef}

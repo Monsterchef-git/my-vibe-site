@@ -19,7 +19,7 @@ import { cx } from '@/lib/utils/cx';
 const MORPH_START = 0.24;
 const MORPH_END = 0.74;
 const SWITCH_THRESHOLD = 0.52;
-const BRIDGE_LABELS = ['KITCHEN CRAFT', 'DIGITAL CRAFT'] as const;
+const BRIDGE_LABELS = ['01 / GASTRONOMY', '02 / INTERFACE'] as const;
 const SCRAMBLE_CHARS = 'ABCDEFGHIKLMNOPQRSTVXYZ0123456789';
 
 function getScrambledWord(p: number, from: string, to: string) {
@@ -55,15 +55,13 @@ const STATES = [
     linkClassName: 'hover:border-lime-300/45 hover:text-lime-300 focus-visible:border-lime-300/55 focus-visible:text-lime-200 active:text-lime-200',
     wordClassName: 'text-white',
     ambientTone: 'lime',
-    copy: (
+    secondLine: (
       <>
-        Kitchen craft.
-        <br />
-        <CulinaryTerm term="service">Service</CulinaryTerm>, structure, taste.
+        Kitchens taught the <CulinaryTerm term="service">rhythm</CulinaryTerm>.
       </>
     ),
     href: '/works#works-gastronomy',
-    cta: 'See kitchen work →',
+    cta: '→ watch the kitchen work',
   },
   {
     id: 'development',
@@ -75,15 +73,9 @@ const STATES = [
     linkClassName: 'hover:border-cyan-300/45 hover:text-cyan-300 focus-visible:border-cyan-300/55 focus-visible:text-cyan-200 active:text-cyan-200',
     wordClassName: 'text-cyan-300 night-glow-cyan',
     ambientTone: 'cyan',
-    copy: (
-      <>
-        Digital craft.
-        <br />
-        Product, detail, launch.
-      </>
-    ),
+    secondLine: 'Interfaces keep the beat.',
     href: '/works#works-development',
-    cta: 'See digital work →',
+    cta: '→ watch the screens work',
   },
 ] as const;
 
@@ -321,7 +313,9 @@ export default function HomeIdentityMorph() {
                   'max-w-[30rem] text-zinc-100 [text-shadow:0_6px_34px_rgba(0,0,0,0.95)]',
                 )}
               >
-                {activeState.copy}
+                Twelve years <CulinaryTerm term="plating">plating</CulinaryTerm>.
+                <br />
+                {activeState.secondLine}
               </p>
 
               <div

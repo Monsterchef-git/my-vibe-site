@@ -1,9 +1,11 @@
 'use client';
 
 import { AmbientGlow, Hero, CulinaryTerm } from '@/design/primitives';
-import { sectionMicroClassName } from '@/design/tokens/components/sectionStyles';
+import {
+  sectionGutterClassName,
+  sectionMicroClassName,
+} from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
-import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import ScrambleText from '@/components/shared/ScrambleText';
 import { cx } from '@/lib/utils/cx';
 
@@ -27,6 +29,9 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         statement={<CulinaryTerm term="pass">The pass is open.</CulinaryTerm>}
         counterLine="briefs, reservations, collaborations →"
         tone="lime"
+        index="04"
+        next={{ label: 'TOP', href: '#top' }}
+        meta={{ city: 'MEDELLIN, CO', tag: 'CHAPTER 04' }}
         anchor={
           <span className={cx(sectionMicroClassName, 'text-zinc-500')}>
             Medellin, CO
@@ -36,7 +41,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
 
       <section
         aria-label="Email installation"
-        className={cx('relative py-32 md:py-48', pageGutterClassName)}
+        className={cx('relative py-32 md:py-48', sectionGutterClassName)}
       >
         <AmbientGlow
           tone="lime"
@@ -58,7 +63,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
                 'mb-1 ml-1 block font-mono uppercase text-zinc-400 transition-colors duration-[900ms] group-hover:text-zinc-200 group-focus-visible:text-zinc-200 md:ml-[2vw] motion-reduce:transition-none',
                 tracking.dense,
               )}
-              style={{ fontSize: 'clamp(1.15rem, 2.4vw, 2rem)' }}
+              style={{ fontSize: 'clamp(1.35rem, 2.8vw, 2.4rem)' }}
             />
 
             {/* JOHNHERRERA — the installation. Fills the viewport. */}
@@ -71,7 +76,7 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
                 'night-glow block max-w-full font-mono uppercase text-[var(--accent-primary)] transition-[text-shadow] duration-[900ms] group-hover:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)] group-focus-visible:[text-shadow:0_0_48px_rgba(202,253,0,0.75),0_0_120px_rgba(202,253,0,0.28)] motion-reduce:transition-none',
                 tracking.dense,
               )}
-              style={{ fontSize: 'clamp(2.2rem, 9vw, 11rem)', lineHeight: 0.9 }}
+              style={{ fontSize: 'clamp(2.8rem, 11vw, 13rem)', lineHeight: 0.9 }}
             />
 
             {/* chef.com — medium, offset right, fading */}
@@ -84,13 +89,13 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
                 'mt-1 ml-2 block font-mono uppercase text-zinc-400/88 transition-colors duration-[900ms] group-hover:text-zinc-200 group-focus-visible:text-zinc-200 md:ml-[4vw] motion-reduce:transition-none',
                 tracking.dense,
               )}
-              style={{ fontSize: 'clamp(1.5rem, 3.6vw, 3.2rem)' }}
+              style={{ fontSize: 'clamp(1.9rem, 4.3vw, 4rem)' }}
             />
           </a>
         </div>
       </section>
 
-      <footer className={cx('pb-14 pt-48 md:pb-16 md:pt-64', pageGutterClassName)}>
+      <footer className={cx('pb-14 pt-48 md:pb-16 md:pt-64', sectionGutterClassName)}>
         <div className="space-y-0">
           {[
             {

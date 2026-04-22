@@ -28,7 +28,7 @@ export function CulinaryTerm({ term, children, className }: CulinaryTermProps) {
   return (
     <span
       data-cursor-role="chef"
-      data-cursor-mode="keyword"
+      data-cursor-mode="link"
       data-cursor-label={label}
       className={cx(
         'inline-block cursor-default border-b border-dashed border-zinc-700 transition-colors hover:border-lime-400/60',

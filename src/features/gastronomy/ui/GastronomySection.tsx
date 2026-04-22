@@ -28,7 +28,7 @@ export default function GastronomySection({
       data-cursor-role="chef"
       className={cx('relative', className)}
     >
-      <div className={cx(pageGutterClassName, 'pb-40 md:pb-52')}>
+      <div className={cx(pageGutterClassName, compact ? 'pb-16 md:pb-24' : 'pb-40 md:pb-52')}>
         {!compact && (
           <SectionChrome
             index="01"

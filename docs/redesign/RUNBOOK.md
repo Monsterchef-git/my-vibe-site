@@ -1678,6 +1678,128 @@ En `render`:
 
 ---
 
+### Step 6.8 · Hero dialogue pass
+
+**Context:** Feedback del usuario 2026-04-22: los 4 heroes del site no hablan el mismo idioma visual. Diagnósticos acumulados:
+
+- **Eyebrows con color del tono** ([sectionStyles.ts:12-17](src/design/tokens/components/sectionStyles.ts:12)) — HOME/WORKS/CONTACT pintan lime y ABOUT pinta white/62. La metadata debería ser neutral en todo el site; el color del tono tiene que vivir solo en el elemento más grande (statement) + en el scroll cue.
+- **Sin indicador de scroll visible en heroes.** El "SCROLL" del home es un cursor label del morph, no un elemento del Hero primitive. Los demás heroes no tienen pista alguna de que haya más contenido abajo.
+- **Morph del home con copy redundante y triadas blandas.** "Kitchen craft" / "Digital craft" aparece en bridge label Y en copy (triplicación). Triadas "Service/structure/taste" y "Product/detail/launch" son genéricas de menú y pitch deck respectivamente, sin tensión sensorial.
+- **CTAs del morph funcionales, no editoriales.** "See kitchen work →" lee como botón de CMS.
+
+**Principio rector:** un sitio awwwards no gana por gestos aislados, gana por **coherencia radical**. Los 4 heroes deben sentirse páginas de un mismo libro. El diálogo unificado es lo que sostiene todo el resto de gestos visuales.
+
+**Files:**
+- `src/design/primitives/Hero/Hero.tsx`
+- `src/design/tokens/components/sectionStyles.ts`
+- `src/features/home/ui/HomeIdentityMorph.tsx`
+- Los 4 heroes (`HomeHero` si existe / `WorksHero` / `AboutHero` / `ContactSection`) para pasar los nuevos props.
+
+---
+
+**Sub-step 6.8a · Eyebrows neutrales en todos los heroes**
+
+1. En `Hero.tsx`, eliminar el map `toneToEyebrowTone` (líneas ~20-25). El eyebrow ya no recibe `tone`.
+2. Pasar al Eyebrow siempre `role="muted"` (pinta `text-zinc-500` via `eyebrowMuted`). Alternativamente `role="dim"` (`text-zinc-600`) si queda muy alto contraste.
+3. El prop `tone` del Hero sigue existiendo pero solo alimenta: statement accent (si hay `CulinaryTerm` u otro), scroll cue (ver 6.8b), y anchor color (si se mantiene `anchor`).
+4. Verificar visualmente que los 4 heroes muestran eyebrow idéntico en color (`ABOUT`, `WORKS`, `CONTACT`, `HOME`).
+
+✓ Los 4 eyebrows leen igual en color. El ojo ya no percibe a ABOUT como "el raro".
+
+---
+
+**Sub-step 6.8b · Status bar inferior (scroll cue + chapter index + metadata)**
+
+**Revisión 2026-04-22 (v3):** historial de decisiones sobre este sub-step:
+- v1 propuso línea vertical + punto animado → descartada, poco legible, el usuario no entendió el lenguaje.
+- v2 propuso chapter index solo en esquina inferior derecha con flecha → descartada, colisiona con el cutout del About (la figura sangra por el borde inferior derecho y pisa el texto; drop-shadow o subir contraste es compensar, no resolver).
+- **v3 (esta):** status bar edge-to-edge en el borde inferior del Hero. Resuelve legibilidad por estructura (tiene su propio backdrop), da contraste garantizado sobre cualquier fondo (negro, cutout, imágenes futuras), y es un gesto awwwards de recurrencia clara en 2025-2026 (Locomotive, Uncommon, varios winners del año).
+
+**Concepto:** una franja fina en el borde inferior del Hero, `bg-black/60 backdrop-blur-md`, que funciona como "status bar" del site. Divide la información en dos extremos: metadata editorial a la izquierda, chapter index a la derecha. Estructura como HUD de cámara o de software editorial.
+
+**Props del `Hero` primitive (opcionales):**
+```
+index?: string              // "01", "02", "03", "04"
+next?: { label: string; href: string }   // { label: 'WORKS', href: '#works' }
+meta?: { city?: string; tag?: string }    // metadata para el lado izquierdo
+```
+
+**Estructura del elemento:**
+- Wrapper: `absolute bottom-0 left-0 right-0 z-20 border-t border-white/5 bg-black/60 backdrop-blur-md`.
+- Padding: `py-3 px-6 md:px-10 lg:px-16` (matching `pageGutterClassName`).
+- Layout interno: `flex items-center justify-between gap-8`.
+- Tipografía: mono uppercase `text-[10px] text-zinc-400` con `tracking-[0.18em]`.
+
+**Lado izquierdo — metadata editorial:**
+- Formato: `{meta.city} · {meta.tag}` — ej `MEDELLIN, CO · CHAPTER {index}`.
+- Si no se pasa `meta.city`, usar default global `MEDELLIN, CO`.
+- Si no se pasa `meta.tag`, fallback a `CHAPTER {index}`.
+- **Opcional avanzado:** añadir live time `14:22 GMT-5` que se actualiza cada 60s vía `useEffect`. Metadata viva = site se siente "on" en vez de estático. Es el gesto awwwards de cierre. Si añade complejidad o hay dudas de rendimiento, dejar fuera de la primera iteración.
+
+**Lado derecho — chapter index + arrow:**
+- Una sola línea: `{index} / 04 — NEXT: {next.label} ↓`.
+- La flecha `↓` (o `↑` en Contact) lleva pulse sutil: opacity `0.5 → 1 → 0.5` cada 2s. El texto no se mueve.
+- El texto `NEXT: {next.label} ↓` (incluida la flecha) es un `<Link>` al `next.href` — clickable como teaser del siguiente capítulo. Hover: `text-zinc-200` + flecha opacity 1 constante.
+- El segmento `{index} / 04 —` queda como texto estático, no parte del link.
+- Respetar `prefers-reduced-motion`: sin pulse, flecha estática.
+
+**Pasar los props en cada hero:**
+- `HomeHero`: `index="01" next={{ label: 'WORKS', href: '#works' }}` (o `/works`).
+- `WorksHero`: `index="02" next={{ label: 'ABOUT', href: '#about' }}`.
+- `AboutHero`: `index="03" next={{ label: 'CONTACT', href: '#contact' }}`.
+- `ContactSection`: `index="04" next={{ label: 'TOP', href: '#top' }}` + flecha `↑` invertida.
+
+**Beneficios estructurales de la status bar:**
+✓ Legibilidad garantizada sobre cualquier fondo — el backdrop-blur resuelve el problema About sin necesidad de drop-shadow ni subir contraste.
+✓ Los 4 heroes cierran con la misma franja visual — diálogo unificado máximo.
+✓ Dos funciones en un solo elemento: scroll cue (flecha + pulse) + paginación (chapter index) + orientación (metadata).
+✓ Gesto awwwards 2025-2026 verificable (Locomotive, Uncommon).
+✓ Elimina el problema de la esquina inferior izquierda vacía — ahora lleva metadata intencional.
+
+⚠ `z-index: 20` sobre el contenido del Hero, pero por debajo del `TopNav` (que suele ir en 50+).
+⚠ En About, la figura cutout sigue sangrando por debajo — el backdrop-blur se aplica *sobre* ella, lo que crea un efecto "glass" intencional en esa zona. Verificar que se ve limpio, no turbio. Si molesta, reducir blur a `backdrop-blur-sm` o subir opacidad del black a `bg-black/75`.
+⚠ En mobile, revisar que la status bar no rompa la respiración del Hero. Si el hero queda comprimido, reducir `py-3` a `py-2` en mobile.
+⚠ Si `next.href` apunta a un `#hash` en la misma página, usar scroll smooth y respetar `prefers-reduced-motion`.
+
+---
+
+**Sub-step 6.8c · Morph copy overhaul (home)**
+
+Cambios en `HomeIdentityMorph.tsx`:
+
+1. **Eliminar bridge labels duplicados.** `BRIDGE_LABELS = ['KITCHEN CRAFT', 'DIGITAL CRAFT']` → `['01 / GASTRONOMY', '02 / INTERFACE']`. Refuerza el diálogo de paginación editorial del Sub-step 6.8b.
+
+2. **Reescribir copy de cada estado** — una frase base fija + segunda línea que muta con el morph:
+   - **Estado fijo en la pantalla** (no cambia): `Twelve years plating.`
+   - **Estado 1 (CHEF, lime):** segunda línea `Kitchens taught the rhythm.`
+   - **Estado 2 (DEV, cyan):** segunda línea `Interfaces keep the beat.`
+
+   En lugar de dos bloques paralelos con triadas genéricas, es **una sola frase de dos líneas** donde la segunda se reescribe al scrollear. El usuario ve una biografía que se actualiza en tiempo real — ese es el gesto awwwards real del morph, no el cambio de slide.
+
+3. **CTAs editoriales, no funcionales:**
+   - Estado 1: `See kitchen work →` → `→ watch the kitchen work`
+   - Estado 2: `See digital work →` → `→ watch the screens work`
+
+   `watch` sugiere movimiento y sustituye el pasivo `see`. La flecha va antes, como signo editorial, no como botón.
+
+4. **Mantener** la palabra `CHEF → DEV` mutando en tipografía grande — ese gesto ya funciona, es la columna vertebral del morph.
+
+✓ El copy deja de decir "craft" tres veces en 3 segundos.
+✓ La triada de cocina y la triada de dev desaparecen como "listas", se vuelven frase.
+✓ Los bridge labels se alinean con el chapter index del Sub-step 6.8b (`01 / GASTRONOMY` habla el mismo idioma que `01 / 04 — NEXT: WORKS`).
+
+---
+
+**Criterios de cierre del Step 6.8 completo:**
+
+✓ Test de coherencia: capturas de los 4 heroes alineadas lado a lado se leen como 4 páginas del mismo libro.
+✓ En cada hero: eyebrow neutral, statement con accent del tono, counterLine neutral, scroll cue animado con tono, chapter index mono en zinc-500.
+✓ Morph del home: frase continua + CTAs editoriales + bridge labels numéricos.
+✓ Ningún hero tiene un gesto visual que los otros 3 no repliquen (o en su equivalente).
+⚠ Este step toca muchos archivos — dividir en al menos 3 commits: (a) eyebrows neutrales, (b) scroll cue + chapter index primitive, (c) morph copy. Cada uno reversible por separado.
+
+---
+
 ## Global rules while executing
 
 1. **One step = one commit.** Don't batch. Easier to revert.

@@ -6,11 +6,11 @@ import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { DevelopmentSection } from '@/features/development/ui';
 import { GastronomySection } from '@/features/gastronomy/ui';
 import { WorksHero } from '@/features/works/ui';
-import { CulinaryTerm } from '@/design/primitives';
 import { cx } from '@/lib/utils/cx';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
 const worksSeo = PAGE_SEO.works;
+export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: worksSeo.title,
   description: worksSeo.description,
@@ -48,7 +48,7 @@ export default function WorksPage() {
     <main
       id="main-content"
       data-cursor-role="dev"
-      className="relative z-0 min-h-screen bg-[#0a0a0a] pb-32 pt-28 text-white md:pt-32"
+      className="relative z-0 min-h-svh bg-[#0a0a0a] pb-20 text-white md:pb-24"
     >
       <script
         type="application/ld+json"
@@ -62,7 +62,7 @@ export default function WorksPage() {
 
       <section
         aria-label="Works filters"
-        className={cx('space-y-8 py-32 md:space-y-10 md:py-48', pageGutterClassName)}
+        className={cx('space-y-8 py-16 md:space-y-10 md:py-24', pageGutterClassName)}
       >
         <div className="grid gap-3 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-5">
           <a
@@ -96,21 +96,10 @@ export default function WorksPage() {
         </div>
       </section>
 
-      <div aria-hidden="true" className="h-48 md:h-72" />
-
       <GastronomySection
         id="works-gastronomy"
         compact
       />
-
-      <section
-        aria-label="Works narrative bridge"
-        className={cx('flex min-h-40 items-center justify-center py-32 md:py-48', pageGutterClassName)}
-      >
-        <p className={cx('text-center font-mono text-[10px] uppercase text-zinc-500', tracking.label)}>
-          ready for <CulinaryTerm term="service">service</CulinaryTerm> →
-        </p>
-      </section>
 
       <ErrorBoundary>
         <DevelopmentSection

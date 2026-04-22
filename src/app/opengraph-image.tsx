@@ -5,6 +5,8 @@ import { join } from 'node:path';
 export const alt = 'Cooked fast. Shipped faster.';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
+export const dynamic = 'force-static';
+export const revalidate = 86400;
 
 export default async function OG() {
   const forkSrc = await readFile(

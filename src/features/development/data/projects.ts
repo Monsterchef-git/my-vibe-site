@@ -2,7 +2,10 @@ export type Project = {
   id: string;
   number: string;
   title: string;
-  tags: string[];
+  year: string;
+  client: string;
+  stack: string;
+  role: string;
   href: string;
   image: string;
   imageAlt: string;
@@ -13,7 +16,10 @@ export const PROJECTS: Project[] = [
     id: 'blue-moon',
     number: '01',
     title: 'Blue Moon Cottage',
-    tags: ['2026', 'Hospitality', 'Landing'],
+    year: '2026',
+    client: 'Blue Moon Cottage',
+    stack: 'Landing · Hospitality',
+    role: 'Creative Direction',
     href: 'https://www.bluemoonhopetown.com',
     image: '/works/blue-moon.webp',
     imageAlt: 'Blue Moon Cottage landing hero.',
@@ -22,7 +28,10 @@ export const PROJECTS: Project[] = [
     id: 'isolution',
     number: '02',
     title: 'iSolution Lab',
-    tags: ['2025', 'Landing', 'Apple'],
+    year: '2025',
+    client: 'iSolution Lab',
+    stack: 'Landing · Apple Repair',
+    role: 'Web Development',
     href: 'https://isolution.com.co',
     image: '/works/isolution.webp',
     imageAlt: 'iSolution Lab landing screenshot.',
@@ -31,7 +40,10 @@ export const PROJECTS: Project[] = [
     id: 'meghans',
     number: '03',
     title: "Meghan's Momentum",
-    tags: ['2025', 'Editorial'],
+    year: '2025',
+    client: "Meghan's Momentum",
+    stack: 'Editorial · Brand Site',
+    role: 'Creative Direction',
     href: 'https://www.meghansmomentumstudios.com',
     image: '/works/meghans.webp',
     imageAlt: "Meghan's Momentum homepage screenshot.",
@@ -40,7 +52,10 @@ export const PROJECTS: Project[] = [
     id: 'spa-lleras',
     number: '04',
     title: 'Spa Lleras',
-    tags: ['2025', 'Landing', 'Wellness'],
+    year: '2025',
+    client: 'Spa Lleras',
+    stack: 'Landing · Wellness',
+    role: 'Web Development',
     href: 'https://spalleras.com/',
     image: '/works/spa.webp',
     imageAlt: 'Spa Lleras website screenshot.',
@@ -49,7 +64,10 @@ export const PROJECTS: Project[] = [
     id: 'lleras-medical',
     number: '05',
     title: 'Lleras Medical',
-    tags: ['2025', 'Landing', 'Health'],
+    year: '2025',
+    client: 'Lleras Medical',
+    stack: 'Landing · Health',
+    role: 'Web Development',
     href: 'https://www.llerasmedicallounge.com/',
     image: '/works/medical.webp',
     imageAlt: 'Lleras Medical website screenshot.',
@@ -58,7 +76,10 @@ export const PROJECTS: Project[] = [
     id: 'tecnical',
     number: '06',
     title: 'tecnical.app',
-    tags: ['2026', 'SaaS', 'Next.js'],
+    year: '2026',
+    client: 'tecnical.app',
+    stack: 'SaaS · Next.js',
+    role: 'Product Design',
     href: 'https://www.tecnical.app',
     image: '/works/tecnicalapp.webp',
     imageAlt: 'tecnical.app landing screenshot.',

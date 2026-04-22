@@ -259,7 +259,7 @@ export default function GastronomyHorizontalGallery() {
       {!reducedMotion ? (
         <div
           ref={scrollDriverRef}
-          data-cursor-mode="drag"
+          data-cursor-mode="scroll"
           data-cursor-label="Scroll"
           className="hidden h-[360svh] md:block lg:h-[420svh] xl:h-[440svh]"
         >
@@ -275,7 +275,7 @@ export default function GastronomyHorizontalGallery() {
 
             <div
               ref={trackRef}
-              className="flex min-w-max items-start gap-0 pl-[10vw] pr-[18vw] will-change-transform"
+              className="flex min-w-max items-start gap-0 pl-0 pr-[8vw] will-change-transform"
             >
               {GALLERY_FRAMES.map((frame) => (
                 <GalleryStill

@@ -55,17 +55,26 @@ export default function WorksList() {
               onMouseLeave={() => setActiveId(null)}
               className="group block py-10 transition-colors duration-[700ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-14 motion-reduce:transition-none"
             >
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-[auto_1fr_auto] md:items-baseline md:gap-8">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-[auto_1fr_auto] md:items-start md:gap-8">
                 <span className={cx('font-mono text-[10px] uppercase text-zinc-600', tracking.label)}>
                   {project.number}
                 </span>
 
-                <h3 className="font-headline text-[clamp(2rem,5.8vw,4rem)] italic leading-[0.9] text-white transition-all duration-[700ms] group-hover:translate-x-2 group-hover:text-cyan-300 motion-reduce:transition-none">
-                  {project.title}
-                </h3>
+                <div className="space-y-3">
+                  <h3 className="font-headline text-[clamp(3rem,8vw,7rem)] italic leading-[0.88] text-white transition-all duration-[700ms] group-hover:translate-x-2 group-hover:text-cyan-300 motion-reduce:transition-none">
+                    {project.title}
+                  </h3>
 
-                <span className={cx('font-mono text-[10px] uppercase text-zinc-500 md:text-right', tracking.eyebrow)}>
-                  {project.tags.join(' · ')}
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-1 font-mono text-[10px] uppercase text-zinc-500 md:max-w-lg">
+                    <span className={tracking.label}>Year {project.year}</span>
+                    <span className={tracking.label}>Client {project.client}</span>
+                    <span className={tracking.label}>Stack {project.stack}</span>
+                    <span className={tracking.label}>Role {project.role}</span>
+                  </div>
+                </div>
+
+                <span className={cx('font-mono text-[10px] uppercase text-zinc-500 md:pt-2 md:text-right', tracking.eyebrow)}>
+                  file/{project.number}
                 </span>
               </div>
             </a>

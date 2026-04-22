@@ -18,6 +18,8 @@ export const eyebrowTones = {
 
 export const sectionEyebrowClassName = eyebrowPrimary;
 
+export const sectionGutterClassName = 'px-6 md:px-10 lg:px-16';
+
 export const sectionIntroClassName = 'space-y-3';
 export const sectionTitleClassName =
   'text-[clamp(2.5rem,14vw,4rem)] md:text-7xl font-headline italic leading-none';

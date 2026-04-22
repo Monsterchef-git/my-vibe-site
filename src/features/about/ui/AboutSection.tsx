@@ -1,11 +1,11 @@
-import { Eyebrow, MonoToken, CulinaryTerm } from '@/design/primitives';
+import { CulinaryTerm, Eyebrow, MonoToken } from '@/design/primitives';
 import {
   sectionBodyClassName,
+  sectionGutterClassName,
   sectionMicroClassName,
   sectionSupportClassName,
 } from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
-import { SectionChrome } from '@/design/ui';
 import { cx } from '@/lib/utils/cx';
 
 interface AboutSectionProps {
@@ -19,7 +19,14 @@ const specRows = [
   { key: 'CUISINE', value: 'Contemporary tropical' },
   { key: 'TOOLS', value: 'Next.js · Tailwind · AI' },
   { key: 'FOCUS', value: 'Brand sites · SEO · visual direction' },
-  { key: 'APPROACH', value: <span><CulinaryTerm term="service">Service</CulinaryTerm>-led · editorial · clear</span> },
+  {
+    key: 'APPROACH',
+    value: (
+      <span>
+        <CulinaryTerm term="service">Service</CulinaryTerm>-led · editorial · clear
+      </span>
+    ),
+  },
 ];
 
 export default function AboutSection({
@@ -33,24 +40,16 @@ export default function AboutSection({
       data-scroll-tone="white"
       data-cursor-role="chef"
       className={cx(
-        'relative w-full overflow-hidden',
+        'relative w-full',
+        sectionGutterClassName,
         compact ? 'pt-4 md:pt-6' : 'py-32 md:py-52',
-        className
+        className,
       )}
     >
-      {!compact && (
-        <SectionChrome
-          index="03"
-          label="About"
-          meta="Medellin, Colombia"
-          tone="white"
-        />
-      )}
-
       <div
         className={cx(
           !compact && 'reveal',
-          'grid gap-12 border-t border-zinc-800/60 pt-8 lg:grid-cols-[1fr_auto] lg:gap-20',
+          'grid gap-12 pt-8 lg:grid-cols-[1fr_auto] lg:gap-20',
         )}
       >
         <div className="grid gap-6 md:grid-cols-2">

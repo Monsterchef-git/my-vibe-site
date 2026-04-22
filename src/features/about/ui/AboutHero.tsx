@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { Hero, CulinaryTerm } from '@/design/primitives';
+import { CulinaryTerm, Hero } from '@/design/primitives';
 import {
-  BLUR_ABOUT_PORTRAIT,
-  IMAGE_ABOUT_PORTRAIT,
+  BLUR_ABOUT_CHEF_CUTOUT,
+  IMAGE_ABOUT_CHEF_CUTOUT,
 } from '@/lib/imageAssets';
 
 export default function AboutHero() {
@@ -12,38 +12,26 @@ export default function AboutHero() {
       statement={<CulinaryTerm term="mise en place">Mise en place for the web.</CulinaryTerm>}
       counterLine="the kitchen taught me the rest."
       tone="white"
+      index="03"
+      next={{ label: 'CONTACT', href: '/contact' }}
+      meta={{ city: 'MEDELLIN, CO', tag: 'CHAPTER 03' }}
+      statusLineFadeRight
       sidePosition="background"
     >
-      <div 
-        data-cursor-mode="portrait"
-        data-cursor-label="THE CHEF"
-        className="relative h-[80svh] w-full lg:h-full"
-      >
+      <div className="relative h-full w-full">
         <Image
-          src={IMAGE_ABOUT_PORTRAIT}
-          alt="Portrait of John Herrera"
-          width={1240}
-          height={1400}
-          sizes="(min-width: 1024px) min(55vw, 40rem), 100vw"
+          src={IMAGE_ABOUT_CHEF_CUTOUT}
+          alt="Portrait of John Herrera cutting tomatoes"
+          fill
+          sizes="(min-width: 1024px) min(55vw, 40rem), 90vw"
           placeholder="blur"
-          blurDataURL={BLUR_ABOUT_PORTRAIT}
+          blurDataURL={BLUR_ABOUT_CHEF_CUTOUT}
           priority
-          className="h-full w-full object-cover object-[center_18%]"
+          className="object-contain object-[center_18%] [filter:contrast(1.1)_saturate(0.95)]"
         />
-        {/* Mobile: dark bottom fade to protect statement */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.2)_40%,rgba(0,0,0,0.94)_100%)] lg:hidden"
-        />
-        {/* Desktop: black canvas bleeds into portrait from the left */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 hidden w-full bg-[linear-gradient(90deg,rgba(0,0,0,1)_0%,rgba(0,0,0,0.96)_28%,rgba(0,0,0,0.55)_55%,rgba(0,0,0,0.1)_82%,rgba(0,0,0,0)_100%)] lg:block"
-        />
-        {/* Desktop: subtle bottom grounding */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-1/3 bg-gradient-to-b from-transparent to-black/80 lg:block"
+          className="pointer-events-none absolute inset-0 opacity-[0.1] mix-blend-soft-light [background-image:radial-gradient(circle_at_24%_22%,rgba(255,255,255,0.36)_0%,transparent_58%),repeating-linear-gradient(0deg,rgba(255,255,255,0.06)_0,rgba(255,255,255,0.06)_1px,transparent_1px,transparent_2px)]"
         />
       </div>
     </Hero>

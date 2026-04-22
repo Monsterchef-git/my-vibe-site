@@ -11,7 +11,38 @@ body {
   background-color: var(--background);
   color: #ffffff;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100svh;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes hero-status-arrow-pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.hero-status-arrow {
+  animation: hero-status-arrow-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-status-arrow {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -5,9 +5,7 @@ import Lenis from 'lenis';
 
 export default function LenisProvider() {
   useEffect(() => {
-    const desktopQuery = window.matchMedia(
-      '(min-width: 768px) and (hover: hover) and (pointer: fine)',
-    );
+    const desktopQuery = window.matchMedia('(min-width: 768px)');
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     let lenis: Lenis | null = null;

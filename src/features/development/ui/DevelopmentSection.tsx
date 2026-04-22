@@ -2,6 +2,7 @@ import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import { SectionChrome } from '@/design/ui';
 import {
   sectionBodyClassName,
+  sectionGutterClassName,
   sectionIntroClassName,
   sectionTitleClassName,
 } from '@/design/tokens/components/sectionStyles';
@@ -26,7 +27,7 @@ export default function DevelopmentSection({
       data-cursor-role="dev"
       className={cx(
         'relative w-full overflow-hidden',
-        compact ? 'pt-4 md:pt-6' : 'space-y-10 py-32 md:py-52',
+        compact ? 'space-y-8 py-16 md:py-24' : 'space-y-10 py-32 md:py-52',
         className
       )}
     >
@@ -39,7 +40,7 @@ export default function DevelopmentSection({
         />
       )}
 
-      <div className={cx(sectionIntroClassName, 'reveal')}>
+      <div className={cx(sectionGutterClassName, sectionIntroClassName, 'reveal')}>
         <h2 className={cx(sectionTitleClassName, 'text-cyan-400 night-glow-cyan')}>
           Digital Craft
         </h2>

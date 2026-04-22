@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import Eyebrow, { type EyebrowTone } from '@/design/primitives/Eyebrow';
+import Link from 'next/link';
+import Eyebrow from '@/design/primitives/Eyebrow';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { cx } from '@/lib/utils/cx';
@@ -12,17 +13,14 @@ export interface HeroProps {
   counterLine: ReactNode;
   tone: HeroTone;
   anchor?: ReactNode;
+  index?: string;
+  next?: { label: string; href: string };
+  meta?: { city?: string; tag?: string };
+  statusLineFadeRight?: boolean;
   children?: ReactNode;
   sidePosition?: 'right' | 'background';
   className?: string;
 }
-
-const toneToEyebrowTone: Record<HeroTone, EyebrowTone> = {
-  lime: 'lime',
-  cyan: 'cyan',
-  blue: 'blue',
-  white: 'white',
-};
 
 const toneToAccentClassName: Record<HeroTone, string> = {
   lime: 'text-lime-300',
@@ -37,6 +35,10 @@ export function Hero({
   counterLine,
   tone,
   anchor,
+  index,
+  next,
+  meta,
+  statusLineFadeRight = false,
   children,
   sidePosition = 'right',
   align = 'start',
@@ -44,6 +46,10 @@ export function Hero({
 }: HeroProps & { align?: 'start' | 'center' | 'end' }) {
   const hasSide = Boolean(children);
   const showRightSide = hasSide && sidePosition === 'right';
+  const chapter = index ?? '01';
+  const metaCity = meta?.city ?? 'MEDELLIN, CO';
+  const metaTag = meta?.tag ?? `CHAPTER ${chapter}`;
+  const nextArrow = chapter === '04' ? '↑' : '↓';
 
   return (
     <section
@@ -59,12 +65,12 @@ export function Hero({
         <div
           aria-hidden="true"
           className={cx(
-            'pointer-events-none absolute inset-0 z-0',
+            'pointer-events-none absolute inset-0',
             // sidePosition="background" stays background on all tiers
             // sidePosition="right" is backdrop on md, flex-auto on lg+
             sidePosition === 'background'
-              ? 'lg:top-0 lg:-bottom-[12vh] lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]'
-              : 'hidden md:block lg:hidden'
+              ? 'z-[15] lg:top-0 lg:-bottom-[12vh] lg:left-auto lg:right-0 lg:w-[min(55vw,40rem)] 2xl:w-[min(48rem,42vw)]'
+              : 'z-0 hidden md:block lg:hidden'
           )}
         >
           {children}
@@ -78,7 +84,7 @@ export function Hero({
         <div className="max-w-[68rem] space-y-6">
           <Eyebrow
             as="p"
-            tone={toneToEyebrowTone[tone]}
+            role="muted"
             className="font-mono uppercase"
           >
             {eyebrow}
@@ -111,6 +117,45 @@ export function Hero({
           </div>
         ) : null}
       </div>
+
+      {(index || next) ? (
+        <div
+          className={cx(
+            'absolute bottom-0 left-0 right-0 z-30 bg-black/60 backdrop-blur-md',
+            pageGutterClassName,
+          )}
+        >
+          <div
+            aria-hidden="true"
+            className={cx(
+              'pointer-events-none absolute inset-x-0 top-0 h-px',
+              statusLineFadeRight
+                ? 'bg-[linear-gradient(90deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.05)_56%,rgba(255,255,255,0)_82%)]'
+                : 'bg-white/5',
+            )}
+          />
+          <div className="flex items-center justify-between gap-8 py-2 md:py-3">
+            <p className={cx('font-mono text-[10px] uppercase text-zinc-400', tracking.label)}>
+              {metaCity} · {metaTag}
+            </p>
+
+            <div className={cx('font-mono text-[10px] uppercase text-zinc-400', tracking.label)}>
+              {index ? `${index} / 04 — ` : ''}
+              {next ? (
+                <Link
+                  href={next.href}
+                  className="inline-flex items-center gap-2 text-zinc-400 transition-colors duration-300 hover:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                >
+                  <span>NEXT: {next.label}</span>
+                  <span aria-hidden="true" className="hero-status-arrow opacity-60">
+                    {nextArrow}
+                  </span>
+                </Link>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

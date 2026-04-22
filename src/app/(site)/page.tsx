@@ -9,6 +9,7 @@ import { CulinaryTerm } from '@/design/primitives';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
 const homeSeo = PAGE_SEO.home;
+export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: homeSeo.title,
@@ -47,7 +48,7 @@ export default function Home() {
     <main 
       id="main-content" 
       data-cursor-role="chef"
-      className="relative z-0 min-h-screen signal-static-bg bg-[#0a0a0a] text-white"
+      className="relative z-0 min-h-svh signal-static-bg bg-[#0a0a0a] text-white"
     >
       <script
         type="application/ld+json"
@@ -68,12 +69,9 @@ export default function Home() {
             statement="Cooked fast. Shipped faster."
             counterLine={<span>twelve years <CulinaryTerm term="plating">plating</CulinaryTerm>. now shipping interfaces.</span>}
             tone="lime"
-            anchor={
-              <span className="inline-flex items-center gap-2">
-                Scroll
-                <span aria-hidden="true">↓</span>
-              </span>
-            }
+            index="01"
+            next={{ label: 'WORKS', href: '/works' }}
+            meta={{ city: 'MEDELLIN, CO', tag: 'CHAPTER 01' }}
           >
             <ErrorBoundary>
               <HomeNameScramble />

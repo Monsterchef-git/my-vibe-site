@@ -5,6 +5,7 @@ import { ContactSection } from '@/features/contact/ui';
 import { PAGE_SEO, SITE_URL } from '@/lib/constants';
 
 const contactSeo = PAGE_SEO.contact;
+export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: contactSeo.title,
   description: contactSeo.description,
@@ -41,8 +42,9 @@ export default function ContactPage() {
   return (
     <main
       id="main-content"
-      className="relative z-0 bg-[#0a0a0a] pt-28 text-white md:pt-32"
+      className="relative z-0 bg-[#0a0a0a] text-white"
     >
+      <span id="top" aria-hidden="true" className="sr-only" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
