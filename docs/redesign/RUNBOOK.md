@@ -13,7 +13,8 @@ Step-by-step guide to apply the awwwards redesign. Each step is a discrete actio
 8. ~~S5 — Polish~~ ✓ done
 9. ~~R1-R3 — Stability Recovery (Addendum)~~ ✓ done
 10. ~~S3.6 — Pulido tras el rescue~~ ✓ aplicado
-11. **S3.6.9 — Addendum post-aplicación** ← en curso (aire lateral + cursor idle + copy tecnical + bleed portrait)
+11. ~~S3.6.9 — Addendum post-aplicación~~ ✓ done
+12. **S6 — Polish & Performance** ← en curso (cursor preciso + gutters + about bleed + mobile + fluid CPU)
 
 **Status:** Core redesign live. S3.6 cierra las desviaciones identificadas en el audit de 2026-04-20: código muerto de D7, spec de D9, unificación de padding D10, bugs funcionales (gastronomy gallery + CHEF morph) y optimización del cursor en dev.
 
@@ -1428,6 +1429,252 @@ En `render`:
 - [ ] Portrait sangra 12vh por debajo del Hero en lg+.
 - [ ] `overflow-x-clip` en `<main>` de about.
 - [ ] Sin scroll horizontal en ningún viewport.
+
+---
+
+## Sprint 6 — Polish & Performance
+
+**Context:** Sitio en producción. Feedback del usuario 2026-04-21: cursor se siente lento/impreciso, About + Digital Craft pegados a bordes, retrato About no se integra (costura visible con hero), mobile no 100% pulido, preocupación por consumo de Fluid CPU en Vercel.
+
+**Goal:** Rematar la sensación awwwards sin añadir features. Un commit por step.
+
+---
+
+### Step 6.1 · Cursor preciso
+
+**File:** `src/components/MagneticCursor.tsx`
+
+1. `BASE_EASING` de `0.22` → `0.35`. Subir factor magnético en modos `link`/`cta` de `0.38` → `0.55`.
+2. Eliminar `stretch` + `angle` (rotación/deformación basada en velocidad): refs, cálculos en `render`, y aplicación al shell.
+3. Eliminar modos no usados: `drag`, `keyword`, `portrait`. Reducir `CURSOR_MODES` a `['idle', 'link', 'cta', 'lens', 'scroll']`.
+4. Quitar `cursorFilter` (siempre `'none'`) y simplificar transiciones CSS del shell a `transform, opacity` únicamente.
+5. Quitar listener `window.visualViewport?.addEventListener('scroll', refreshActiveRect)` (redundante con `window.scroll`).
+
+✓ Cursor engancha y suelta en <100ms. Sin jank al mover rápido. Sin deformación tipo "chicle".
+⚠ Después de quitar modo `portrait`, revisar que no se rompa nada en `AboutHero` (el `data-cursor-mode="portrait"` sobre el retrato debe eliminarse en Step 6.3).
+
+---
+
+### Step 6.2 · Gutters laterales
+
+**Files:** `src/design/tokens/components/sectionStyles.ts` + las secciones no-hero.
+
+1. Añadir export `sectionGutterClassName = 'px-6 md:px-10 lg:px-16'` en `sectionStyles.ts`.
+2. Aplicar en `AboutSection`, `DevelopmentSection`, `WorksList`, `ContactSection` (envoltorios raíz de cada sección, no en heroes).
+3. Asegurar que el gutter se suma al padding vertical existente sin duplicar.
+
+✓ En 390px y 1440px, ningún texto/card toca el borde del viewport.
+⚠ No tocar heroes — siguen edge-to-edge (regla Sprint 1).
+
+---
+
+### Step 6.3 · About cutout bleed
+
+**Context:** La foto de John está recortada sobre fondo transparente (PNG) — chef con delantal denim, tirantes rojos, cortando tomates, mirada hacia abajo. Esto permite un tratamiento tipo "cutout editorial" en lugar de rectángulo con gradientes. La integración deja de ser un problema de máscaras y pasa a ser uno de composición tipográfica alrededor de una silueta.
+
+**Files:** `src/features/about/ui/AboutHero.tsx` + `src/features/about/ui/AboutSection.tsx` + `src/lib/imageAssets.ts`
+
+**Decisión de dirección:**
+- Foto cutout sobre canvas negro, sin contenedor, sin border, sin rounded, sin gradiente de máscara.
+- Color real (opción 1), NO duotone ni B/N con spot color. Tonos originales del denim/tirantes/tomates.
+- Figura sangra por el borde inferior: manos y tomates cortados, nunca se muestra la foto completa.
+- La silueta **atraviesa el grid tipográfico** — hombro o brazo pisa parte del párrafo/statement.
+- Sin `AboutHero` separado: el statement "Mise en place for the web." pasa a vivir dentro de `AboutSection` como parte de la misma composición. Un solo bloque, no dos.
+
+**Asset confirmado:** PNG con alpha transparente real ya guardado en `public/images/about/`. Dimensiones 1656×2944 (~9:16), recorte limpio (pelo, hombros, brazos), tatuaje visible en antebrazo izquierdo (sumar peso narrativo, no taparlo con texto).
+
+**Notas del cutout a tener en cuenta:**
+- Verificar al aplicar sobre negro puro que no aparezca halo blanco residual en el pelo rizado (zona superior). Si aparece, reexportar el asset con `decontaminate edges` activado — no se arregla con CSS.
+- Corte inferior original termina en manos + tomates. El sangrado final de la sección va a cortar **más arriba** (a la altura del delantal/tirantes), dejando los tomates fuera del frame. Eso es intencional: crea el misterio de "qué está haciendo" que se revela al entrar a gastronomía.
+- Ratio 9:16 funciona bien en el lado derecho desktop. En mobile, cuidar `object-position` para no cortar la cara.
+
+**Pasos:**
+
+1. Registrar el asset en `src/lib/imageAssets.ts` como `IMAGE_ABOUT_CHEF_CUTOUT` apuntando a `/images/about/<filename>.png`, con su `BLUR_ABOUT_CHEF_CUTOUT` generado (puedes usar plaiceholder o el pipeline existente). El asset anterior con fondo blanco queda como fallback o se elimina cuando esta tarea esté mergeada.
+
+2. Eliminar `AboutHero.tsx` del render (o vaciarlo a componente que solo devuelve null). El Hero About deja de existir como sección aparte. Actualizar `page.tsx` para no montarlo.
+
+3. Reescribir `AboutSection.tsx` como composición única:
+   - Wrapper `relative` con `min-h-screen` y `py-24 md:py-32`.
+   - Grid 12 columnas en desktop (`lg:grid-cols-12`).
+   - Bloque izquierdo (cols 1–7): eyebrow `ABOUT — 03`, statement `Mise en place for the web.` (font-headline italic grande), counterLine `the kitchen taught me the rest.`, párrafos actuales, profile rows.
+   - Bloque derecho (cols 6–12, overlap intencional con el izquierdo): la figura cutout, absolutamente posicionada, `width` ~50–55% del ancho de la sección, alineada al borde derecho y sangrada por abajo (`bottom: -10%` o similar para cortar las manos).
+
+4. Tratamiento de la Image:
+   - `filter: contrast(1.1) saturate(0.95)` ligero.
+   - Grain overlay al 10–12% sobre la figura (reusar el overlay grain global si existe, o aplicar un `::after` local).
+   - `object-position: bottom` para asegurar que el corte suceda en las manos, no en la cabeza.
+   - `sizes` responsive: `(min-width: 1024px) 50vw, 90vw`.
+   - Mantener `priority` (sigue siendo LCP candidate de esa sección).
+
+5. Detalle de composición awwwards:
+   - Línea `h-px bg-[#cafd00]` horizontal que atraviesa la sección a la altura del cuello/manos de la figura, pasando **por detrás** de la silueta (z-index menor que la Image). Ancho full.
+   - Opcional: número `03` en `font-headline` italic gigante (`text-[18rem] lg:text-[24rem]`) en `text-white/[0.04]`, absolutamente posicionado detrás de la figura como ancla compositiva.
+
+6. Mobile (`<lg`):
+   - Layout vertical: eyebrow → statement → figura full-width (~75% ancho, centrada, sangrada por abajo con manos cortadas) → párrafos → profile rows.
+   - Sin gradientes de máscara (no hacen falta con cutout).
+   - La línea lime horizontal se mantiene, pero atraviesa la figura en mobile también.
+
+7. Eliminar `data-cursor-mode="portrait"` y `data-cursor-label="THE CHEF"` (modo eliminado en Step 6.1). La figura ya no necesita cursor especial — es contenido estático, no interactivo.
+
+✓ No hay costura visible entre hero y about porque el hero About ya no existe como sección aparte.
+✓ La figura se corta por el borde inferior (manos fuera del frame).
+✓ La silueta pisa al menos un elemento tipográfico (hombro sobre párrafo o brazo sobre línea lime).
+✓ En mobile la figura no compite con el texto — es un bloque entre bloques.
+⚠ Confirmar contraste del texto izquierdo cuando haya overlap con la figura — puede necesitar un sutil `text-shadow` o aumento de peso.
+⚠ El cutout requiere PNG con alpha real. Si el archivo tiene fondo blanco sólido, el efecto no funciona — hay que generar la versión recortada primero.
+
+---
+
+### Step 6.3b · Correcciones post-aplicación
+
+**Context:** Tras aplicar S6.3, feedback del usuario 2026-04-21: el cutout de la foto funciona bien (color real + grain + sangrado inferior ✓), pero la composición artística alrededor rompe con el resto del site. El AboutHero fusionado dentro de AboutSection dejó de sentirse hermano de los otros heroes (`WORKS`, `CONTACT`). Elementos decorativos extra se sienten forzados.
+
+**Problema identificado:** S6.3 mezcló dos decisiones — "meter el cutout bien" (acierto) y "convertir About en una composición especial distinta al resto" (error). Hay que separar las dos y quedarnos solo con la primera.
+
+**Files:** `src/features/about/ui/AboutHero.tsx` + `src/features/about/ui/AboutSection.tsx` + `src/app/(site)/page.tsx`
+
+**Pasos:**
+
+1. Restaurar `AboutHero.tsx` como componente activo, usando el `<Hero>` primitive igual que `WorksHero` y `ContactSection`:
+   - `eyebrow="ABOUT"` (sin `— 03`, sin numeración — ningún otro hero del site la tiene).
+   - `statement="Mise en place for the web."` (con el `CulinaryTerm` actual si aplica).
+   - `counterLine="the kitchen taught me the rest."`
+   - `tone="white"`.
+   - `sidePosition="background"`.
+
+2. El cutout vive como `children` del `<Hero>` (slot background), no como elemento absoluto de `AboutSection`:
+   - Mantener posición derecha, sangrado inferior, color real + grain ligero — todo lo que ya funciona.
+   - Sin borde, sin rounded, sin máscara de gradiente.
+   - `object-position` cuidadoso para mobile (no cortar la cara).
+
+3. Eliminar elementos decorativos añadidos en S6.3:
+   - Número `03` gigante traslúcido detrás de la figura → fuera. Ningún otro hero del site usa este recurso.
+   - Línea `h-px bg-[#cafd00]` horizontal cruzando el párrafo → fuera. Cortar texto con una línea decorativa se siente forzado cuando el resto del site no lo hace.
+   - Cualquier `data-cursor-mode="portrait"` o `data-cursor-label="THE CHEF"` residual (el modo ya fue eliminado en Step 6.1).
+
+4. Restaurar `AboutSection.tsx` a su rol original: contenido textual (párrafos + profile rows). Sin composición artística, sin overlap con figura, sin gutters artísticos. Solo aire + tipografía + datos.
+
+5. Actualizar `page.tsx` para volver a montar `<AboutHero />` + `<AboutSection />` como dos componentes separados en el flujo vertical, igual que el resto del site.
+
+✓ AboutHero se lee como hermano de WorksHero y ContactSection — mismo ritmo, misma estructura.
+✓ El cutout sigue viviendo en el Hero como side background, sin costuras.
+✓ Cero elementos decorativos extra (número gigante, línea lime cruzando texto).
+✓ Eyebrow dice `ABOUT` a secas, en el mismo diálogo del resto.
+⚠ El único punto de cuidado: que el cutout como `children` del Hero no pelee con el layout del primitive. Si `Hero` espera el children en una columna específica, posicionar la figura absolutamente dentro de ese slot para que sangre por abajo del Hero sin romper el grid.
+
+---
+
+### Step 6.4 · Mobile pass
+
+**Files:** varios, auditoría.
+
+1. Buscar `100vh` → reemplazar por `100svh` donde aplique (heroes, about).
+2. Verificar tap targets en nav, botones y cards: mínimo 44×44px.
+3. En `src/components/LenisProvider.tsx`, desactivar Lenis en `<768px` (condicionar el init a `window.matchMedia('(min-width: 768px)').matches`).
+4. Auditar en 375px y 390px: sin overflow horizontal, tipografía clamp(), carouseles con snap correcto.
+
+✓ Lighthouse Mobile ≥90 en Performance y Accessibility.
+⚠ Tras desactivar Lenis, verificar que el momentum nativo de iOS se siente bien y que las revelaciones on-scroll siguen disparando.
+
+---
+
+### Step 6.5 · Vercel Fluid CPU
+
+**Files:** `src/app/**` según hallazgos.
+
+1. Revisar Vercel dashboard → Observability → Fluid Compute. Identificar rutas/funciones más costosas antes de tocar código.
+2. Confirmar que `page.tsx` y layouts son Server Components puros sin `fetch` dinámico sin cache.
+3. Añadir `export const dynamic = 'force-static'` en rutas estáticas donde aplique.
+4. Verificar que `opengraph-image.tsx` cachea correctamente (no regenera por request).
+5. Revisar middleware si existe — es el principal driver de fluid CPU.
+
+✓ Invocations/día en rango estático (<100 para un portfolio).
+⚠ No optimizar a ciegas: medir primero, actuar después.
+
+---
+
+### Step 6.6 · Works copy + bridge line
+
+**Context:** Feedback del usuario 2026-04-21: el CTA `Start with hospitality` en `WorksHero` suena a onboarding corporativo y no aporta. La línea divisoria actual (`#Hospitality ─── #Digital`) funciona como concepto pero puede pasar a ser más concreta y editorial. La línea le gusta, el copy no.
+
+**Decisión:**
+- Eliminar el CTA `Start with hospitality` del `WorksHero`.
+- Invertir el peso del bridge: lo concreto arriba, la categoría como subtítulo.
+
+**Files:** `src/features/works/ui/WorksHero.tsx` + `src/app/(site)/works/page.tsx`
+
+**Pasos:**
+
+1. En `WorksHero.tsx`, eliminar el prop `anchor` con el link `Start with hospitality` completo (líneas del `<a>` con `href="#works-gastronomy"`). El Hero queda solo con `eyebrow`, `statement` y `counterLine`.
+
+2. En `works/page.tsx`, reescribir el bridge (líneas ~68–97):
+   - `#Hospitality` → `#Kitchen` (lado lime, ancla a `#works-gastronomy`).
+   - `#Digital` → `#Interface` (lado cyan, ancla a `#works-development`).
+   - Mantener la línea `h-px` central como separador.
+   - **Upgrade opcional (recomendado):** cambiar `bg-zinc-800` de la línea central por un gradiente `bg-gradient-to-r from-lime-300/40 via-zinc-800 to-cyan-300/40`. Refuerza visualmente el cruce de mundos.
+
+3. Añadir sublínea tipográfica debajo de cada ancla (`text-[10px] text-zinc-500 mt-1`):
+   - Bajo `#Kitchen`: `01 — hospitality`
+   - Bajo `#Interface`: `02 — digital`
+   - Esto invierte el peso: lo concreto (Kitchen/Interface) gana jerarquía, la categoría (hospitality/digital) queda como pie de página.
+
+4. Mantener los `data-cursor-role` (`chef` en Kitchen, `dev` en Interface) — el cursor sigue cambiando de tono al hover.
+
+✓ WorksHero se siente consistente con el resto de heroes (sin CTA raro, solo statement + counterLine).
+✓ El bridge gana concreción: `#Kitchen ─── #Interface` + pies de categoría.
+✓ Gradiente lime→cyan en la línea central refuerza el cruce narrativo (opcional pero recomendado).
+⚠ Revisar que el hash `#Kitchen` siga anclando a `#works-gastronomy` (el id de la sección no cambia, solo el label visible).
+
+**Estado (2026-04-22):** CTA `Start with hospitality` removido de `WorksHero`.
+
+---
+
+### Step 6.7 · Works density pass
+
+**Context:** Feedback del usuario 2026-04-21: la página `/works` se siente con demasiado aire entre secciones. Diagnóstico: el espacio vertical entre el hero y el primer proyecto suma ~1000–1200px en desktop por acumulación de paddings, un spacer redundante y un bridge de 400px de altura para una sola línea de microcopy. Ese no es el aire awwwards — es hueco.
+
+**Principio rector:** los sites awwwards no tienen menos aire, tienen aire distinto. El aire vive en escala tipográfica, sangrado edge-to-edge y gutters horizontales. NO en gaps verticales entre bloques.
+
+**Files:** `src/app/(site)/works/page.tsx` + `src/features/gastronomy/ui/GastronomySection.tsx` + `src/features/development/ui/DevelopmentSection.tsx` + `src/features/development/ui/WorksList.tsx` + `src/features/gastronomy/ui/GastronomyHorizontalGallery.tsx`
+
+**Pasos:**
+
+1. **Reducir padding de secciones contenedoras en `works/page.tsx`:**
+   - Filter row (`#Kitchen ─── #Interface`): `py-32 md:py-48` → `py-16 md:py-24`.
+   - Spacer `<div aria-hidden="true" className="h-48 md:h-72" />`: eliminar por completo. Redundante con los paddings de las secciones vecinas.
+   - Main wrapper: `pb-32` → `pb-20 md:pb-24`. `pt-28 md:pt-32` queda (respeta el top nav).
+
+2. **Compact de verdad:**
+   - Auditar `GastronomySection` y `DevelopmentSection` en modo `compact`. Si heredan `py-32 md:py-52` del modo normal, forzar `py-16 md:py-24` cuando `compact={true}`.
+   - El primer proyecto debe ser visible con 1–2 scrolls tras el hero, no con 4.
+
+3. **Eliminar bridge "ready for service →":**
+   - Borrar la `<section aria-label="Works narrative bridge">` completa en `works/page.tsx` (líneas ~107–114).
+   - El paso gastronomía → development ya está marcado por la filter row arriba (`#Kitchen ─── #Interface`) y por el cambio de tono (lime → cyan). Un segundo bridge es ruido.
+
+4. **Densificar contenido:**
+   - `GastronomyHorizontalGallery` y `WorksList`: sangrar edge-to-edge desactivando `pageGutterClassName` en los wrappers de proyectos. El aire lo ponen los gutters internos de cada card/item, no los del main.
+   - Títulos de proyecto: si existen en `WorksList`, escalar a `text-[clamp(3rem,8vw,7rem)]`. Grandes, italic, no discretos.
+   - Metadata dense: año, cliente, stack, rol — en `font-mono text-[10px]`, apilados cerca del título o sobre la imagen. Estilo "file", no estilo "product card".
+
+5. **Jerarquía del flow final:**
+   ```
+   WorksHero (full viewport)
+     ↓
+   #Kitchen ─── #Interface  (filter row, py compact)
+     ↓
+   GastronomySection edge-to-edge (compact real)
+     ↓  (sin bridge)
+   DevelopmentSection edge-to-edge (compact real)
+   ```
+
+✓ El primer proyecto de gastronomía es visible sin más de 2 scrolls tras el hero.
+✓ Entre secciones no hay más de `py-24` de aire vertical en desktop.
+✓ Las galerías/listas sangran a los bordes del viewport.
+✓ Cero spacers `aria-hidden` de puro relleno en el layout.
+⚠ Al quitar el bridge, confirmar que la transición de tono lime→cyan sigue leyéndose. Si no, el filter row debe quedar `sticky top-0` para reforzar la orientación durante el scroll.
 
 ---
 
