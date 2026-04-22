@@ -42,7 +42,7 @@ export default function ContactPage() {
   return (
     <main
       id="main-content"
-      className="relative z-0 bg-[#0a0a0a] text-white"
+      className="relative z-0 bg-[#0a0a0a] pb-16 text-white md:pb-20"
     >
       <span id="top" aria-hidden="true" className="sr-only" />
       <script
@@ -52,7 +52,9 @@ export default function ContactPage() {
       <TopNav currentPath="/contact" />
 
       <ErrorBoundary>
-        <ContactSection />
+        <section data-site-chapter="04">
+          <ContactSection />
+        </section>
       </ErrorBoundary>
     </main>
   );

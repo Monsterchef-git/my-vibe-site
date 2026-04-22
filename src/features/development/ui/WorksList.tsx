@@ -8,6 +8,7 @@ import { cx } from '@/lib/utils/cx';
 
 export default function WorksList() {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeMobileIndex, setActiveMobileIndex] = useState(0);
   const [supportsHover, setSupportsHover] = useState(false);
 
   useEffect(() => {
@@ -18,6 +19,39 @@ export default function WorksList() {
     mediaQuery.addEventListener('change', syncHoverCapability);
 
     return () => mediaQuery.removeEventListener('change', syncHoverCapability);
+  }, []);
+
+  useEffect(() => {
+    const track = document.querySelector<HTMLElement>('[data-works-mobile-track]');
+    if (!track) {
+      return;
+    }
+
+    const cards = Array.from(track.querySelectorAll<HTMLElement>('[data-works-mobile-card]'));
+    if (cards.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const winner = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!winner) {
+          return;
+        }
+        const idx = Number((winner.target as HTMLElement).dataset.worksMobileCard ?? 0);
+        setActiveMobileIndex(idx);
+      },
+      {
+        threshold: [0.55, 0.75],
+        root: track,
+      },
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -41,7 +75,69 @@ export default function WorksList() {
         </div>
       ) : null}
 
-      <ul className="relative z-10 divide-y divide-zinc-900/60 border-y border-zinc-900/60">
+      <div className="relative z-10 space-y-5 md:hidden">
+        <div
+          data-works-mobile-track
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none]"
+        >
+          {PROJECTS.map((project, index) => (
+            <a
+              key={project.id}
+              data-works-mobile-card={index}
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.title} — ${project.imageAlt} (opens in new tab)`}
+              data-cursor-mode="lens"
+              data-cursor-label="OPEN"
+              className="group block min-w-[85vw] snap-center overflow-hidden rounded-3xl border border-zinc-800/70 bg-zinc-950/70 backdrop-blur-xl"
+            >
+              <div className="relative h-[50svh] min-h-[20rem]">
+                <Image
+                  src={project.image}
+                  alt={project.imageAlt}
+                  fill
+                  sizes="85vw"
+                  loading="lazy"
+                  className="object-cover"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0.65)_100%)]"
+                />
+              </div>
+              <div className="space-y-4 p-5">
+                <span className={cx('font-mono text-[10px] uppercase text-cyan-300', tracking.label)}>
+                  {project.number} / 06
+                </span>
+                <h3 className="font-headline text-[clamp(2rem,11vw,3.6rem)] italic leading-[0.9] text-white">
+                  {project.title}
+                </h3>
+                <div className="grid grid-cols-1 gap-1 font-mono text-[10px] uppercase text-zinc-400">
+                  <span className={tracking.label}>Year {project.year}</span>
+                  <span className={tracking.label}>Client {project.client}</span>
+                  <span className={tracking.label}>Stack {project.stack}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div className="flex justify-center gap-2 px-4">
+          {PROJECTS.map((project, index) => (
+            <span
+              key={`${project.id}-dot`}
+              aria-hidden="true"
+              className={cx(
+                'h-1.5 w-1.5 rounded-full transition-colors duration-300',
+                index === activeMobileIndex ? 'bg-cyan-300' : 'bg-zinc-700',
+              )}
+            />
+          ))}
+        </div>
+      </div>
+
+      <ul className="relative z-10 hidden divide-y divide-zinc-900/60 border-y border-zinc-900/60 md:block">
         {PROJECTS.map((project) => (
           <li key={project.id}>
             <a

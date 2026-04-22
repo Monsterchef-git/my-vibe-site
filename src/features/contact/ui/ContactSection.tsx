@@ -29,9 +29,6 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         statement={<CulinaryTerm term="pass">The pass is open.</CulinaryTerm>}
         counterLine="briefs, reservations, collaborations →"
         tone="lime"
-        index="04"
-        next={{ label: 'TOP', href: '#top' }}
-        meta={{ city: 'MEDELLIN, CO', tag: 'CHAPTER 04' }}
         anchor={
           <span className={cx(sectionMicroClassName, 'text-zinc-500')}>
             Medellin, CO

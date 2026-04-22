@@ -57,7 +57,9 @@ export default function WorksPage() {
       <TopNav currentPath="/works" />
 
       <ErrorBoundary>
-        <WorksHero />
+        <section data-site-chapter="02">
+          <WorksHero />
+        </section>
       </ErrorBoundary>
 
       <section

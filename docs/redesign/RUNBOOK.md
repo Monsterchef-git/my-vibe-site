@@ -15,6 +15,7 @@ Step-by-step guide to apply the awwwards redesign. Each step is a discrete actio
 10. ~~S3.6 — Pulido tras el rescue~~ ✓ aplicado
 11. ~~S3.6.9 — Addendum post-aplicación~~ ✓ done
 12. **S6 — Polish & Performance** ← en curso (cursor preciso + gutters + about bleed + mobile + fluid CPU)
+13. ~~Step 6.9 — Mobile awwwards pass~~ ✓ aplicado (2026-04-22)
 
 **Status:** Core redesign live. S3.6 cierra las desviaciones identificadas en el audit de 2026-04-20: código muerto de D7, spec de D9, unificación de padding D10, bugs funcionales (gastronomy gallery + CHEF morph) y optimización del cursor en dev.
 
@@ -1797,6 +1798,116 @@ Cambios en `HomeIdentityMorph.tsx`:
 ✓ Morph del home: frase continua + CTAs editoriales + bridge labels numéricos.
 ✓ Ningún hero tiene un gesto visual que los otros 3 no repliquen (o en su equivalente).
 ⚠ Este step toca muchos archivos — dividir en al menos 3 commits: (a) eyebrows neutrales, (b) scroll cue + chapter index primitive, (c) morph copy. Cada uno reversible por separado.
+
+---
+
+### Step 6.9 · Mobile awwwards pass
+
+**Execution update (2026-04-22):** aplicado.
+- ✓ 6.9a implementado: clamp del hero, nav/status alturas para mobile, separación del cutout de About en `<lg`.
+- ✓ 6.9b implementado: status bar sticky global (`<SiteStatusBar />`) con chapter index por `IntersectionObserver`.
+- ✓ 6.9c implementado parcialmente: galerías mobile en `snap-x` + dots + haptic (`navigator.vibrate(10)`) en cambio de chapter.
+- ⚠ 6.9c modal editorial de About y progression de form quedan como fase 2.
+
+**Context:** Feedback del usuario 2026-04-22: en mobile se siguen montando textos del hero y la página no se siente 100% mobile. Diagnóstico: el Hero en viewports <768px acumula top nav + eyebrow + statement con clamp mal calibrado + counterLine + status bar, y el About cutout comparte viewport con el texto del hero generando overlap estructural.
+
+**Principio rector:** awwwards mobile ≠ desktop encogido. Los sites awwwards en mobile siguen cuatro reglas que son casi opuestas a sus versiones desktop:
+
+1. **Una idea por viewport.** Cada pantalla es un solo gesto, no una composición multicapa.
+2. **Tipografía más grande proporcionalmente**, no más chica — statement que llene 3-4 líneas gigantes.
+3. **Scroll choreography en lugar de composición espacial** — el gesto vive en el tiempo, no en el espacio.
+4. **Aire vertical generoso, densidad horizontal brutal** — exactamente al revés que desktop.
+
+---
+
+**Sub-step 6.9a · Resolver colisiones actuales (urgente)**
+
+**Files:** `src/design/primitives/Hero/Hero.tsx` + `src/features/about/ui/AboutHero.tsx` + `src/features/about/ui/AboutSection.tsx` + `src/app/(site)/page.tsx`
+
+1. **Hero statement clamp:** en `Hero.tsx:87`, ajustar `text-[clamp(2.75rem,12vw,6.5rem)]` → `text-[clamp(3rem,13vw,6.5rem)]`. El mínimo sube, se acepta que wrappea en 3-4 líneas en 375px — eso es el gesto, no un bug.
+
+2. **Status bar del Hero en mobile (Sub-step 6.8b):** reducir a una sola línea con solo `{index} / 04 ↓`. Sin metadata lado izquierdo (`MEDELLIN, CO · CHAPTER XX` desaparece en <md). Sin `NEXT: {label}`. La metadata completa vuelve en `md:` y superiores. Mobile necesita minimalismo extremo.
+
+3. **About cutout en mobile:** NO compartir viewport con el Hero About. La figura pasa a vivir como bloque separado **debajo** del Hero, ocupando su propio `min-h-svh`. Flow en mobile:
+   - Hero About (texto solo, sin figura): `min-h-svh`.
+   - Bloque figura (full-width, sangrada por abajo, sin texto superpuesto): `min-h-svh`.
+   - AboutSection (párrafos + profile rows): `min-h-[auto]`.
+   
+   En desktop (`lg:`), el cutout vuelve al slot `children` del Hero como está definido en 6.3b. Este cambio es solo para `<lg`.
+
+4. **Alturas definidas del Hero en mobile:** top nav `h-14`, status bar `h-10`, Hero content real `calc(100svh - 6rem)`. Medir y ajustar — si el counterLine u otros elementos quedan cortados, recortar `py-*` del Hero wrapper.
+
+✓ Cero overlap entre statement, counterLine, status bar y cutout en 375px / 390px / 428px.
+✓ El statement ocupa 3-4 líneas gigantes en mobile, no se comprime.
+⚠ Al separar el cutout del Hero en mobile, asegurar que el bloque de la figura tiene su propio fade inferior para que no se sienta "suelto".
+
+---
+
+**Sub-step 6.9b · Status bar sticky a la página completa**
+
+**Files:** `src/app/(site)/layout.tsx` (nuevo componente global) + retirar del `Hero` primitive.
+
+1. Mover la status bar del `Hero.tsx` (Sub-step 6.8b) al layout raíz como componente global `<SiteStatusBar />`. Posición: `fixed bottom-0 z-40`, siempre visible durante todo el scroll — no solo en hero.
+
+2. El chapter index dentro de la status bar actualiza en vivo usando `IntersectionObserver` sobre las 4 secciones:
+   - Al entrar a Home → muestra `01 / 04 — NEXT: WORKS ↓`.
+   - Al entrar a Works → muestra `02 / 04 — NEXT: ABOUT ↓`.
+   - Al entrar a About → muestra `03 / 04 — NEXT: CONTACT ↓`.
+   - Al entrar a Contact → muestra `04 / 04 — NEXT: TOP ↑`.
+
+3. Transición entre estados: fade suave `transition-opacity duration-300` cuando cambia el label. El `{index}` cambia como counter con una micro-rotación opcional (subida vertical 4px + fade).
+
+4. El `<Hero>` primitive deja de renderizar la status bar — solo contiene eyebrow, statement, counterLine y el slot `children`. Los props `index` / `next` / `meta` se mueven al componente `<SiteStatusBar />` que los deriva del scroll position, no los recibe por prop.
+
+5. En mobile (<md), la status bar sigue siendo `fixed bottom-0` pero con altura reducida (`py-2`) y solo mostrando `{index} / 04 ↓ NEXT` (texto más corto). En desktop, la versión completa con metadata lado izquierdo.
+
+✓ El chapter index es un HUD global, siempre presente, actualizándose con el scroll.
+✓ El diálogo unificado se eleva de nivel: no es un elemento de hero, es un elemento del site.
+✓ Elimina el problema de overlap del cutout About con el chapter index — ya no viven en el mismo layer.
+⚠ Respetar `z-index` vs TopNav (nav va encima de la status bar si hay menú desplegable que se extiende hacia abajo, pero la status bar debe ir encima del contenido general).
+⚠ Si la página entra al viewport del form de Contact, el status bar puede tapar el submit button en mobile — considerar ocultarla cuando un form input está enfocado (`:focus-within` del form main).
+
+---
+
+**Sub-step 6.9c · Gestos awwwards específicos de mobile**
+
+**Files:** varios por feature.
+
+1. **Galerías de Works (Gastronomy + Development):**
+   - En mobile, convertir el grid vertical en `snap-x snap-mandatory` horizontal. Una card por viewport (`min-w-[85vw]`), swipe táctil.
+   - Pagination dots mono abajo (`·· • ··` — dot activo en color del tono).
+   - Conservar el grid vertical solo en `md:` y superiores.
+
+2. **About — retrato como modal editorial (opcional, gesto awwwards fuerte):**
+   - En mobile, tap sobre la palabra "Chef" en el statement (o sobre el nombre "John Herrera" en el profile) abre la figura cutout fullscreen con fade `duration-500`.
+   - Cerrar con tap fuera de la figura o swipe hacia abajo.
+   - Reemplaza el bloque separado del Sub-step 6.9a — el cutout deja de vivir en el flow vertical y se convierte en gesto on-demand. Opción más awwwards pero requiere más trabajo. Decidir antes de implementar: bloque separado (simple) vs modal on-tap (gesto awwwards).
+
+3. **Contact form — single-question progression:**
+   - Un input por pantalla en mobile. Progreso mono arriba: `01 / 03 — NAME`.
+   - Tap Enter o botón `NEXT →` avanza al siguiente campo.
+   - En desktop, form tradicional en una pantalla. En mobile, progression editorial.
+
+4. **Transiciones entre secciones en mobile:**
+   - Sin Lenis (ya definido en Step 6.4).
+   - `scroll-behavior: smooth` nativo.
+   - Cuando el chapter index cambia (Sub-step 6.9b), disparar un micro-feedback táctil si `navigator.vibrate` está disponible: `navigator.vibrate(10)`. Haptic sutil, 10ms.
+
+✓ La experiencia mobile tiene su propio vocabulario awwwards — no es mini-desktop.
+✓ Horizontal snap galleries, modal cutout, single-question form, haptic feedback en chapter change.
+⚠ El haptic feedback solo funciona en algunos navegadores mobile — no es crítico, fallar en silencio.
+⚠ El modal cutout es el sub-step más ambicioso del 6.9c. Si el tiempo es corto, priorizar 6.9a + 6.9b y dejar 6.9c como fase 2.
+
+---
+
+**Criterios de cierre del Step 6.9 completo:**
+
+✓ Lighthouse Mobile ≥90 en Performance y Accessibility en 375px / 390px / 428px.
+✓ Cero overlap de textos en ningún viewport mobile.
+✓ Status bar sticky visible en toda la navegación, actualizándose con el scroll.
+✓ Galerías de Works con swipe horizontal en mobile.
+✓ El site se siente mobile-native, no mobile-responsive.
+⚠ Dividir en 3 commits: (a) fixes de overlap (6.9a), (b) status bar sticky global (6.9b), (c) gestos táctiles (6.9c). El 6.9a es bloqueante; 6.9b y 6.9c son elevaciones.
 
 ---
 

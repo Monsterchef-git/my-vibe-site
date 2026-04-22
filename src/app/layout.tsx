@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import AppEffects from '@/components/AppEffects';
 import GoogleTracking from '@/components/GoogleTracking';
+import SiteStatusBar from '@/components/shared/SiteStatusBar';
 import {
   PAGE_SEO,
   PERSON_IMAGE,
@@ -139,6 +140,7 @@ export default function RootLayout({
         <div className="relative z-10">
           {children}
         </div>
+        <SiteStatusBar />
       </body>
     </html>
   )

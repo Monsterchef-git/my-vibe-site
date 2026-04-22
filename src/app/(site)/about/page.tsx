@@ -51,7 +51,9 @@ export default function AboutPage() {
       <TopNav currentPath="/about" />
 
       <ErrorBoundary>
-        <AboutHero />
+        <section data-site-chapter="03">
+          <AboutHero />
+        </section>
       </ErrorBoundary>
 
       <ErrorBoundary>

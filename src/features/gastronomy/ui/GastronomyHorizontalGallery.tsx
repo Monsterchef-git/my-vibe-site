@@ -171,7 +171,9 @@ function GalleryStill({
 export default function GastronomyHorizontalGallery() {
   const scrollDriverRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotionPreference();
+  const [activeFrame, setActiveFrame] = useState(0);
 
   useEffect(() => {
     let frame = 0;
@@ -244,19 +246,85 @@ export default function GastronomyHorizontalGallery() {
     };
   }, [reducedMotion]);
 
+  useEffect(() => {
+    const track = mobileTrackRef.current;
+    if (!track) {
+      return;
+    }
+
+    const items = Array.from(track.querySelectorAll<HTMLElement>('[data-mobile-frame]'));
+    if (items.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const winner = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!winner) {
+          return;
+        }
+        const idx = Number((winner.target as HTMLElement).dataset.mobileFrame ?? 0);
+        setActiveFrame(idx);
+      },
+      {
+        threshold: [0.55, 0.75],
+        root: track,
+      },
+    );
+
+    items.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
-      <div className={cx('space-y-4', reducedMotion ? '' : 'md:hidden')}>
-        {GALLERY_FRAMES.map((frame) => (
-          <GalleryStill
-            key={frame.id}
-            frame={frame}
-            className={frame.stackClassName}
-          />
-        ))}
+      <div className="space-y-4 md:hidden">
+        <div
+          ref={mobileTrackRef}
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none]"
+        >
+          {GALLERY_FRAMES.map((frame, index) => (
+            <div
+              key={frame.id}
+              data-mobile-frame={index}
+              className="min-w-[85vw] snap-center"
+            >
+              <GalleryStill
+                frame={frame}
+                className="h-[76svh] min-h-[26rem] w-full"
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="flex justify-center gap-2 px-4">
+          {GALLERY_FRAMES.map((frame, index) => (
+            <span
+              key={`${frame.id}-dot`}
+              aria-hidden="true"
+              className={cx(
+                'h-1.5 w-1.5 rounded-full transition-colors duration-300',
+                index === activeFrame ? 'bg-lime-300' : 'bg-zinc-700',
+              )}
+            />
+          ))}
+        </div>
       </div>
 
-      {!reducedMotion ? (
+      {reducedMotion ? (
+        <div className="hidden space-y-4 md:block">
+          {GALLERY_FRAMES.map((frame) => (
+            <GalleryStill
+              key={frame.id}
+              frame={frame}
+              className={frame.stackClassName}
+            />
+          ))}
+        </div>
+      ) : (
         <div
           ref={scrollDriverRef}
           data-cursor-mode="scroll"
@@ -287,7 +355,7 @@ export default function GastronomyHorizontalGallery() {
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   );
 }

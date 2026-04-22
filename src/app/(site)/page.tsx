@@ -48,7 +48,7 @@ export default function Home() {
     <main 
       id="main-content" 
       data-cursor-role="chef"
-      className="relative z-0 min-h-svh signal-static-bg bg-[#0a0a0a] text-white"
+      className="relative z-0 min-h-svh signal-static-bg bg-[#0a0a0a] pb-16 text-white md:pb-20"
     >
       <script
         type="application/ld+json"
@@ -63,15 +63,13 @@ export default function Home() {
           id="hero"
           variant="hero"
           scrollTone="lime"
+          data-site-chapter="01"
         >
           <Hero
             eyebrow="HOME"
             statement="Cooked fast. Shipped faster."
             counterLine={<span>twelve years <CulinaryTerm term="plating">plating</CulinaryTerm>. now shipping interfaces.</span>}
             tone="lime"
-            index="01"
-            next={{ label: 'WORKS', href: '/works' }}
-            meta={{ city: 'MEDELLIN, CO', tag: 'CHAPTER 01' }}
           >
             <ErrorBoundary>
               <HomeNameScramble />

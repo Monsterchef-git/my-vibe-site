@@ -30,6 +30,21 @@ html {
   }
 }
 
+.status-index-rise {
+  animation: status-index-rise 220ms ease;
+}
+
+@keyframes status-index-rise {
+  0% {
+    transform: translateY(4px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .hero-status-arrow {
   animation: hero-status-arrow-pulse 2s ease-in-out infinite;
 }
@@ -42,6 +57,10 @@ html {
   .hero-status-arrow {
     animation: none;
     opacity: 1;
+  }
+
+  .status-index-rise {
+    animation: none;
   }
 }
 
