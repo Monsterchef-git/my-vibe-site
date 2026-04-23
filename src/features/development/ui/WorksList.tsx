@@ -90,6 +90,7 @@ export default function WorksList() {
               aria-label={`${project.title} — ${project.imageAlt} (opens in new tab)`}
               data-cursor-mode="lens"
               data-cursor-label="OPEN"
+              data-magnetic="card"
               className="group block min-w-[85vw] snap-center overflow-hidden rounded-3xl border border-zinc-800/70 bg-zinc-950/70 backdrop-blur-xl"
             >
               <div className="relative h-[50svh] min-h-[20rem]">
@@ -147,6 +148,7 @@ export default function WorksList() {
               aria-label={`${project.title} — ${project.imageAlt} (opens in new tab)`}
               data-cursor-mode="lens"
               data-cursor-label="OPEN"
+              data-magnetic="card"
               onMouseEnter={() => setActiveId(project.id)}
               onMouseLeave={() => setActiveId(null)}
               className="group block py-10 transition-colors duration-[700ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-14 motion-reduce:transition-none"

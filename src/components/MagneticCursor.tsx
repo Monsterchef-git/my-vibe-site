@@ -34,6 +34,13 @@ const ROLE_MAP: Record<CursorRole, { tone: CursorTone; label: string }> = {
 const BASE_SIZE = 18;
 const BASE_EASING = 0.35;
 const POINTER_SETTLE_DELAY_MS = 96;
+const SCROLL_MAGNETIC_PAUSE_MS = 120;
+
+const MAGNETIC_PRESETS = {
+  cta: { radius: 110, strength: 0.22, scale: 1.03, easing: 0.2 },
+  card: { radius: 90, strength: 0.16, scale: 1.015, easing: 0.18 },
+  link: { radius: 70, strength: 0.1, scale: 1.01, easing: 0.24 },
+} as const;
 
 const TONE_RGB: Record<CursorTone, string> = {
   neutral: '161, 161, 170',
@@ -45,6 +52,15 @@ const TONE_RGB: Record<CursorTone, string> = {
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
+
+const toFiniteNumber = (value: string | undefined, fallback: number) => {
+  if (!value) {
+    return fallback;
+  }
+
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
 
 const isCursorMode = (value: string | undefined): value is CursorMode =>
   CURSOR_MODES.includes(value as CursorMode);
@@ -100,6 +116,60 @@ const getCursorTone = (element: HTMLElement | null): CursorTone => {
 
 const getStickiness = (element: HTMLElement | null) =>
   element?.dataset.cursorStick === 'true';
+
+type MagneticPresetName = keyof typeof MAGNETIC_PRESETS;
+type MagneticConfig = {
+  radius: number;
+  strength: number;
+  scale: number;
+  easing: number;
+};
+
+const getMagneticPresetName = (
+  element: HTMLElement,
+  mode: CursorMode,
+): MagneticPresetName | null => {
+  const rawPreset = element.dataset.magnetic;
+  if (rawPreset === 'cta' || rawPreset === 'card' || rawPreset === 'link') {
+    return rawPreset;
+  }
+
+  if (!rawPreset || rawPreset === 'true' || rawPreset === 'on') {
+    if (mode === 'cta') {
+      return 'cta';
+    }
+
+    if (mode === 'lens') {
+      return 'card';
+    }
+
+    return 'link';
+  }
+
+  return null;
+};
+
+const getMagneticConfig = (
+  element: HTMLElement | null,
+  mode: CursorMode,
+): MagneticConfig | null => {
+  if (!element || mode === 'scroll') {
+    return null;
+  }
+
+  const presetName = getMagneticPresetName(element, mode);
+  if (!presetName) {
+    return null;
+  }
+
+  const preset = MAGNETIC_PRESETS[presetName];
+  return {
+    radius: clamp(toFiniteNumber(element.dataset.magneticRadius, preset.radius), 48, 220),
+    strength: clamp(toFiniteNumber(element.dataset.magneticStrength, preset.strength), 0.04, 0.4),
+    scale: clamp(toFiniteNumber(element.dataset.magneticScale, preset.scale), 1, 1.08),
+    easing: clamp(toFiniteNumber(element.dataset.magneticEasing, preset.easing), 0.08, 0.35),
+  };
+};
 
 type StyleSnapshot = {
   cursorOpacity: string;
@@ -160,6 +230,8 @@ const MagneticCursor = () => {
   const velocityRef = useRef({ x: 0, y: 0 });
   const speedRef = useRef(0);
   const lastPointerRef = useRef({ x: 0, y: 0 });
+  const scrollPausedRef = useRef(false);
+  const scrollPauseTimerRef = useRef<number | null>(null);
   const [enabled, setEnabled] = useState(false);
 
   const render = useCallback(() => {
@@ -186,6 +258,9 @@ const MagneticCursor = () => {
     const mode = getCursorMode(activeElement);
     const tone = getCursorTone(activeElement ?? hoveredElement);
     const labelText = getCursorLabel(activeElement);
+    const magneticConfig = getMagneticConfig(activeElement, mode);
+    const canUseMagneticPull = Boolean(magneticConfig) && !scrollPausedRef.current;
+    const isMagneticTarget = canUseMagneticPull && mode !== 'scroll';
     const rgb = TONE_RGB[tone];
     const pointer = pointerRef.current;
     const hasLabel = labelText.length > 0;
@@ -206,6 +281,17 @@ const MagneticCursor = () => {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const stickyBoost = getStickiness(activeElement) ? 0.14 : 0;
+      const distToCenter = Math.hypot(centerX - pointer.x, centerY - pointer.y);
+      const radius = magneticConfig?.radius ?? 0;
+      const influence = canUseMagneticPull
+        ? clamp(1 - distToCenter / Math.max(radius, 1), 0, 1)
+        : 0;
+      const pull = canUseMagneticPull
+        ? (magneticConfig?.strength ?? 0) * influence * influence
+        : 0;
+      const scaleBoost = canUseMagneticPull
+        ? 1 + ((magneticConfig?.scale ?? 1) - 1) * influence
+        : 1;
 
       if (mode === 'lens') {
         const localX = rect.width > 0 ? pointer.x - rect.left : 0;
@@ -213,17 +299,17 @@ const MagneticCursor = () => {
         const lensOffsetX = rect.width > 0 ? ((localX / rect.width) - 0.5) * 18 : 0;
         const lensOffsetY = rect.height > 0 ? ((localY / rect.height) - 0.5) * 12 : 0;
 
-        targetWidth = clamp(rect.width * 0.34, 96, 184);
-        targetHeight = clamp(rect.height * 0.2, 68, 116);
-        targetX = pointer.x + (centerX - pointer.x) * (0.22 + stickyBoost) + lensOffsetX * 0.34;
-        targetY = pointer.y + (centerY - pointer.y) * (0.18 + stickyBoost * 0.4) + lensOffsetY * 0.34;
-        easing = 0.14;
+        targetWidth = clamp(rect.width * 0.34 * scaleBoost, 92, 188);
+        targetHeight = clamp(rect.height * 0.2 * scaleBoost, 66, 120);
+        targetX = pointer.x + (centerX - pointer.x) * pull + lensOffsetX * 0.28;
+        targetY = pointer.y + (centerY - pointer.y) * pull + lensOffsetY * 0.28;
+        easing = canUseMagneticPull ? magneticConfig?.easing ?? 0.18 : 0.2;
       } else if (mode === 'cta') {
-        targetWidth = clamp(rect.width + 28, 72, 196);
-        targetHeight = clamp(rect.height + 18, 42, 64);
-        targetX = pointer.x + (centerX - pointer.x) * (0.55 + stickyBoost);
-        targetY = pointer.y + (centerY - pointer.y) * (0.55 + stickyBoost);
-        easing = 0.22;
+        targetWidth = clamp((rect.width + 24) * scaleBoost, 70, 196);
+        targetHeight = clamp((rect.height + 16) * scaleBoost, 40, 66);
+        targetX = pointer.x + (centerX - pointer.x) * (pull + stickyBoost * 0.1);
+        targetY = pointer.y + (centerY - pointer.y) * (pull + stickyBoost * 0.1);
+        easing = canUseMagneticPull ? magneticConfig?.easing ?? 0.2 : 0.24;
       } else if (mode === 'scroll') {
         targetWidth = hasLabel ? clamp(labelText.length * 11 + 42, 92, 136) : 96;
         targetHeight = 36;
@@ -231,16 +317,17 @@ const MagneticCursor = () => {
         targetY = pointer.y;
         easing = 0.2;
       } else {
-        targetWidth = clamp(rect.width + 18, 54, 168);
-        targetHeight = clamp(rect.height + 12, 36, 56);
-        targetX = pointer.x + (centerX - pointer.x) * (0.55 + stickyBoost);
-        targetY = pointer.y + (centerY - pointer.y) * (0.55 + stickyBoost);
-        easing = 0.24;
+        targetWidth = clamp((rect.width + 14) * scaleBoost, 52, 168);
+        targetHeight = clamp((rect.height + 10) * scaleBoost, 34, 58);
+        targetX = pointer.x + (centerX - pointer.x) * (pull + stickyBoost * 0.08);
+        targetY = pointer.y + (centerY - pointer.y) * (pull + stickyBoost * 0.08);
+        easing = canUseMagneticPull ? magneticConfig?.easing ?? 0.24 : 0.26;
       }
     }
 
-    currentRef.current.x += (targetX - currentRef.current.x) * easing;
-    currentRef.current.y += (targetY - currentRef.current.y) * easing;
+    const followEasing = canUseMagneticPull ? easing : 1;
+    currentRef.current.x += (targetX - currentRef.current.x) * followEasing;
+    currentRef.current.y += (targetY - currentRef.current.y) * followEasing;
     sizeRef.current.width += (targetWidth - sizeRef.current.width) * 0.2;
     sizeRef.current.height += (targetHeight - sizeRef.current.height) * 0.2;
 
@@ -283,6 +370,9 @@ const MagneticCursor = () => {
       nextShellBorderColor = `rgba(${rgb}, 0.72)`;
       nextShellBackground = 'rgba(10, 10, 10, 0.04)';
       nextShellShadow = `0 0 0 1px rgba(${rgb}, 0.14), inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 18px 42px rgba(0, 0, 0, 0.24)`;
+    }
+    if (isMagneticTarget) {
+      nextShellShadow = `${nextShellShadow}, 0 0 26px rgba(${rgb}, 0.18)`;
     }
 
     const nextDotOpacity = mode === 'idle' ? '1' : mode === 'link' ? '0.45' : '0';
@@ -366,7 +456,7 @@ const MagneticCursor = () => {
     }
 
     const desktopQuery = window.matchMedia(
-      '(min-width: 768px) and (hover: hover) and (pointer: fine)',
+      '(min-width: 1024px) and (hover: hover) and (pointer: fine)',
     );
     // Respect reduced-motion users by disabling the custom cursor entirely.
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -397,6 +487,11 @@ const MagneticCursor = () => {
       dot.style.boxShadow = '0 0 14px rgba(202, 253, 0, 0.72)';
       label.textContent = '';
       label.style.opacity = '0';
+      scrollPausedRef.current = false;
+      if (scrollPauseTimerRef.current !== null) {
+        window.clearTimeout(scrollPauseTimerRef.current);
+        scrollPauseTimerRef.current = null;
+      }
     };
 
     const updateEnabled = () => {
@@ -517,7 +612,20 @@ const MagneticCursor = () => {
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
     window.addEventListener('pointerup', handlePointerUp, { passive: true });
     window.addEventListener('pointercancel', handlePointerUp, { passive: true });
-    window.addEventListener('scroll', refreshActiveRect, { passive: true });
+    const handleScroll = () => {
+      scrollPausedRef.current = true;
+      if (scrollPauseTimerRef.current !== null) {
+        window.clearTimeout(scrollPauseTimerRef.current);
+      }
+      scrollPauseTimerRef.current = window.setTimeout(() => {
+        scrollPausedRef.current = false;
+        dirtyRef.current = true;
+        startFrameLoop();
+      }, SCROLL_MAGNETIC_PAUSE_MS);
+      refreshActiveRect();
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', refreshActiveRect);
     window.visualViewport?.addEventListener('resize', refreshActiveRect);
     window.addEventListener('keydown', handleKeyDown);
@@ -535,12 +643,15 @@ const MagneticCursor = () => {
       window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerUp);
-      window.removeEventListener('scroll', refreshActiveRect);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', refreshActiveRect);
       window.visualViewport?.removeEventListener('resize', refreshActiveRect);
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('blur', handlePointerLeave);
       document.documentElement.removeEventListener('mouseleave', handlePointerLeave);
+      if (scrollPauseTimerRef.current !== null) {
+        window.clearTimeout(scrollPauseTimerRef.current);
+      }
     };
   }, [startFrameLoop]);
 
@@ -549,7 +660,7 @@ const MagneticCursor = () => {
       ref={cursorRef}
       aria-hidden="true"
       className={cx(
-        'pointer-events-none fixed left-0 top-0 z-[260] transition-[transform,opacity] duration-300',
+        'pointer-events-none fixed left-0 top-0 z-[260] transition-opacity duration-150',
         enabled ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
       )}
     >

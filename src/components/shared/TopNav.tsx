@@ -70,6 +70,7 @@ export default function TopNav({ currentPath }: TopNavProps) {
           href="/contact"
           data-cursor-mode="cta"
           data-cursor-label="Contact"
+          data-magnetic="cta"
           className="group inline-flex min-h-9 items-center justify-self-start gap-2 px-0.5 transition-colors duration-[500ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:justify-self-end md:min-h-11 md:gap-2.5 md:px-1 motion-reduce:transition-none"
         >
           <div className="relative flex h-2 w-2">

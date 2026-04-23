@@ -101,7 +101,7 @@ export function SectionCTA({
   return (
     <Link
       href={href}
-      data-magnetic="lens"
+      data-magnetic="cta"
       className={cx(
         'group relative isolate mt-10 flex items-center justify-between gap-4 overflow-hidden rounded-full border border-zinc-800/60 bg-white/[0.02] px-6 py-4 transition-all duration-[700ms] motion-reduce:transition-none',
         toneClasses.root,

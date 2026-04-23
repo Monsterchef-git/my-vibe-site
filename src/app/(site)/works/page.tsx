@@ -72,6 +72,7 @@ export default function WorksPage() {
             data-cursor-mode="cta"
             data-cursor-label="Explore"
             data-cursor-role="chef"
+            data-magnetic="link"
             className={cx(
               'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-lime-300/78 transition-colors duration-300 hover:text-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-lime-200',
               tracking.eyebrow,
@@ -88,6 +89,7 @@ export default function WorksPage() {
             data-cursor-mode="cta"
             data-cursor-label="Explore"
             data-cursor-role="dev"
+            data-magnetic="link"
             className={cx(
               'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-cyan-300/78 transition-colors duration-300 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-cyan-200 md:justify-end md:text-right',
               tracking.eyebrow,
