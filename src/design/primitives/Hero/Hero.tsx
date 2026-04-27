@@ -101,6 +101,12 @@ export function Hero({
               {anchor}
             </div>
           ) : null}
+
+          {showRightSide ? (
+            <div className="pt-2 md:hidden">
+              {children}
+            </div>
+          ) : null}
         </div>
 
         {showRightSide ? (
