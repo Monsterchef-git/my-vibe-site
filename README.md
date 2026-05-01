@@ -1,6 +1,6 @@
-# John Herrera | Creative Chef & Digital Craft
+# John Herrera | Chef + Dev in Medellín
 
-Personal site built as an editorial portfolio for John Herrera, combining gastronomy and digital product craft in one narrative system.
+Personal editorial portfolio for John Herrera, combining kitchen craft and digital product work in one route-based experience.
 
 ## Runtime Stack
 
@@ -9,6 +9,18 @@ Personal site built as an editorial portfolio for John Herrera, combining gastro
 - TypeScript
 - Tailwind CSS 4
 - Lenis (smooth-scroll behavior)
+
+## Project Commands
+
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+npm start
+```
+
+`npm run dev` and `npm run build` currently run Next with `--webpack`. `next.config.ts` still defines a Turbopack root for compatibility with future build/dev changes.
 
 ## Getting Started
 
@@ -19,28 +31,22 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Production Commands
-
-```bash
-npm run lint
-npm run build
-npm start
-```
-
 ## Routes
 
-- `/` Home editorial entry point
-- `/works` Works split (gastronomy + development)
-- `/about` Profile and trajectory
-- `/contact` Contact installation
+- `/` Home hero and editorial entry point
+- `/works` Hospitality and digital work
+- `/about` Profile, trajectory, and working position
+- `/contact` Contact CTA and social links
+
+All route pages live under `src/app/(site)/` and export `dynamic = 'force-static'`.
 
 ## Current Architecture
 
 ```text
 src/
-├── app/                      # App Router, layout, metadata, og image
+├── app/                      # Root layout, route group, metadata, OG/Twitter image
 ├── design/
-│   ├── primitives/           # SectionPrimitive, CardPrimitive, MonoToken, Eyebrow
+│   ├── primitives/           # SectionPrimitive, MonoToken, Eyebrow, Hero, AmbientGlow, CulinaryTerm
 │   ├── tokens/               # primitives/semantic/components tokens
 │   └── ui/                   # composed DS blocks (SectionChrome)
 ├── features/
@@ -51,8 +57,13 @@ src/
 │   ├── home/
 │   └── works/
 ├── components/
-│   └── shared/               # shared infra UI (TopNav, ErrorBoundary, scroll helpers)
-└── lib/                      # constants, hooks, utils
+│   ├── shared/               # TopNav, ErrorBoundary, scroll helpers, status bar
+│   └── *.tsx                 # app-level effects: Lenis, cursor, tracking, terminal
+├── lib/                      # constants, hooks, utils, image assets
+├── assets/                   # source asset home
+├── config/                   # project configuration home
+├── content/                  # reserved content home
+└── types/                    # global TypeScript types
 ```
 
 ## Design System Source of Truth
@@ -62,6 +73,7 @@ Active source of truth is under `src/design/`:
 - `src/design/tokens/*` for visual decisions
 - `src/design/primitives/*` for base building blocks
 - `src/design/ui/*` for composed design-system pieces
+- `src/lib/utils/cx.ts` for class merging
 
 ## Security Headers
 
@@ -75,6 +87,14 @@ Configured globally in `next.config.ts`:
 - `X-Frame-Options`
 - `X-Content-Type-Options`
 - `Referrer-Policy`
+
+## SEO and Metadata
+
+- Root metadata is defined in `src/app/layout.tsx`.
+- Per-route metadata comes from `PAGE_SEO` in `src/lib/constants.ts`.
+- The OG image is generated dynamically in `src/app/opengraph-image.tsx`.
+- `src/app/twitter-image.tsx` reuses the OG image output.
+- `robots.ts` and `sitemap.ts` are generated from the site constants.
 
 ## Analytics and Consent
 
@@ -116,6 +136,7 @@ Runs on every push and pull request:
 ## AI Context
 
 See [CONTEXT.md](./CONTEXT.md) for full AI-oriented project context.
+Use [AGENTS.md](./AGENTS.md) as the operational ruleset for coding agents.
 
 ## Phase 4 Audit
 

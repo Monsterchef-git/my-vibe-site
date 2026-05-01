@@ -71,6 +71,7 @@ src/
 ├── assets/                          # Imágenes, SVGs, fonts
 ├── types/                           # Tipos globales TypeScript
 └── config/                          # Configuraciones (tailwind, etc.)
+```
 
 ## 3. Reglas Estrictas de Arquitectura y Componentes
 

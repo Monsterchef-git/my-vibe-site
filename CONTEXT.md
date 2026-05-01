@@ -1,183 +1,157 @@
 # Project Context — John Herrera Personal Site
 
-> AI-readable reference for any tool working on this codebase.
-> Last updated: 2026-04-13.
+> AI-readable reference for tools working on this codebase.
+> Last updated: 2026-05-01.
 
 ## Identity
 
-- **Owner:** John Herrera — creative chef focused on digital craft based in Medellin, Colombia.
-- **Concept:** "Chef by Day, Digital Craft by Night" — a personal portfolio that presents two disciplines under one brand: culinary direction and digital product craft.
+- **Owner:** John Herrera — chef and web developer based in Medellin, Colombia.
+- **Concept:** "Cooked fast. Shipped faster." A personal portfolio that presents kitchen craft and digital product work under one editorial identity.
 - **Domain:** johnherrerachef.com
-- **Language:** Spanish (es_CO). Section titles mix Spanish and English for stylistic effect.
-- **Current direction:** Premium editorial. Less overt UI/terminal ornament, more typography, whitespace, image presence, and restrained motion.
+- **Language:** Current implementation uses English metadata and route copy (`lang="en"`, `locale: en_US`). Some culinary/domain words remain intentionally bilingual.
+- **Current direction:** Dark editorial portfolio with tactile kitchen references, restrained motion, high-contrast typography, and a lime/cyan/blue signal system.
 
 ## Voice Rules
 
-The voice should feel authored, precise, and premium.
-It should come from practice, not self-promotion.
+The voice should feel authored, precise, and direct. It should come from practice, not self-promotion.
 
 ### Writing Principles
 
 - Prefer concrete language over abstract claims.
-- Avoid repeated use of words like precision, detail, narrative, obsession, standard.
-- Gastronomy should feel physical, sensorial, and service-led.
-- Digital should feel structured, calm, and intellectually clear.
+- Keep copy short, tactile, and confident.
+- Gastronomy should feel physical, service-led, and sensory.
+- Digital should feel structured, calm, and clear.
 - About should read as position, not autobiography.
 - Contact should feel selective, minimal, and direct.
 - Never sound like an agency.
 - Never oversell.
-- Keep a strong editorial restraint.
+- Avoid repeated use of words like precision, detail, narrative, obsession, standard.
 
-### Preferred Copy Direction
+### Current Copy Anchors
 
-- **Home**
-  - Prefer:
-    - `Two disciplines.`
-    - `One standard.`
-    - `Service. Structure. Taste.`
-  - Over:
-    - `Two disciplines. One standard.`
-    - `A practice grounded in service, structure, and taste.`
-
-- **Works**
-  - Prefer:
-    - `Different materials.`
-    - `Different tempos.`
-    - `Same discipline.`
-  - Over:
-    - `Two bodies of work. Different materials, different tempos, same level of care.`
-
-- **Gastronomy**
-  - Prefer:
-    - `Product.`
-    - `Timing.`
-    - `Service.`
-    - `Atmosphere.`
-  - Over:
-    - `From private dinners to hospitality concepts, the work begins with product and ends with the full rhythm of service.`
-
-- **Digital**
-  - Prefer:
-    - `Less noise.`
-    - `More order.`
-    - `Stronger presence.`
-  - Over:
-    - `A quieter kind of digital work: thoughtful structure, editorial clarity, and performance where it matters.`
-
-- **About**
-  - Prefer an entry closer to:
-    - `Years in kitchens.`
-    - `Now across digital.`
-    - `Same discipline.`
-    - `Different medium.`
-  - Then follow with a more human paragraph below.
-
-- **Contact**
-  - Prefer:
-    - `Private inquiries.`
-  - Over:
-    - `Selected commissions and private inquiries.`
+- **Home:** `Cooked fast. Shipped faster.`
+- **Home counterline:** `twelve years plating. now shipping interfaces.`
+- **Works:** `Taste, applied. Kitchens and interfaces, same instinct.`
+- **About:** `Mise en place for the web. The kitchen taught me the rest.`
+- **Contact:** `The pass is open. Briefs, reservations, collaborations.`
 
 ## Stack
 
 | Layer | Technology | Version |
-|-------|-----------|---------|
-| Framework | Next.js (App Router) | 16.2.1 |
+|-------|------------|---------|
+| Framework | Next.js App Router | 16.2.1 |
 | UI | React | 19.2.4 |
-| Language | TypeScript (strict) | 5+ |
+| Language | TypeScript | 5+ |
 | Styling | Tailwind CSS | 4 |
-| Icons | Lucide React | 1.7+ |
-| Build | Turbopack (build) / Webpack (dev) | — |
+| Motion / scroll | Lenis + local hooks | 1.3+ |
 | Optimization | React Compiler | 1.0.0 |
+| Icons | Lucide React only when icons are needed | AGENTS rule |
 
-**No other UI libraries.** `react-icons` was removed — brand logos (Apple) use inline SVG.
+`react-icons`, `clsx`, and `classnames` are not dependencies. Use local SVGs/inline SVG for brand marks and `cx()` for class merging.
+
+## Commands
+
+```bash
+npm install
+npm run dev      # next dev . --webpack
+npm run lint     # ESLint 9
+npm run build    # next build --webpack
+npm start        # next start
+```
+
+`next.config.ts` enables `reactCompiler`, security headers, image formats (`avif`, `webp`), compression, and a Turbopack root. Package scripts currently force Webpack for dev and build.
 
 ## Architecture
 
 ### Rendering Strategy
-- `page.tsx` is a **Server Component** and currently acts as a focused brand entry hero, not a long single-page landing.
-- Internal pages (`/works`, `/about`, `/contact`) also render as **Server Components** and compose shared sections/primitives.
-- Interactive components remain **Client Component islands**:
-  - `TopNav.tsx` — primary route navigation.
-  - `ScrollReveal.tsx` — reveal triggers where needed.
-  - `WorksList.tsx` — hover-driven project list treatment.
-  - `HeroTypewriter.tsx`, `MagneticCursor.tsx`, `PageLoader.tsx` — controlled motion layers.
-- `BackgroundTerminal.tsx` is a Server Component (static HTML, CSS-only animation).
-- Client components should be wrapped in `ErrorBoundary` when composed from route-level Server Components.
+
+- Route `page.tsx` files are Server Components and must stay that way.
+- Route pages live in `src/app/(site)/` and export `dynamic = 'force-static'`.
+- Interactive behavior is isolated in Client Components:
+  - `AppEffects.tsx` mounts Lenis, MagneticCursor, ScrollReveal, and the home-only BackgroundTerminal.
+  - `TopNav.tsx` handles route navigation.
+  - `ScrollProgressBlock.tsx` and `useScrollProgress.ts` power scroll-reactive surfaces.
+  - `HomeNameScramble.tsx`, `WorksList.tsx`, and `GastronomyHorizontalGallery.tsx` handle section-specific interactions.
+- Client components used from route-level Server Components should be wrapped in `ErrorBoundary`.
+- Static copy, SEO metadata, route structure, and JSON-LD remain server-rendered.
 
 ### File Map
 
-```
+```text
 src/
 ├── app/
-│   ├── layout.tsx              # Root layout, metadata, OG config, BackgroundTerminal
-│   ├── page.tsx                # Home hero (Server Component)
-│   ├── works/page.tsx          # Editorial intro + gastronomy/development chapters
-│   ├── about/page.tsx          # Editorial intro + profile section
-│   ├── contact/page.tsx        # Contact route with oversized email CTA
-│   ├── not-found.tsx           # Custom 404 error page
-│   ├── robots.ts               # Search engine robots configuration
-│   ├── sitemap.ts              # Search engine sitemap generator
-│   ├── globals.css             # Global styles, animations, grain, terminal scroll, culinary effects
-│   ├── opengraph-image.tsx     # Dynamic OG image generation (1200x630, fork logo + headline)
-│   └── twitter-image.tsx       # Re-exports opengraph-image for Twitter cards
+│   ├── layout.tsx                 # Root metadata, JSON-LD, tracking, AppEffects, grain/static overlays
+│   ├── globals.css                # Global tokens, effects, animations, responsive motion rules
+│   ├── (site)/
+│   │   ├── page.tsx               # Home hero + editorial section
+│   │   ├── works/page.tsx         # Works hero + gastronomy/development chapters
+│   │   ├── about/page.tsx         # About hero + profile section
+│   │   └── contact/page.tsx       # Contact section
+│   ├── not-found.tsx              # Custom 404
+│   ├── robots.ts                  # Robots output
+│   ├── sitemap.ts                 # Sitemap output
+│   ├── opengraph-image.tsx        # Dynamic OG image
+│   └── twitter-image.tsx          # Reuses OG image for Twitter cards
 ├── components/
-│   ├── primitive.tsx           # SectionPrimitive, CardPrimitive, cx() utility, tone system
-│   ├── MonoToken.tsx           # Styled inline tokens (comment | location | project | status)
-│   ├── BackgroundTerminal.tsx  # Fixed backdrop with scrolling terminal logs (Server Component)
-│   ├── TopNav.tsx              # Route navigation
-│   ├── LenisProvider.tsx       # Smooth scrolling wrapper
-│   ├── MagneticButton.tsx      # Magnetic hover button physics
-│   ├── PageLoader.tsx          # Initial loading animation sequence
-│   ├── PageIntroHero.tsx       # Shared editorial page-intro hero for internal routes
-│   ├── ScrollReveal.tsx        # Scroll-triggered reveal animations
-│   ├── ScrambleText.tsx        # Character scramble treatment for select copy
-│   ├── TypewriterTerminal.tsx  # Terminal typewriter effect with infinite loop
-│   ├── WorksList.tsx           # Editorial project list with hover reveal
-│   └── ErrorBoundary.tsx       # Generic error boundary (fail-silent, logs to console)
-public/
-├── images/
-│   ├── og-fork.png             # Fork-circuit brand icon (source for OG + favicons)
-│   ├── culinary-*.jpeg         # Gastronomy images
-│   └── *.png                   # Project screenshots and social assets
-├── apple-touch-icon.png        # 180x180 favicon
-├── favicon-32x32.png           # 32x32 favicon
-└── favicon-16x16.png           # 16x16 favicon
+│   ├── AppEffects.tsx             # Client-only global effects switchboard
+│   ├── BackgroundTerminal.tsx     # Home-only terminal backdrop
+│   ├── GoogleTracking*.tsx        # Optional GTM/GA behavior
+│   ├── LenisProvider.tsx          # Smooth scroll provider
+│   ├── MagneticCursor.tsx         # Custom cursor layer
+│   └── shared/
+│       ├── ErrorBoundary.tsx
+│       ├── TopNav.tsx
+│       ├── ScrollProgressBlock.tsx
+│       ├── ScrollReveal.tsx
+│       ├── ScrambleText.tsx
+│       ├── SiteStatusBar.tsx
+│       └── InternalPageHeroFrame.tsx
+├── design/
+│   ├── primitives/
+│   │   ├── SectionPrimitive.tsx
+│   │   ├── MonoToken.tsx
+│   │   ├── Eyebrow.tsx
+│   │   ├── Hero/
+│   │   ├── AmbientGlow/
+│   │   └── CulinaryTerm/
+│   ├── tokens/
+│   │   ├── primitives/
+│   │   ├── semantic/
+│   │   └── components/
+│   └── ui/
+│       └── SectionChrome.tsx
+├── features/
+│   ├── about/ui/
+│   ├── contact/ui/
+│   ├── development/data/
+│   ├── development/ui/
+│   ├── gastronomy/ui/
+│   ├── home/ui/
+│   └── works/ui/
+├── lib/
+│   ├── constants.ts               # Site constants and per-route SEO
+│   ├── imageAssets.ts             # Shared image references
+│   ├── hooks/
+│   └── utils/
+│       ├── cx.ts
+│       └── useAnimationFrame.ts
+├── assets/
+├── config/
+├── content/
+└── types/
 ```
 
-## Visual System
+## Route Map
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| Background | `#000000` / `bg-zinc-950/70` | Page bg, section panels |
-| Lime | `#cafd00` | Primary accent, glow, gastronomy tone, status indicators |
-| Cyan | `rgb(34 211 238)` | Development tone, project links |
-| Blue | `rgb(96 165 250)` | Contact tone, some project cards |
-| White | `#ffffff` | About section nav active state |
-| Grain | SVG noise at opacity 0.04 | Global overlay + per-card texture |
-| Glass | `backdrop-blur-xl` + semi-transparent borders | Cards, nav, header badge |
-| Typography | `font-headline` (italic) for titles, `font-mono` for data/tokens | Consistent across sections |
+1. **Home** (`/`) — `TopNav`, `Hero`, `HomeNameScramble`, `ScrollProgressBlock`, and `HomeEditorialSection`.
+2. **Works** (`/works`) — `WorksHero`, route filters, `GastronomySection`, and `DevelopmentSection`.
+3. **About** (`/about`) — `AboutHero` and `AboutSection`.
+4. **Contact** (`/contact`) — `ContactSection`.
 
-### Key CSS Classes
-- `.reveal` / `.reveal.active` — scroll-triggered fade-in with scale.
-- `.night-glow` — lime text-shadow effect.
-- `.night-glow-cyan` — cyan text-shadow treatment for digital craft.
-- `.tight-headline` — headline tracking behavior where applied.
-- `.background-terminal-scroll` — infinite translateY animation for backdrop.
-- `.grainy-bg` — inline grain texture per element.
+### Works Projects
 
-## Route Map (Narrative Flow)
+Project data is maintained in `src/features/development/data/projects.ts`.
 
-The experience is now split across dedicated routes:
-
-1. **Home** (`/`) — Brand statement only. Large hero lockup, minimal copy, mono subline from Medellin.
-2. **Works** (`/works`) — Uses `PageIntroHero`, then breaks into two chapters:
-   - `01` **Gastronomy** — restrained image-led grid, premium service copy, hover-responsive photography.
-   - `02` **Digital Craft** — editorial list of projects via `WorksList`.
-3. **About** (`/about`) — Uses `PageIntroHero` and a profile section with stats, bio, and spec rail.
-4. **Contact** (`/contact`) — Large email lockup, social links, and location/work footer notes.
-
-### Works List Projects
 1. **tecnical.app** — SaaS / Next.js
 2. **iSolution Lab** — Landing / Apple
 3. **Meghan's Momentum** — Editorial
@@ -185,40 +159,86 @@ The experience is now split across dedicated routes:
 5. **Lleras Medical** — Landing / Salud
 6. **Blue Moon Cottage** — Hospitalidad
 
-## SEO & Social
+## Visual System
 
-- **OG Image:** Dynamically generated via `opengraph-image.tsx` — black background, fork-circuit logo, "JOHN HERRERA / CULINARY ENGINE", `$ git commit -m 'umami'` in lime monospace.
-- **Twitter Card:** `summary_large_image`, same generated image.
-- **Favicons:** Fork-circuit icon at 16px, 32px, 180px (apple-touch).
-- **Metadata:** Title "John Herrera | Creative Chef & Digital Craft", locale es_CO.
+| Token / Pattern | Value | Usage |
+|-----------------|-------|-------|
+| Background | `#000000`, `#0a0a0a`, `bg-zinc-950/70` | Page bg and panels |
+| Lime | `#cafd00` / `202 253 0` | Primary signal, gastronomy, CTA glow |
+| Cyan | `rgb(34 211 238)` | Development tone |
+| Blue | `rgb(96 165 250)` | Contact tone |
+| White | `#ffffff` | About/nav active/high contrast |
+| Grain | SVG noise around `0.03-0.04` opacity | Global texture |
+| Glass | `backdrop-blur-xl` plus translucent borders | Nav and surface depth |
+| Typography | `font-headline` and `font-mono` | Headlines, tokens, technical copy |
 
-## Performance Decisions
+### Key CSS / Effects
 
-- **BackgroundTerminal hidden on mobile** (`max-width: 767px`) — saves GPU on phones.
-- **`will-change: transform`** on terminal scroll tracks.
-- **`prefers-reduced-motion`** respected — disables all animations.
-- **Culinary hero image** has `priority` for LCP optimization.
-- **All below-fold images** use explicit `loading="lazy"`.
-- **Single icon library** (Lucide) — no duplicate dependencies.
-- **Error boundaries** wrap all client components — page never crashes entirely.
+- `.signal-static-bg` and `.signal-static-overlay` — global static texture.
+- `.night-glow` / `.night-glow-cyan` — accent glow text treatments.
+- `.scroll-progress-block` variants — scroll-reactive sections.
+- `.background-terminal-scroll` — terminal backdrop movement.
+- `.mono-token` variants — comment/location/project/status tokens.
+- Motion rules must respect `prefers-reduced-motion`.
 
 ## Component Conventions
 
-- **Sections** use `SectionPrimitive` — `rounded-[3rem]`, `border-zinc-800/80`, `backdrop-blur-xl`.
-- **Cards** use `CardPrimitive` with `tone` prop: `'lime'` | `'cyan'` | `'blue'` | `'neutral'`.
-- **Class merging** uses local `cx()` function (not clsx/classnames).
-- **Inline tokens** use `MonoToken` with `kind` prop: `'comment'` | `'location'` | `'project'` | `'status'`.
-- **Terminal components** must loop infinitely with a 3s reset delay.
-- **Page intros** for internal pages should prefer `PageIntroHero` over ad-hoc hero sections.
-- **Section numbering** in the current editorial order is `01` Gastronomía, `02` Digital Craft, `03` Sobre mí, `04` Contacto.
+- **Design primitives** live in `src/design/primitives/`.
+- **Composed design-system UI** lives in `src/design/ui/`.
+- **Feature-specific UI** lives in `src/features/*/ui/`.
+- **Shared app UI** lives in `src/components/shared/`.
+- **Global app effects** may live in `src/components/`.
+- **Shared logic** lives in `src/lib/`.
+- Use `cx()` from `src/lib/utils/cx.ts`; do not introduce `clsx` or `classnames`.
+- Prefer existing tokens from `src/design/tokens/` before adding new Tailwind literals.
+- Do not put business logic inside `src/design/`.
 
-## Dev Server
+## SEO, Metadata, and Analytics
 
-```bash
-npm install
-npm run dev          # Webpack dev server on port 3000
-npm run build        # Production build (Turbopack)
-npm run lint         # ESLint 9
-```
+- `src/lib/constants.ts` owns `SITE_URL`, `SITE_TITLE`, `SITE_DESCRIPTION`, `PERSON_IMAGE`, and `PAGE_SEO`.
+- Root metadata and site/person JSON-LD live in `src/app/layout.tsx`.
+- Each route defines its own metadata and page JSON-LD from `PAGE_SEO`.
+- Dynamic OG image generation lives in `src/app/opengraph-image.tsx`.
+- `twitter-image.tsx` reuses the generated OG image.
+- Optional analytics env vars:
+  - `NEXT_PUBLIC_GTM_ID`
+  - `NEXT_PUBLIC_GA_ID`
+- Custom event helpers are implemented in `GoogleTrackingEvents.tsx`.
 
-Config at `.claude/launch.json` for Claude Code preview integration.
+## Performance and Accessibility Decisions
+
+- `BackgroundTerminal` is mounted only on `/` through `AppEffects`.
+- `BackgroundTerminal` must stay hidden on mobile (`max-width: 767px`).
+- `prefers-reduced-motion` should disable animation-heavy behavior.
+- Use `priority` only for LCP images.
+- Use `loading="lazy"` for below-fold images.
+- Decorative overlays should not add meaningful accessibility content.
+- Keep focus states visible on navigation and CTAs.
+- Maintain skip link support via `#main-content`.
+
+## Security and Deployment
+
+Global headers are configured in `next.config.ts`:
+
+- `Content-Security-Policy`
+- `Permissions-Policy`
+- `Cross-Origin-Opener-Policy`
+- `Cross-Origin-Resource-Policy`
+- `Strict-Transport-Security`
+- `X-DNS-Prefetch-Control`
+- `X-Frame-Options`
+- `X-Content-Type-Options`
+- `Referrer-Policy`
+
+CI is defined in `.github/workflows/ci.yml` and runs:
+
+1. `npm ci`
+2. `npm run lint`
+3. `npm run build`
+
+## Agent Notes
+
+- Follow `AGENTS.md` first for operational rules.
+- Before adding components, search `src/design/primitives/`, `src/design/ui/`, and `src/features/*/ui/`.
+- If a requested change requires large moves to match the target architecture, propose the migration and get confirmation before moving files.
+- At the end of important tasks, summarize documentation or structure changes clearly.
