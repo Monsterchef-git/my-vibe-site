@@ -13,6 +13,9 @@ export default function AboutHero() {
         statement={<CulinaryTerm term="mise en place">Mise en place for the web.</CulinaryTerm>}
         counterLine="the kitchen taught me the rest."
         tone="white"
+        course="03"
+        slug="#ABOUT"
+        file="03"
         sidePosition="background"
       >
         <div className="relative hidden h-full w-full lg:block">

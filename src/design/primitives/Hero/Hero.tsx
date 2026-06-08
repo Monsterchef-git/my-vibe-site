@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
+import StatementReveal from '@/components/shared/StatementReveal';
 import Eyebrow from '@/design/primitives/Eyebrow';
+import HeroMetaColumn from '@/design/ui/HeroMetaColumn';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { cx } from '@/lib/utils/cx';
@@ -14,6 +16,10 @@ export interface HeroProps {
   tone: HeroTone;
   anchor?: ReactNode;
   children?: ReactNode;
+  meta?: ReactNode;
+  course?: '01' | '02' | '03' | '04';
+  slug?: string;
+  file?: '01' | '02' | '03' | '04';
   sidePosition?: 'right' | 'background';
   className?: string;
 }
@@ -33,12 +39,23 @@ export function Hero({
   tone,
   anchor,
   children,
+  meta,
+  course = '01',
+  slug,
+  file = '01',
   sidePosition = 'right',
   align = 'start',
   className,
 }: HeroProps & { align?: 'start' | 'center' | 'end' }) {
   const hasSide = Boolean(children);
   const showRightSide = hasSide && sidePosition === 'right';
+  const resolvedMeta = meta ?? (
+    <HeroMetaColumn
+      course={course}
+      slug={slug ?? `#${eyebrow}`}
+      tone={tone}
+    />
+  );
 
   return (
     <section
@@ -73,17 +90,22 @@ export function Hero({
           pageGutterClassName,
         )}
       >
-        <div className="max-w-[68rem] space-y-6">
-          <Eyebrow
-            as="p"
-            role="muted"
-            className="font-mono uppercase"
-          >
-            {eyebrow}
-          </Eyebrow>
+        <div className="max-w-[68rem] space-y-6 lg:max-w-[min(52vw,68rem)]">
+          <div className="flex items-center gap-2">
+            <Eyebrow
+              as="p"
+              role="muted"
+              className="font-mono uppercase"
+            >
+              {eyebrow}
+            </Eyebrow>
+            <span className={cx('font-mono text-[10px] uppercase text-zinc-600 lg:hidden', tracking.eyebrow)}>
+              · FILE {file}/04
+            </span>
+          </div>
 
           <h1 className="font-headline text-[clamp(3rem,13vw,6.5rem)] italic leading-[0.92] text-white">
-            {statement}
+            <StatementReveal>{statement}</StatementReveal>
           </h1>
 
           <p className={cx('font-mono text-sm uppercase text-zinc-400 md:text-base', tracking.label)}>
@@ -102,6 +124,10 @@ export function Hero({
             </div>
           ) : null}
 
+          <div className="pt-2 lg:hidden">
+            {resolvedMeta}
+          </div>
+
           {showRightSide ? (
             <div className="pt-2 md:hidden">
               {children}
@@ -109,11 +135,19 @@ export function Hero({
           ) : null}
         </div>
 
-        {showRightSide ? (
-          <div className="hidden w-full shrink-0 items-end justify-end lg:flex lg:w-[min(48vw,36rem)] 2xl:w-[min(42rem,40vw)]">
-            {children}
+        <div className="hidden w-full shrink-0 flex-col items-end justify-between self-stretch lg:flex lg:w-[min(42vw,36rem)] 2xl:w-[min(42rem,40vw)]">
+          <div className="flex w-full items-start justify-between gap-8">
+            <span className={cx('font-mono text-[10px] uppercase text-zinc-600', tracking.eyebrow)}>
+              FILE {file} / 04
+            </span>
+            {resolvedMeta}
           </div>
-        ) : null}
+          {showRightSide ? (
+            <div className="flex w-full items-end justify-end">
+              {children}
+            </div>
+          ) : null}
+        </div>
       </div>
     </section>
   );

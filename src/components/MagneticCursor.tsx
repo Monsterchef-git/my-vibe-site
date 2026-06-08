@@ -567,6 +567,11 @@ const MagneticCursor = () => {
       startFrameLoop();
 
       updateInteractiveTarget(event.target);
+      window.dispatchEvent(
+        new CustomEvent('magneticcursor:move', {
+          detail: { x: nextX, y: nextY },
+        }),
+      );
     };
 
     const handlePointerLeave = () => {

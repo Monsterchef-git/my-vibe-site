@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import ScrambleText from '@/components/shared/ScrambleText';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { cx } from '@/lib/utils/cx';
@@ -47,6 +48,8 @@ export default function SiteStatusBar() {
     pathname: string;
   } | null>(null);
   const chapter = visibleChapter?.pathname === pathname ? visibleChapter.chapter : routeChapter;
+  const [cycleTick, setCycleTick] = useState(0);
+  const [latency, setLatency] = useState(0);
 
   useEffect(() => {
     const sections = Array.from(
@@ -102,27 +105,76 @@ export default function SiteStatusBar() {
     }
   }, [chapter]);
 
-  const status = useMemo(() => CHAPTERS[chapter], [chapter]);
+  const status = CHAPTERS[chapter];
+  const metadata = [
+    'LAT 6.2476°N · LON -75.5658°W',
+    'WEATHER 22°C CLEAR',
+    `LATENCY ${latency}ms`,
+  ];
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    if (reducedMotion) {
+      return;
+    }
+
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const tick = () => {
+      setLatency(Math.round(performance.now()) % 1000);
+      setCycleTick((current) => current + 1);
+    };
+    const syncTimer = () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+      timer = undefined;
+      if (!document.hidden) {
+        timer = setInterval(tick, 4000);
+      }
+    };
+
+    document.addEventListener('visibilitychange', syncTimer);
+    syncTimer();
+
+    return () => {
+      document.removeEventListener('visibilitychange', syncTimer);
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [metadata.length]);
+
+  const desktopMetaIndex = cycleTick % metadata.length;
+  const showMobileMetadata = cycleTick % 2 === 1;
+  const mobileMetaIndex = Math.floor(cycleTick / 2) % metadata.length;
 
   return (
     <div
       className={cx(
-        'pointer-events-none fixed inset-x-0 bottom-0 z-40 bg-black/72 backdrop-blur-xl',
+        'pointer-events-none fixed inset-x-0 bottom-0 z-40 bg-black/72 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl',
         pageGutterClassName,
       )}
     >
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-white/10" />
 
-      <div className="flex items-center justify-between gap-4 py-2 md:py-3">
+      <div className="grid min-h-12 grid-cols-1 items-center gap-4 py-2 md:grid-cols-[1fr_auto_1fr] md:py-3">
         <p className={cx('hidden font-mono text-[10px] uppercase text-zinc-400 md:block', tracking.label)}>
           MEDELLIN, CO · COURSE {chapter}
         </p>
 
-        <div className={cx('font-mono text-[10px] uppercase text-zinc-300 transition-opacity duration-300', tracking.label)}>
-          <span key={chapter} className="status-index-rise inline-block">
-            {chapter}
-          </span>{' '}
-          / 04
+        <div className={cx('flex items-center justify-between font-mono text-[10px] uppercase text-zinc-300 transition-opacity duration-300 md:justify-center', tracking.label)}>
+          <span className={cx(showMobileMetadata && 'hidden md:inline')}>
+            <span key={chapter} className="status-index-rise inline-block">
+              {chapter}
+            </span>{' '}
+            / 04
+          </span>
+          <span key={cycleTick} className={cx('status-index-rise text-zinc-500 md:hidden', !showMobileMetadata && 'hidden')}>
+            {metadata[mobileMetaIndex]}
+          </span>
           <Link
             href={status.href}
             aria-label={status.label}
@@ -131,10 +183,20 @@ export default function SiteStatusBar() {
             className="pointer-events-auto ml-2 inline-flex min-h-8 items-center gap-1 rounded-full px-2 text-zinc-300 transition-colors duration-300 hover:text-lime-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black motion-reduce:transition-none md:px-0"
           >
             <span className="md:hidden">{status.arrow} {status.shortLabel}</span>
-            <span className="hidden md:inline">— {status.label} {status.arrow}</span>
+            <span className="relative hidden md:inline">
+              — <ScrambleText text={status.label} triggerKey={chapter} /> {status.arrow}
+              <span key={chapter} aria-hidden="true" className="status-chapter-underline absolute inset-x-0 -bottom-1 h-px bg-lime-300" />
+            </span>
           </Link>
           <span className="sr-only">Current course {chapter} of 04</span>
         </div>
+
+        <p
+          key={desktopMetaIndex}
+          className={cx('status-index-rise hidden justify-self-end font-mono text-[10px] uppercase text-zinc-500 md:block', tracking.label)}
+        >
+          {metadata[desktopMetaIndex]}
+        </p>
       </div>
     </div>
   );

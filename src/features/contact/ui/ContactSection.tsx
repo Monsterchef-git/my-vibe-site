@@ -5,6 +5,7 @@ import {
   sectionGutterClassName,
   sectionMicroClassName,
 } from '@/design/tokens/components/sectionStyles';
+import CourseTransition from '@/components/shared/CourseTransition';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import ScrambleText from '@/components/shared/ScrambleText';
 import { cx } from '@/lib/utils/cx';
@@ -29,12 +30,17 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         statement={<CulinaryTerm term="pass">The pass is open.</CulinaryTerm>}
         counterLine="briefs, reservations, collaborations →"
         tone="lime"
+        course="04"
+        slug="#CONTACT"
+        file="04"
         anchor={
           <span className={cx(sectionMicroClassName, 'text-zinc-500')}>
             Medellin, CO
           </span>
         }
       />
+
+      <CourseTransition from="04" to="01" tone="lime" />
 
       <section
         aria-label="Email installation"
@@ -92,45 +98,6 @@ export default function ContactSection({ id = 'contact', className }: ContactSec
         </div>
       </section>
 
-      <footer className={cx('pb-14 pt-48 md:pb-16 md:pt-64', sectionGutterClassName)}>
-        <div className="space-y-0">
-          {[
-            {
-              href: 'https://www.instagram.com/johnherrerachef/',
-              label: 'Instagram',
-              color: 'text-lime-300 hover:text-lime-200 focus-visible:text-lime-200',
-            },
-            {
-              href: 'https://github.com/Monsterchef-git',
-              label: 'GitHub',
-              color: 'text-lime-300 hover:text-lime-200 focus-visible:text-lime-200',
-            },
-            {
-              href: 'https://www.linkedin.com/in/john-herrera-chef/',
-              label: 'LinkedIn',
-              color: 'text-blue-300 hover:text-blue-200 focus-visible:text-blue-200',
-            },
-          ].map(({ href, label, color }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cx(
-                'flex items-baseline justify-between border-t border-zinc-900/60 py-6 font-mono text-[11px] uppercase transition-colors duration-[700ms] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:py-7 motion-reduce:transition-none',
-                tracking.label,
-                color,
-              )}
-            >
-              <span>{label}</span>
-              <span aria-hidden="true" className="text-zinc-600">↗</span>
-            </a>
-          ))}
-          <div className={cx('border-y border-zinc-900/60 pt-5 font-mono text-[11px] uppercase text-zinc-500', tracking.label)}>
-            © 2026
-          </div>
-        </div>
-      </footer>
     </section>
   );
 }

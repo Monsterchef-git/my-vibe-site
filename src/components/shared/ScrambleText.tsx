@@ -13,6 +13,7 @@ type ScrambleTextProps = HTMLAttributes<HTMLElement> & {
   as?: ElementType;
   speed?: number;   // ms between ticks
   stagger?: number; // ms between each char resolving
+  triggerKey?: string | number;
 };
 
 export default function ScrambleText({
@@ -21,6 +22,7 @@ export default function ScrambleText({
   className,
   speed = 35,
   stagger = 42,
+  triggerKey,
   ...props
 }: ScrambleTextProps) {
   const [display, setDisplay] = useState(text);
@@ -67,6 +69,14 @@ export default function ScrambleText({
     clearTimeout(timer.current);
     setDisplay(text);
   }, [text]);
+
+  useEffect(() => {
+    if (triggerKey === undefined) {
+      return;
+    }
+
+    scramble();
+  }, [scramble, triggerKey]);
 
   return (
     <Tag

@@ -5,6 +5,7 @@ import BackgroundTerminal from '@/components/BackgroundTerminal';
 import LenisProvider from '@/components/LenisProvider';
 import MagneticCursor from '@/components/MagneticCursor';
 import ScrollReveal from '@/components/shared/ScrollReveal';
+import PageTransition from '@/components/shared/PageTransition';
 
 export default function AppEffects() {
   const pathname = usePathname();
@@ -16,6 +17,7 @@ export default function AppEffects() {
       {showBackgroundTerminal ? <BackgroundTerminal /> : null}
       <MagneticCursor />
       <ScrollReveal />
+      <PageTransition />
     </>
   );
 }

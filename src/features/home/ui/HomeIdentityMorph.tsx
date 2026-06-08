@@ -108,6 +108,7 @@ function getSectionProgress(node: HTMLElement) {
 
 export default function HomeIdentityMorph() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const wordRef = useRef<HTMLHeadingElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [sectionProgress, setSectionProgress] = useState(0);
 
@@ -120,6 +121,64 @@ export default function HomeIdentityMorph() {
 
     return () => mediaQuery.removeEventListener('change', syncReducedMotion);
   }, []);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      return;
+    }
+
+    let scrollPaused = true;
+    let pauseTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const resetWord = () => {
+      wordRef.current?.style.setProperty('--cursor-parallax-x', '0px');
+      wordRef.current?.style.setProperty('--cursor-parallax-y', '0px');
+    };
+
+    const handleScroll = () => {
+      scrollPaused = false;
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(() => {
+        scrollPaused = true;
+      }, 600);
+      resetWord();
+    };
+
+    const handleCursorMove = (event: Event) => {
+      if (!scrollPaused || !(event instanceof CustomEvent)) {
+        return;
+      }
+
+      const root = rootRef.current;
+      const word = wordRef.current;
+      if (!root || !word) {
+        return;
+      }
+
+      const { x, y } = event.detail as { x: number; y: number };
+      const rect = root.getBoundingClientRect();
+      const inside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+
+      if (!inside) {
+        resetWord();
+        return;
+      }
+
+      const offsetX = ((x - rect.left) / rect.width - 0.5) * 12;
+      const offsetY = ((y - rect.top) / rect.height - 0.5) * 8;
+      word.style.setProperty('--cursor-parallax-x', `${offsetX.toFixed(2)}px`);
+      word.style.setProperty('--cursor-parallax-y', `${offsetY.toFixed(2)}px`);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('magneticcursor:move', handleCursorMove);
+
+    return () => {
+      clearTimeout(pauseTimer);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('magneticcursor:move', handleCursorMove);
+    };
+  }, [reducedMotion]);
 
   useEffect(() => {
     let frame = 0;
@@ -292,9 +351,10 @@ export default function HomeIdentityMorph() {
             />
 
             <h2
+              ref={wordRef}
               aria-label={activeState.word}
               className={cx(
-                'inline-block font-headline italic leading-[0.8] tracking-[-0.03em] transition-colors duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] [text-shadow:0_10px_50px_rgba(0,0,0,0.78)] motion-reduce:transition-none',
+                'identity-morph-word inline-block font-headline italic leading-[0.8] tracking-[-0.03em] transition-[color,transform] duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] [text-shadow:0_10px_50px_rgba(0,0,0,0.78)] motion-reduce:transition-none',
                 activeState.wordClassName,
               )}
               style={{

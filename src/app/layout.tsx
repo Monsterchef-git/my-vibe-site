@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import AppEffects from '@/components/AppEffects';
 import GoogleTracking from '@/components/GoogleTracking';
 import SiteStatusBar from '@/components/shared/SiteStatusBar';
+import SiteFooter from '@/components/shared/SiteFooter';
 import {
   PAGE_SEO,
   PERSON_IMAGE,
@@ -10,15 +11,10 @@ import {
 } from '@/lib/constants';
 import './globals.css';
 
-const siteUrl = SITE_URL;
-const siteTitle = SITE_TITLE;
-const siteDescription = PAGE_SEO.home.description;
-const personImage = PERSON_IMAGE;
-
 export const metadata: Metadata = {
-  title: siteTitle,
-  description: siteDescription,
-  metadataBase: new URL(siteUrl),
+  title: SITE_TITLE,
+  description: PAGE_SEO.home.description,
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: PAGE_SEO.home.path,
   },
@@ -32,18 +28,18 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: siteTitle,
-    description: siteDescription,
-    url: siteUrl,
-    siteName: siteTitle,
+    title: SITE_TITLE,
+    description: PAGE_SEO.home.description,
+    url: SITE_URL,
+    siteName: SITE_TITLE,
     locale: 'en_US',
     type: 'website',
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: siteTitle,
-    description: siteDescription,
+    title: SITE_TITLE,
+    description: PAGE_SEO.home.description,
   },
 };
 
@@ -63,21 +59,21 @@ export default function RootLayout({
               '@graph': [
                 {
                   '@type': 'WebSite',
-                  '@id': `${siteUrl}/#website`,
-                  url: siteUrl,
-                  name: siteTitle,
-                  description: siteDescription,
+                  '@id': `${SITE_URL}/#website`,
+                  url: SITE_URL,
+                  name: SITE_TITLE,
+                  description: PAGE_SEO.home.description,
                   inLanguage: 'en-US',
                 },
                 {
                   '@type': 'Person',
-                  '@id': `${siteUrl}/#person`,
+                  '@id': `${SITE_URL}/#person`,
                   name: 'John Herrera',
                   jobTitle: ['Creative Chef', 'Web Developer'],
                   description:
                     'Creative chef with over a decade in kitchen service, now building conversion-focused landing pages and digital interfaces.',
-                  url: siteUrl,
-                  image: personImage,
+                  url: SITE_URL,
+                  image: PERSON_IMAGE,
                   email: 'chef@johnherrerachef.com',
                   address: {
                     '@type': 'PostalAddress',
@@ -140,6 +136,7 @@ export default function RootLayout({
         <div className="relative z-10">
           {children}
         </div>
+        <SiteFooter />
         <SiteStatusBar />
       </body>
     </html>

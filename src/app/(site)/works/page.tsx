@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
+import CourseTransition from '@/components/shared/CourseTransition';
 import TopNav from '@/components/shared/TopNav';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { pageGutterClassName } from '@/design/tokens/semantic/layout';
@@ -7,42 +8,15 @@ import { DevelopmentSection } from '@/features/development/ui';
 import { GastronomySection } from '@/features/gastronomy/ui';
 import { WorksHero } from '@/features/works/ui';
 import { cx } from '@/lib/utils/cx';
-import { PAGE_SEO, SITE_URL } from '@/lib/constants';
+import { PAGE_SEO } from '@/lib/constants';
+import { buildPageJsonLd, buildPageMetadata } from '@/lib/seo';
 
 const worksSeo = PAGE_SEO.works;
 export const dynamic = 'force-static';
-export const metadata: Metadata = {
-  title: worksSeo.title,
-  description: worksSeo.description,
-  keywords: [...worksSeo.keywords],
-  alternates: {
-    canonical: worksSeo.path,
-  },
-  openGraph: {
-    title: worksSeo.title,
-    description: worksSeo.description,
-    url: `${SITE_URL}${worksSeo.path}`,
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: worksSeo.title,
-    description: worksSeo.description,
-  },
-};
+export const metadata: Metadata = buildPageMetadata(worksSeo);
 
 export default function WorksPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    '@id': `${SITE_URL}${worksSeo.path}#collectionpage`,
-    url: `${SITE_URL}${worksSeo.path}`,
-    name: worksSeo.title,
-    description: worksSeo.description,
-    inLanguage: 'en',
-    isPartOf: { '@id': `${SITE_URL}/#website` },
-    about: { '@id': `${SITE_URL}/#person` },
-  };
+  const jsonLd = buildPageJsonLd(worksSeo);
 
   return (
     <main
@@ -61,6 +35,8 @@ export default function WorksPage() {
           <WorksHero />
         </section>
       </ErrorBoundary>
+
+      <CourseTransition from="02" to="03" tone="lime" />
 
       <section
         aria-label="Works filters"

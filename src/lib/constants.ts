@@ -18,6 +18,10 @@ export const PAGE_SEO = {
       'conversion landing pages',
     ],
     path: '/',
+    openGraphType: 'website',
+    schemaType: 'ProfilePage',
+    schemaId: 'profilepage',
+    schemaRelation: 'mainEntity',
   },
   works: {
     title: 'Works | John Herrera',
@@ -32,6 +36,10 @@ export const PAGE_SEO = {
       'chef dev projects',
     ],
     path: '/works',
+    openGraphType: 'website',
+    schemaType: 'CollectionPage',
+    schemaId: 'collectionpage',
+    schemaRelation: 'about',
   },
   about: {
     title: 'About | John Herrera',
@@ -45,6 +53,10 @@ export const PAGE_SEO = {
       'culinary and web work',
     ],
     path: '/about',
+    openGraphType: 'profile',
+    schemaType: 'AboutPage',
+    schemaId: 'aboutpage',
+    schemaRelation: 'mainEntity',
   },
   contact: {
     title: 'Contact | John Herrera',
@@ -58,5 +70,9 @@ export const PAGE_SEO = {
       'chef dev contact',
     ],
     path: '/contact',
+    openGraphType: 'website',
+    schemaType: 'ContactPage',
+    schemaId: 'contactpage',
+    schemaRelation: 'mainEntity',
   },
 } as const;
