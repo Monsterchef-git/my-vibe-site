@@ -40,7 +40,7 @@ export default function SiteSignature() {
         src="/signature.png"
         alt=""
         className={cx(
-          'site-signature block h-auto w-full max-w-[640px] opacity-90 md:max-w-[920px] lg:max-w-[1200px]',
+          'site-signature block h-auto w-full max-w-[720px] opacity-90 md:max-w-[1080px] lg:max-w-[1400px]',
           drawn && 'is-drawn',
         )}
       />
