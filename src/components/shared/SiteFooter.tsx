@@ -1,3 +1,4 @@
+import SiteSignature from '@/components/shared/SiteSignature';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { sectionGutterClassName } from '@/design/tokens/components/sectionStyles';
 import { cx } from '@/lib/utils/cx';
@@ -24,7 +25,7 @@ export default function SiteFooter() {
   return (
     <footer
       className={cx(
-        'relative z-10 bg-[#0a0a0a] pb-[calc(4.5rem+env(safe-area-inset-bottom))] pt-24 text-white md:pt-32',
+        'relative z-10 bg-[#0a0a0a] pb-[calc(4.5rem+env(safe-area-inset-bottom))] pt-12 text-white md:pt-16',
         sectionGutterClassName,
       )}
     >
@@ -47,6 +48,7 @@ export default function SiteFooter() {
           </a>
         ))}
       </div>
+      <SiteSignature />
       <p className={cx('pt-5 font-mono text-[11px] uppercase text-zinc-500', tracking.label)}>
         © 2026
       </p>

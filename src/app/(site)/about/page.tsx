@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
-import { AboutClosing, AboutHero, AboutSection } from '@/features/about/ui';
+import { AboutHero, AboutSection } from '@/features/about/ui';
 import TopNav from '@/components/shared/TopNav';
 import CourseTransition from '@/components/shared/CourseTransition';
 import { PAGE_SEO } from '@/lib/constants';
@@ -16,7 +16,7 @@ export default function AboutPage() {
   return (
     <main
       id="main-content"
-      className="relative z-0 min-h-svh overflow-x-clip bg-[#0a0a0a] pb-16 text-white"
+      className="relative z-0 min-h-svh overflow-x-clip bg-[#0a0a0a] text-white"
     >
       <script
         type="application/ld+json"
@@ -35,8 +35,6 @@ export default function AboutPage() {
       <ErrorBoundary>
         <AboutSection id="about-profile" compact className="pt-24 md:pt-32" />
       </ErrorBoundary>
-
-      <AboutClosing />
     </main>
   );
 }

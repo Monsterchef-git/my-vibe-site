@@ -13,20 +13,21 @@ const courseByPath = {
   '/contact': '04',
 } as const;
 
-type TransitionDocument = Document & {
-  startViewTransition?: (update: () => void) => void;
-};
-
 function getCourse(pathname: string) {
   return courseByPath[pathname as keyof typeof courseByPath];
 }
+
+const COVER_MS = 380;
+const HOLD_MS = 140;
 
 export default function PageTransition() {
   const pathname = usePathname();
   const router = useRouter();
   const [label, setLabel] = useState('');
   const [active, setActive] = useState(false);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const pendingPathname = useRef<string | null>(null);
+  const navigateTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia(
@@ -36,17 +37,6 @@ export default function PageTransition() {
     if (reducedMotion) {
       return;
     }
-
-    const navigate = (href: string) => {
-      const documentWithTransitions = document as TransitionDocument;
-      const update = () => router.push(href);
-
-      if (documentWithTransitions.startViewTransition) {
-        documentWithTransitions.startViewTransition(update);
-      } else {
-        update();
-      }
-    };
 
     const handleClick = (event: MouseEvent) => {
       if (
@@ -82,29 +72,57 @@ export default function PageTransition() {
         url.origin !== window.location.origin ||
         !nextCourse ||
         !currentCourse ||
-        (url.pathname === pathname && url.hash)
+        url.pathname === pathname
       ) {
         return;
       }
 
       event.preventDefault();
       event.stopPropagation();
+
       setLabel(`COURSE ${currentCourse} → COURSE ${nextCourse}`);
       setActive(true);
+      pendingPathname.current = url.pathname;
 
-      timers.current.push(
-        setTimeout(() => navigate(`${url.pathname}${url.search}${url.hash}`), 180),
-        setTimeout(() => setActive(false), 700),
-      );
+      const href = `${url.pathname}${url.search}${url.hash}`;
+      if (navigateTimer.current) {
+        clearTimeout(navigateTimer.current);
+      }
+      navigateTimer.current = setTimeout(() => {
+        router.push(href);
+      }, COVER_MS);
     };
 
     document.addEventListener('click', handleClick, true);
     return () => {
       document.removeEventListener('click', handleClick, true);
-      timers.current.forEach(clearTimeout);
-      timers.current = [];
     };
   }, [pathname, router]);
+
+  useEffect(() => {
+    if (!pendingPathname.current || pendingPathname.current !== pathname) {
+      return;
+    }
+
+    pendingPathname.current = null;
+    if (revealTimer.current) {
+      clearTimeout(revealTimer.current);
+    }
+    revealTimer.current = setTimeout(() => {
+      setActive(false);
+    }, HOLD_MS);
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (navigateTimer.current) {
+        clearTimeout(navigateTimer.current);
+      }
+      if (revealTimer.current) {
+        clearTimeout(revealTimer.current);
+      }
+    };
+  }, []);
 
   return (
     <div

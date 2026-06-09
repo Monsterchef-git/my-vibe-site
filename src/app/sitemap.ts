@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/constants';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = 'https://johnherrerachef.com';
   const lastModified = {
     home: '2026-04-13T18:23:45-05:00',
     works: '2026-04-13T21:48:08-05:00',
@@ -11,25 +11,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: `${siteUrl}/`,
+      url: `${SITE_URL}/`,
       lastModified: lastModified.home,
       changeFrequency: 'monthly',
       priority: 1,
     },
     {
-      url: `${siteUrl}/works`,
+      url: `${SITE_URL}/works`,
       lastModified: lastModified.works,
       changeFrequency: 'monthly',
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/about`,
+      url: `${SITE_URL}/about`,
       lastModified: lastModified.about,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${siteUrl}/contact`,
+      url: `${SITE_URL}/contact`,
       lastModified: lastModified.contact,
       changeFrequency: 'monthly',
       priority: 0.7,

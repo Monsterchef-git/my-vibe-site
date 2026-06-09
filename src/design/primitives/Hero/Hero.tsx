@@ -91,18 +91,13 @@ export function Hero({
         )}
       >
         <div className="max-w-[68rem] space-y-6 lg:max-w-[min(52vw,68rem)]">
-          <div className="flex items-center gap-2">
-            <Eyebrow
-              as="p"
-              role="muted"
-              className="font-mono uppercase"
-            >
-              {eyebrow}
-            </Eyebrow>
-            <span className={cx('font-mono text-[10px] uppercase text-zinc-600 lg:hidden', tracking.eyebrow)}>
-              · FILE {file}/04
-            </span>
-          </div>
+          <Eyebrow
+            as="p"
+            role="muted"
+            className="font-mono uppercase"
+          >
+            {eyebrow}
+          </Eyebrow>
 
           <h1 className="font-headline text-[clamp(3rem,13vw,6.5rem)] italic leading-[0.92] text-white">
             <StatementReveal>{statement}</StatementReveal>
@@ -136,10 +131,7 @@ export function Hero({
         </div>
 
         <div className="hidden w-full shrink-0 flex-col items-end justify-between self-stretch lg:flex lg:w-[min(42vw,36rem)] 2xl:w-[min(42rem,40vw)]">
-          <div className="flex w-full items-start justify-between gap-8">
-            <span className={cx('font-mono text-[10px] uppercase text-zinc-600', tracking.eyebrow)}>
-              FILE {file} / 04
-            </span>
+          <div className="flex w-full justify-end">
             {resolvedMeta}
           </div>
           {showRightSide ? (

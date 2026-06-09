@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import AppEffects from '@/components/AppEffects';
 import GoogleTracking from '@/components/GoogleTracking';
+import PageTransition from '@/components/shared/PageTransition';
 import SiteStatusBar from '@/components/shared/SiteStatusBar';
 import SiteFooter from '@/components/shared/SiteFooter';
 import {
@@ -138,6 +139,7 @@ export default function RootLayout({
         </div>
         <SiteFooter />
         <SiteStatusBar />
+        <PageTransition />
       </body>
     </html>
   )
