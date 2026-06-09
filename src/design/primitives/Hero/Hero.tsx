@@ -42,7 +42,6 @@ export function Hero({
   meta,
   course = '01',
   slug,
-  file = '01',
   sidePosition = 'right',
   align = 'start',
   className,

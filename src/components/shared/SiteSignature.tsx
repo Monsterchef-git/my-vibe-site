@@ -12,7 +12,6 @@ export default function SiteSignature() {
     if (!node) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setDrawn(true);
       return;
     }
 

@@ -5,6 +5,7 @@ import TopNav from '@/components/shared/TopNav';
 import { Hero } from '@/design/primitives';
 import ScrollProgressBlock from '@/components/shared/ScrollProgressBlock';
 import CourseTransition from '@/components/shared/CourseTransition';
+import BootSequence from '@/components/shared/BootSequence';
 import HomeNameScramble from '@/features/home/ui/HomeNameScramble';
 import HomeEditorialSection from '@/features/home/ui/HomeEditorialSection';
 import { CulinaryTerm } from '@/design/primitives';
@@ -25,6 +26,7 @@ export default function Home() {
       data-cursor-role="chef"
       className="relative z-0 min-h-svh signal-static-bg bg-[#0a0a0a] pb-16 text-white md:pb-20"
     >
+      <BootSequence />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
