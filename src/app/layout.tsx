@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Fraunces, JetBrains_Mono } from 'next/font/google';
 import AppEffects from '@/components/AppEffects';
 import GoogleTracking from '@/components/GoogleTracking';
 import PageTransition from '@/components/shared/PageTransition';
@@ -11,6 +12,21 @@ import {
   SITE_URL,
 } from '@/lib/constants';
 import './globals.css';
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
+  display: 'swap',
+  style: ['normal', 'italic'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   title: SITE_TITLE,
@@ -50,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${fraunces.variable} ${jetBrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
