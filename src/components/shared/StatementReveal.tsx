@@ -1,14 +1,9 @@
 'use client';
 
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import type { CSSProperties, ReactElement, ReactNode } from 'react';
+import { useRef } from 'react';
+import type { ReactNode } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap, SplitText } from '@/lib/gsap';
 import { cx } from '@/lib/utils/cx';
 
 interface StatementRevealProps {
@@ -16,80 +11,72 @@ interface StatementRevealProps {
   className?: string;
 }
 
-function revealNode(node: ReactNode, index: { current: number }): ReactNode {
-  if (typeof node === 'string') {
-    return node.split(/(\s+)/).map((part) => {
-      if (/^\s+$/.test(part)) {
-        return part;
-      }
-
-      const wordIndex = index.current++;
-      return (
-        <span
-          key={`${part}-${wordIndex}`}
-          className="statement-reveal-word"
-          style={{ '--word-index': wordIndex } as CSSProperties}
-        >
-          {part}
-        </span>
-      );
-    });
-  }
-
-  if (!isValidElement(node)) {
-    return node;
-  }
-
-  const element = node as ReactElement<{ children?: ReactNode }>;
-  if (element.props.children === undefined) {
-    return element;
-  }
-
-  return cloneElement(
-    element,
-    undefined,
-    Children.map(element.props.children, (child) => revealNode(child, index)),
-  );
-}
-
 export default function StatementReveal({
   children,
   className,
 }: StatementRevealProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [active, setActive] = useState(false);
-  const index = { current: 0 };
+  // Plain-string statements are safe to split; rich statements wrap interactive
+  // components (CulinaryTerm) whose DOM React owns and SplitText must not touch.
+  const isPlainText = typeof children === 'string';
 
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) {
-      return;
-    }
+  // StatementReveal only ever wraps the hero headline, which is always above the
+  // fold — so the reveal plays on mount rather than waiting on a scroll trigger
+  // (a scroll gate here just races font loading and leaves the hero blank).
+  useGSAP(
+    () => {
+      const node = ref.current;
+      if (!node) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
+      if (isPlainText) {
+        let split: SplitText | null = null;
+        let tween: gsap.core.Tween | null = null;
+        let cancelled = false;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setActive(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.35 },
-    );
+        // Split after fonts settle so line breaks match the rendered Fraunces.
+        document.fonts.ready.then(() => {
+          if (cancelled || !ref.current) return;
 
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+          // No line mask: the hero's tight leading-[0.92] italic has glyphs
+          // taller than the line box, so an overflow-clip mask would crop
+          // descenders/ascenders permanently. Reveal with a rise + fade instead.
+          split = SplitText.create(node, { type: 'lines' });
+          tween = gsap.from(split.lines, {
+            yPercent: 60,
+            autoAlpha: 0,
+            duration: 0.9,
+            ease: 'expo.out',
+            stagger: 0.12,
+          });
+        });
+
+        return () => {
+          cancelled = true;
+          tween?.kill();
+          split?.revert();
+        };
+      }
+
+      // Rich children: reveal the block as a whole, leaving its DOM intact.
+      const tween = gsap.from(node, {
+        yPercent: 16,
+        autoAlpha: 0,
+        duration: 0.85,
+        ease: 'expo.out',
+      });
+
+      return () => tween.kill();
+    },
+    { scope: ref, dependencies: [isPlainText] },
+  );
 
   return (
     <span
       ref={ref}
-      className={cx('statement-reveal', active && 'is-active', className)}
+      className={cx('statement-reveal', !isPlainText && 'inline-block', className)}
     >
-      {Children.map(children, (child) => revealNode(child, index))}
+      {children}
     </span>
   );
 }

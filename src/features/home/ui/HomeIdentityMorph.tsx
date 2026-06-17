@@ -2,7 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from '@/lib/gsap';
 import { AmbientGlow, CulinaryTerm } from '@/design/primitives';
 import { sectionBodyClassName } from '@/design/tokens/components/sectionStyles';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
@@ -15,6 +18,25 @@ import {
 } from '@/lib/imageAssets';
 import { cx } from '@/lib/utils/cx';
 
+
+// WebGL canvas is a desktop-only progressive enhancement; the DOM <Image>
+// crossfade stays the baseline (and the fallback on mobile / reduced-motion).
+const IdentityMorphCanvas = dynamic(
+  () => import('@/features/home/ui/IdentityMorphCanvas'),
+  { ssr: false },
+);
+
+function supportsWebGL() {
+  try {
+    const canvas = document.createElement('canvas');
+    return Boolean(
+      window.WebGLRenderingContext &&
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')),
+    );
+  } catch {
+    return false;
+  }
+}
 
 const MORPH_START = 0.24;
 const MORPH_END = 0.74;
@@ -95,22 +117,18 @@ function easeInOutCubic(value: number) {
 
 
 
-function getSectionProgress(node: HTMLElement) {
-  const rect = node.getBoundingClientRect();
-  const viewportHeight = window.innerHeight;
-  const sectionHeight = rect.height;
-
-  // Progress 0 when top enters bottom of viewport, 1 when bottom leaves top of viewport
-  // But here we want the sticky track's relative progress.
-  const progress = -rect.top / Math.max(sectionHeight - viewportHeight, 1);
-  return clamp(progress);
-}
-
 export default function HomeIdentityMorph() {
   const rootRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLHeadingElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [sectionProgress, setSectionProgress] = useState(0);
+  // WebGL morph layer: enabled only on capable desktops; `ready` flips once the
+  // GL context paints so we can hand off from the <Image> baseline without flash.
+  const [useCanvas, setUseCanvas] = useState(false);
+  const [canvasReady, setCanvasReady] = useState(false);
+  const progressRef = useRef(0);
+  const invalidateRef = useRef<(() => void) | null>(null);
+  const mouseRef = useRef<[number, number]>([-1, -1]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -121,6 +139,16 @@ export default function HomeIdentityMorph() {
 
     return () => mediaQuery.removeEventListener('change', syncReducedMotion);
   }, []);
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia('(min-width: 768px)');
+    const evaluate = () =>
+      setUseCanvas(!reducedMotion && desktopQuery.matches && supportsWebGL());
+
+    evaluate();
+    desktopQuery.addEventListener('change', evaluate);
+    return () => desktopQuery.removeEventListener('change', evaluate);
+  }, [reducedMotion]);
 
   useEffect(() => {
     if (reducedMotion) {
@@ -161,6 +189,10 @@ export default function HomeIdentityMorph() {
 
       if (!inside) {
         resetWord();
+        if (mouseRef.current[0] !== -1) {
+          mouseRef.current = [-1, -1];
+          invalidateRef.current?.();
+        }
         return;
       }
 
@@ -168,6 +200,10 @@ export default function HomeIdentityMorph() {
       const offsetY = ((y - rect.top) / rect.height - 0.5) * 8;
       word.style.setProperty('--cursor-parallax-x', `${offsetX.toFixed(2)}px`);
       word.style.setProperty('--cursor-parallax-y', `${offsetY.toFixed(2)}px`);
+
+      // Feed the cursor lens in the WebGL layer: viewport-relative uv, y-up.
+      mouseRef.current = [x / window.innerWidth, 1 - y / window.innerHeight];
+      invalidateRef.current?.();
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -180,44 +216,38 @@ export default function HomeIdentityMorph() {
     };
   }, [reducedMotion]);
 
-  useEffect(() => {
-    let frame = 0;
+  // Scroll-driven progress for the sticky track, smoothed by ScrollTrigger's
+  // scrub. The trigger spans the full tall wrapper (rootRef is h-full inside
+  // the h-[190svh] section), so progress runs 0→1 across the sticky window.
+  // Reduced motion drops the scrub so the morph snaps instead of easing.
+  useGSAP(
+    () => {
+      const trigger = rootRef.current;
+      if (!trigger) return;
 
-    const schedule = () => {
-      if (frame !== 0) return;
-
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        const node = rootRef.current;
-        if (node) {
-          setSectionProgress(getSectionProgress(node));
-        }
+      const st = ScrollTrigger.create({
+        trigger,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: reducedMotion ? false : 0.6,
+        onUpdate: (self) => {
+          const raw = self.progress;
+          setSectionProgress(raw);
+          // Feed the WebGL layer directly (no React render) and request a redraw,
+          // keeping the eased value identical to the DOM crossfade below.
+          progressRef.current = reducedMotion
+            ? raw >= SWITCH_THRESHOLD
+              ? 1
+              : 0
+            : easeInOutCubic(mapRange(raw, MORPH_START, MORPH_END));
+          invalidateRef.current?.();
+        },
       });
-    };
 
-    const node = rootRef.current;
-    const resizeObserver = new ResizeObserver(schedule);
-    
-    if (node) {
-      resizeObserver.observe(node);
-    }
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    window.addEventListener('load', schedule);
-
-    schedule();
-
-    return () => {
-      if (frame !== 0) {
-        window.cancelAnimationFrame(frame);
-      }
-      resizeObserver.disconnect();
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-      window.removeEventListener('load', schedule);
-    };
-  }, []);
+      return () => st.kill();
+    },
+    { scope: rootRef, dependencies: [reducedMotion] },
+  );
 
   const morphProgress = useMemo(() => {
     if (reducedMotion) {
@@ -265,6 +295,17 @@ export default function HomeIdentityMorph() {
           data-cursor-role={activeState.id === 'development' ? 'dev' : 'chef'}
         />
 
+        {useCanvas ? (
+          <IdentityMorphCanvas
+            progressRef={progressRef}
+            invalidateRef={invalidateRef}
+            mouseRef={mouseRef}
+            fromSrc={STATES[0].image}
+            toSrc={STATES[1].image}
+            onReady={() => setCanvasReady(true)}
+          />
+        ) : null}
+
         <div
           aria-hidden="true"
           className="identity-morph-frame"
@@ -279,7 +320,7 @@ export default function HomeIdentityMorph() {
             priority
             className="identity-morph-main"
             style={{
-              opacity: gastronomyOpacity,
+              opacity: canvasReady ? 0 : gastronomyOpacity,
               transform: gastronomyTransform,
               filter: `brightness(${0.9 - morphProgress * 0.16}) saturate(${0.9 - morphProgress * 0.05}) contrast(1)`,
             }}
@@ -317,7 +358,7 @@ export default function HomeIdentityMorph() {
             loading="lazy"
             className="identity-morph-main"
             style={{
-              opacity: developmentOpacity,
+              opacity: canvasReady ? 0 : developmentOpacity,
               transform: developmentTransform,
               filter: `brightness(${0.72 + morphProgress * 0.18}) saturate(${0.98 - morphProgress * 0.08}) contrast(1.02)`,
             }}
