@@ -594,24 +594,6 @@ body {
   );
 }
 
-.statement-reveal-word {
-  display: inline-block;
-  clip-path: inset(0 0 100% 0);
-  opacity: 0;
-  transform: translateY(0.4em);
-  transition:
-    clip-path 620ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 420ms ease,
-    transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: calc(var(--word-index) * 60ms);
-}
-
-.statement-reveal.is-active .statement-reveal-word {
-  clip-path: inset(0);
-  opacity: 1;
-  transform: translateY(0);
-}
-
 .course-marquee-track {
   animation: course-marquee 28s linear infinite;
   will-change: transform;
@@ -696,13 +678,6 @@ body {
   .scroll-progress-bridge-line {
     transform: none !important;
     opacity: 1 !important;
-  }
-
-  .statement-reveal-word {
-    clip-path: inset(0) !important;
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
   }
 
   .course-marquee-track,

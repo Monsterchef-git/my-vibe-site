@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Lenis from 'lenis';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 
 export default function LenisProvider() {
   useEffect(() => {
@@ -9,15 +10,19 @@ export default function LenisProvider() {
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     let lenis: Lenis | null = null;
-    let raf: number | null = null;
+
+    // Drive Lenis from GSAP's ticker so there's a single rAF loop shared with
+    // ScrollTrigger. gsap.ticker passes seconds; lenis.raf expects ms.
+    const tick = (time: number) => {
+      lenis?.raf(time * 1000);
+    };
+
+    const onLenisScroll = () => ScrollTrigger.update();
 
     const destroyLenis = () => {
-      if (raf !== null) {
-        cancelAnimationFrame(raf);
-        raf = null;
-      }
-
       if (lenis) {
+        gsap.ticker.remove(tick);
+        lenis.off('scroll', onLenisScroll);
         lenis.destroy();
         lenis = null;
       }
@@ -26,6 +31,8 @@ export default function LenisProvider() {
     const setupLenis = () => {
       destroyLenis();
 
+      // No Lenis on touch/mobile or reduced-motion: ScrollTrigger falls back to
+      // native scroll, which it tracks on its own.
       if (!desktopQuery.matches || reducedMotionQuery.matches) {
         return;
       }
@@ -38,12 +45,9 @@ export default function LenisProvider() {
         touchMultiplier: 1,
       });
 
-      const loop = (time: number) => {
-        lenis?.raf(time);
-        raf = requestAnimationFrame(loop);
-      };
-
-      raf = requestAnimationFrame(loop);
+      lenis.on('scroll', onLenisScroll);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
     };
 
     setupLenis();
