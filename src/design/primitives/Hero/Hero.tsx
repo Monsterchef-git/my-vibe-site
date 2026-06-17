@@ -60,7 +60,7 @@ export function Hero({
     <section
       id={id}
       className={cx(
-        'relative flex min-h-svh w-full pb-10 pt-14 md:pb-14 md:pt-32 lg:pb-16',
+        'relative flex min-h-[auto] w-full pb-8 pt-14 md:min-h-svh md:pb-14 md:pt-32 lg:pb-16',
         align === 'center' && 'items-center',
         align === 'end' && 'items-end',
         align === 'start' && 'items-start',
@@ -85,7 +85,7 @@ export function Hero({
 
       <div
         className={cx(
-          'relative z-10 mx-auto flex min-h-[calc(100svh-6rem)] w-full max-w-[78rem] flex-col gap-8 lg:min-h-0 lg:flex-row lg:items-end lg:justify-between lg:gap-10',
+          'relative z-10 mx-auto flex min-h-0 w-full max-w-[78rem] flex-col gap-8 md:min-h-[calc(100svh-6rem)] lg:min-h-0 lg:flex-row lg:items-end lg:justify-between lg:gap-10',
           pageGutterClassName,
         )}
       >

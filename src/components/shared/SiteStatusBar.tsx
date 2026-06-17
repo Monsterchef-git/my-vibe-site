@@ -160,19 +160,19 @@ export default function SiteStatusBar() {
     >
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-white/10" />
 
-      <div className="grid min-h-12 grid-cols-1 items-center gap-4 py-2 md:grid-cols-[1fr_auto_1fr] md:py-3">
+      <div className="grid min-h-12 grid-cols-1 items-center gap-4 py-2 pl-10 md:grid-cols-[1fr_auto_1fr] md:py-3 md:pl-0">
         <p className={cx('hidden font-mono text-[10px] uppercase text-zinc-400 md:block', tracking.label)}>
           MEDELLIN, CO · COURSE {chapter}
         </p>
 
-        <div className={cx('flex items-center justify-between font-mono text-[10px] uppercase text-zinc-300 transition-opacity duration-300 md:justify-center', tracking.label)}>
-          <span className={cx(showMobileMetadata && 'hidden md:inline')}>
+        <div className={cx('grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 font-mono text-[10px] uppercase text-zinc-300 transition-opacity duration-300 md:flex md:justify-center', tracking.label)}>
+          <span className={cx('min-w-0', showMobileMetadata && 'hidden md:inline')}>
             <span key={chapter} className="status-index-rise inline-block">
               {chapter}
             </span>{' '}
             / 04
           </span>
-          <span key={cycleTick} className={cx('status-index-rise text-zinc-500 md:hidden', !showMobileMetadata && 'hidden')}>
+          <span key={cycleTick} className={cx('status-index-rise min-w-0 truncate text-zinc-500 md:hidden', !showMobileMetadata && 'hidden')}>
             {metadata[mobileMetaIndex]}
           </span>
           <Link
@@ -180,7 +180,7 @@ export default function SiteStatusBar() {
             aria-label={status.label}
             data-cursor-mode="link"
             data-cursor-label={status.shortLabel}
-            className="pointer-events-auto ml-2 inline-flex min-h-8 items-center gap-1 rounded-full px-2 text-zinc-300 transition-colors duration-300 hover:text-lime-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black motion-reduce:transition-none md:px-0"
+            className="pointer-events-auto inline-flex min-h-8 shrink-0 items-center gap-1 justify-self-end rounded-full px-2 text-zinc-300 transition-colors duration-300 hover:text-lime-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black motion-reduce:transition-none md:ml-2 md:px-0"
           >
             <span className="md:hidden">{status.arrow} {status.shortLabel}</span>
             <span className="relative hidden md:inline">

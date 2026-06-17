@@ -19,10 +19,6 @@ body {
   min-height: 100svh;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 @keyframes hero-status-arrow-pulse {
   0% {
     opacity: 0.5;
