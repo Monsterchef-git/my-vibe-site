@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap } from '@/lib/gsap';
 import {
   BLUR_CULINARY_PLATING,
   IMAGE_CULINARY_PLATING,
@@ -106,10 +108,6 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
 ] as const;
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
-
 function useReducedMotionPreference() {
   const [reducedMotion, setReducedMotion] = useState(() =>
     typeof window !== 'undefined'
@@ -175,76 +173,38 @@ export default function GastronomyHorizontalGallery() {
   const reducedMotion = useReducedMotionPreference();
   const [activeFrame, setActiveFrame] = useState(0);
 
-  useEffect(() => {
-    let frame = 0;
+  // Horizontal pan driven by a scrubbed ScrollTrigger (synced with Lenis).
+  // The tall driver + sticky viewport stay in CSS; the track translates from 0
+  // to -overflow across the scroll. Reduced motion renders a vertical stack
+  // instead (the driver isn't mounted), so this no-ops when refs are absent.
+  useGSAP(
+    () => {
+      const track = trackRef.current;
+      const driver = scrollDriverRef.current;
+      if (!track || !driver) return;
 
-    const syncTrackPosition = () => {
-      const section = scrollDriverRef.current;
-      const trackEl = trackRef.current;
-      if (!section || !trackEl) return;
+      const getOverflow = () =>
+        Math.max(track.scrollWidth - window.innerWidth, 0);
 
-      const rect = section.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      
-      const overflow = Math.max(trackEl.scrollWidth - viewportWidth, 0);
-      const scrollableHeight = section.offsetHeight - viewportHeight;
-      
-      const progress = clamp(-rect.top / Math.max(scrollableHeight, 1), 0, 1);
-
-      trackEl.style.transform = `translate3d(${-overflow * progress}px, 0, 0)`;
-    };
-
-    const schedule = () => {
-      if (frame !== 0) return;
-
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        syncTrackPosition();
+      const tween = gsap.to(track, {
+        x: () => -getOverflow(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: driver,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
       });
-    };
 
-    const track = trackRef.current;
-    const driver = scrollDriverRef.current;
-
-    if (!track || reducedMotion) {
-      if (track) {
-        track.style.transform = 'translate3d(0, 0, 0)';
-      }
-      return;
-    }
-
-    const resizeObserver = new ResizeObserver(schedule);
-    const viewport = window.visualViewport;
-
-    if (driver) {
-      resizeObserver.observe(driver);
-    }
-    if (track) {
-      resizeObserver.observe(track);
-    }
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    window.addEventListener('load', schedule);
-    viewport?.addEventListener('resize', schedule);
-    viewport?.addEventListener('scroll', schedule);
-
-    schedule();
-
-    return () => {
-      if (frame !== 0) {
-        window.cancelAnimationFrame(frame);
-      }
-
-      resizeObserver.disconnect();
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-      window.removeEventListener('load', schedule);
-      viewport?.removeEventListener('resize', schedule);
-      viewport?.removeEventListener('scroll', schedule);
-    };
-  }, [reducedMotion]);
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
+    },
+    { scope: scrollDriverRef, dependencies: [reducedMotion] },
+  );
 
   useEffect(() => {
     const track = mobileTrackRef.current;
