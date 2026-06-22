@@ -119,7 +119,7 @@ export default function WorksFilter({ children }: { children: ReactNode }) {
     <>
       <div
         className={cx(
-          'sticky top-[4.5rem] z-20 border-y border-zinc-900/70 bg-black/55 py-4 backdrop-blur-md md:top-24',
+          'border-y border-zinc-900/70 py-4',
           pageGutterClassName,
         )}
       >
