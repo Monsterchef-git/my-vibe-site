@@ -1,5 +1,5 @@
 export const IMAGE_ABOUT_PORTRAIT = '/images/about-john-herrera.webp';
-export const IMAGE_ABOUT_CHEF_CUTOUT = '/images/about/about-chef-cutout.png';
+export const IMAGE_ABOUT_CHEF_CUTOUT = '/about/about-chef-cutout.webp';
 export const IMAGE_BLUE_MOON = '/images/blue-moon-hero.webp';
 export const IMAGE_CULINARY_PLATING = '/images/culinary-plating.webp';
 

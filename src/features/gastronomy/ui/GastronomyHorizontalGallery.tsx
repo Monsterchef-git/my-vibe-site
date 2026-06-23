@@ -36,7 +36,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'seaside-toast',
-    src: '/images/culinary-01-optimized.jpg',
+    src: '/images/culinary-01-optimized.webp',
     alt: 'Toast with poached egg, hollandaise, pickled onion, and capers served by the sea.',
     sizes: '(min-width: 1280px) 30vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-8 mt-[8vh] h-[64vh] w-[30vw] min-w-[22rem]',
@@ -45,7 +45,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'causa',
-    src: '/images/culinary-04-optimized.jpg',
+    src: '/images/culinary-04-optimized.webp',
     alt: 'Lima-style causa with crispy shrimp, avocado, and pickled onion served on a black plate.',
     sizes: '(min-width: 1280px) 22vw, (min-width: 768px) 34vw, 100vw',
     panelClassName: '-ml-14 mt-[24vh] h-[44vh] w-[22vw] min-w-[16rem] z-[2]',
@@ -54,7 +54,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'paella',
-    src: '/images/culinary-05-optimized.jpg',
+    src: '/images/culinary-05-optimized.webp',
     alt: 'Seafood paella in a large pan with shrimp and mussels during dinner service.',
     sizes: '(min-width: 1280px) 52vw, (min-width: 768px) 70vw, 100vw',
     panelClassName: '-ml-10 mt-[12vh] h-[56vh] w-[52vw] min-w-[38rem]',
@@ -63,7 +63,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'kitchen',
-    src: '/images/culinary-chef.jpeg',
+    src: '/images/culinary-chef.webp',
     alt: 'Chef plating during a live kitchen service.',
     sizes: '(min-width: 1280px) 26vw, (min-width: 768px) 38vw, 100vw',
     panelClassName: '-ml-4 mt-[2vh] h-[68vh] w-[26vw] min-w-[20rem]',
@@ -72,7 +72,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'chef-portrait',
-    src: '/images/culinary-02-optimized.jpg',
+    src: '/images/culinary-02-optimized.webp',
     alt: 'Chef smiling in the kitchen while presenting a dish, with mise en place and vegetables in the foreground.',
     sizes: '(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-10 mt-[14vh] h-[74vh] w-[28vw] min-w-[21rem] z-[2]',
@@ -81,7 +81,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'fresh-bowl',
-    src: '/images/culinary-fresh.jpeg',
+    src: '/images/culinary-fresh.webp',
     alt: 'Seared tuna bowl with fresh vegetables and microgreens.',
     sizes: '(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 100vw',
     panelClassName: '-ml-12 mt-[24vh] h-[46vh] w-[20vw] min-w-[15rem] z-[3]',
@@ -90,7 +90,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'breakfast',
-    src: '/images/culinary-03-optimized.jpg',
+    src: '/images/culinary-03-optimized.webp',
     alt: 'Breakfast spread with eggs, avocado, arepa, sausages, fresh fruit, and smoothie.',
     sizes: '(min-width: 1280px) 24vw, (min-width: 768px) 36vw, 100vw',
     panelClassName: '-ml-8 mt-[8vh] h-[58vh] w-[24vw] min-w-[18rem]',
@@ -99,7 +99,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'creamy-plate',
-    src: '/images/culinary-hero.jpeg',
+    src: '/images/culinary-hero.webp',
     alt: 'Served dish with creamy soup and crostini in an editorial setup.',
     sizes: '(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-10 mt-[18vh] h-[54vh] w-[28vw] min-w-[21rem]',
