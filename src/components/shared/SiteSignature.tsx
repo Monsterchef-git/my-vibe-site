@@ -37,7 +37,7 @@ export default function SiteSignature() {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/signature.png"
+        src="/signature.webp"
         alt=""
         className={cx(
           'site-signature block h-auto w-full max-w-[720px] opacity-90 md:max-w-[1080px] lg:max-w-[1400px]',
