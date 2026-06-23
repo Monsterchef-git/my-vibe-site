@@ -2,12 +2,9 @@ import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import CourseTransition from '@/components/shared/CourseTransition';
 import TopNav from '@/components/shared/TopNav';
-import { tracking } from '@/design/tokens/primitives/atmosphere';
-import { pageGutterClassName } from '@/design/tokens/semantic/layout';
 import { DevelopmentSection } from '@/features/development/ui';
 import { GastronomySection } from '@/features/gastronomy/ui';
-import { WorksHero } from '@/features/works/ui';
-import { cx } from '@/lib/utils/cx';
+import { ChapterDivider, WorksFilter, WorksHero } from '@/features/works/ui';
 import { PAGE_SEO } from '@/lib/constants';
 import { buildPageJsonLd, buildPageMetadata } from '@/lib/seo';
 
@@ -38,54 +35,30 @@ export default function WorksPage() {
 
       <CourseTransition from="02" to="03" tone="lime" />
 
-      <section
-        aria-label="Works filters"
-        className={cx('space-y-8 py-16 md:space-y-10 md:py-24', pageGutterClassName)}
-      >
-        <div className="grid gap-3 md:grid-cols-[auto_1fr_auto] md:items-center md:gap-5">
-          <a
-            href="#works-gastronomy"
-            data-cursor-mode="cta"
-            data-cursor-label="Explore"
-            data-cursor-role="chef"
-            data-magnetic="link"
-            className={cx(
-              'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-lime-300/78 transition-colors duration-300 hover:text-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-lime-200',
-              tracking.eyebrow,
-            )}
-          >
-            #Hospitality
-          </a>
-          <div
-            aria-hidden="true"
-            className="h-px bg-zinc-800"
-          />
-          <a
-            href="#works-development"
-            data-cursor-mode="cta"
-            data-cursor-label="Explore"
-            data-cursor-role="dev"
-            data-magnetic="link"
-            className={cx(
-              'inline-flex min-h-11 items-center font-mono text-[11px] uppercase text-cyan-300/78 transition-colors duration-300 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/65 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:text-cyan-200 md:justify-end md:text-right',
-              tracking.eyebrow,
-            )}
-          >
-            #Digital
-          </a>
-        </div>
-      </section>
-
-      <GastronomySection
-        id="works-gastronomy"
-        compact
-      />
-
       <ErrorBoundary>
-        <DevelopmentSection
-          id="works-development"
-          compact
-        />
+        <WorksFilter>
+          <div data-discipline="hospitality">
+            <GastronomySection
+              id="works-gastronomy"
+              compact
+            />
+          </div>
+
+          <div data-discipline="divider">
+            <ErrorBoundary>
+              <ChapterDivider />
+            </ErrorBoundary>
+          </div>
+
+          <div data-discipline="digital">
+            <ErrorBoundary>
+              <DevelopmentSection
+                id="works-development"
+                compact
+              />
+            </ErrorBoundary>
+          </div>
+        </WorksFilter>
       </ErrorBoundary>
     </main>
   );

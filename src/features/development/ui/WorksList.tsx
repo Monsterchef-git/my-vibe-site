@@ -1,15 +1,26 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
 import { PROJECTS } from '@/features/development/data/projects';
+import WorksHoverBackground from '@/features/development/ui/WorksHoverBackground';
+import { supportsWebGL } from '@/lib/webgl/capability';
 import { cx } from '@/lib/utils/cx';
 
 export default function WorksList() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
   const [supportsHover, setSupportsHover] = useState(false);
+  const [useWebGL, setUseWebGL] = useState(false);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  const projectImages = useMemo(() => PROJECTS.map((project) => project.image), []);
+  const activeIndex = activeId
+    ? PROJECTS.findIndex((project) => project.id === activeId)
+    : null;
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -20,6 +31,38 @@ export default function WorksList() {
 
     return () => mediaQuery.removeEventListener('change', syncHoverCapability);
   }, []);
+
+  useEffect(() => {
+    const evaluate = () => setUseWebGL(supportsWebGL());
+    evaluate();
+  }, []);
+
+  // Stagger the project rows in as they enter the viewport.
+  useGSAP(
+    () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const items = listRef.current?.querySelectorAll(':scope > li');
+      if (!items || items.length === 0) return;
+
+      gsap.set(items, { autoAlpha: 0, yPercent: 6 });
+      const triggers = ScrollTrigger.batch(items, {
+        start: 'top 90%',
+        once: true,
+        onEnter: (batch) =>
+          gsap.to(batch, {
+            autoAlpha: 1,
+            yPercent: 0,
+            duration: 0.8,
+            ease: 'expo.out',
+            stagger: 0.08,
+            overwrite: true,
+          }),
+      });
+
+      return () => triggers.forEach((trigger) => trigger.kill());
+    },
+    { scope: listRef },
+  );
 
   useEffect(() => {
     const track = document.querySelector<HTMLElement>('[data-works-mobile-track]');
@@ -56,7 +99,15 @@ export default function WorksList() {
 
   return (
     <div className="relative">
-      {supportsHover ? (
+      {supportsHover && useWebGL ? (
+        <WorksHoverBackground
+          images={projectImages}
+          activeIndex={activeIndex}
+          className="fixed inset-0 z-0"
+        />
+      ) : null}
+
+      {supportsHover && !useWebGL ? (
         <div className="pointer-events-none fixed inset-0 z-0">
           {PROJECTS.map((project) => (
             <Image
@@ -138,7 +189,10 @@ export default function WorksList() {
         </div>
       </div>
 
-      <ul className="relative z-10 hidden divide-y divide-zinc-900/60 border-y border-zinc-900/60 md:block">
+      <ul
+        ref={listRef}
+        className="relative z-10 hidden divide-y divide-zinc-900/60 border-y border-zinc-900/60 md:block"
+      >
         {PROJECTS.map((project) => (
           <li key={project.id}>
             <a

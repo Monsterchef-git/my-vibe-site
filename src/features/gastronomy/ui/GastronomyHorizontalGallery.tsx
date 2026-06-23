@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap } from '@/lib/gsap';
 import {
   BLUR_CULINARY_PLATING,
   IMAGE_CULINARY_PLATING,
@@ -34,7 +36,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'seaside-toast',
-    src: '/images/culinary-01-optimized.jpg',
+    src: '/images/culinary-01-optimized.webp',
     alt: 'Toast with poached egg, hollandaise, pickled onion, and capers served by the sea.',
     sizes: '(min-width: 1280px) 30vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-8 mt-[8vh] h-[64vh] w-[30vw] min-w-[22rem]',
@@ -43,7 +45,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'causa',
-    src: '/images/culinary-04-optimized.jpg',
+    src: '/images/culinary-04-optimized.webp',
     alt: 'Lima-style causa with crispy shrimp, avocado, and pickled onion served on a black plate.',
     sizes: '(min-width: 1280px) 22vw, (min-width: 768px) 34vw, 100vw',
     panelClassName: '-ml-14 mt-[24vh] h-[44vh] w-[22vw] min-w-[16rem] z-[2]',
@@ -52,7 +54,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'paella',
-    src: '/images/culinary-05-optimized.jpg',
+    src: '/images/culinary-05-optimized.webp',
     alt: 'Seafood paella in a large pan with shrimp and mussels during dinner service.',
     sizes: '(min-width: 1280px) 52vw, (min-width: 768px) 70vw, 100vw',
     panelClassName: '-ml-10 mt-[12vh] h-[56vh] w-[52vw] min-w-[38rem]',
@@ -61,7 +63,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'kitchen',
-    src: '/images/culinary-chef.jpeg',
+    src: '/images/culinary-chef.webp',
     alt: 'Chef plating during a live kitchen service.',
     sizes: '(min-width: 1280px) 26vw, (min-width: 768px) 38vw, 100vw',
     panelClassName: '-ml-4 mt-[2vh] h-[68vh] w-[26vw] min-w-[20rem]',
@@ -70,7 +72,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'chef-portrait',
-    src: '/images/culinary-02-optimized.jpg',
+    src: '/images/culinary-02-optimized.webp',
     alt: 'Chef smiling in the kitchen while presenting a dish, with mise en place and vegetables in the foreground.',
     sizes: '(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-10 mt-[14vh] h-[74vh] w-[28vw] min-w-[21rem] z-[2]',
@@ -79,7 +81,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'fresh-bowl',
-    src: '/images/culinary-fresh.jpeg',
+    src: '/images/culinary-fresh.webp',
     alt: 'Seared tuna bowl with fresh vegetables and microgreens.',
     sizes: '(min-width: 1280px) 20vw, (min-width: 768px) 30vw, 100vw',
     panelClassName: '-ml-12 mt-[24vh] h-[46vh] w-[20vw] min-w-[15rem] z-[3]',
@@ -88,7 +90,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'breakfast',
-    src: '/images/culinary-03-optimized.jpg',
+    src: '/images/culinary-03-optimized.webp',
     alt: 'Breakfast spread with eggs, avocado, arepa, sausages, fresh fruit, and smoothie.',
     sizes: '(min-width: 1280px) 24vw, (min-width: 768px) 36vw, 100vw',
     panelClassName: '-ml-8 mt-[8vh] h-[58vh] w-[24vw] min-w-[18rem]',
@@ -97,7 +99,7 @@ const GALLERY_FRAMES: GalleryFrame[] = [
   },
   {
     id: 'creamy-plate',
-    src: '/images/culinary-hero.jpeg',
+    src: '/images/culinary-hero.webp',
     alt: 'Served dish with creamy soup and crostini in an editorial setup.',
     sizes: '(min-width: 1280px) 28vw, (min-width: 768px) 40vw, 100vw',
     panelClassName: '-ml-10 mt-[18vh] h-[54vh] w-[28vw] min-w-[21rem]',
@@ -105,10 +107,6 @@ const GALLERY_FRAMES: GalleryFrame[] = [
     imageClassName: 'object-center',
   },
 ] as const;
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
 
 function useReducedMotionPreference() {
   const [reducedMotion, setReducedMotion] = useState(() =>
@@ -175,76 +173,38 @@ export default function GastronomyHorizontalGallery() {
   const reducedMotion = useReducedMotionPreference();
   const [activeFrame, setActiveFrame] = useState(0);
 
-  useEffect(() => {
-    let frame = 0;
+  // Horizontal pan driven by a scrubbed ScrollTrigger (synced with Lenis).
+  // The tall driver + sticky viewport stay in CSS; the track translates from 0
+  // to -overflow across the scroll. Reduced motion renders a vertical stack
+  // instead (the driver isn't mounted), so this no-ops when refs are absent.
+  useGSAP(
+    () => {
+      const track = trackRef.current;
+      const driver = scrollDriverRef.current;
+      if (!track || !driver) return;
 
-    const syncTrackPosition = () => {
-      const section = scrollDriverRef.current;
-      const trackEl = trackRef.current;
-      if (!section || !trackEl) return;
+      const getOverflow = () =>
+        Math.max(track.scrollWidth - window.innerWidth, 0);
 
-      const rect = section.getBoundingClientRect();
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      
-      const overflow = Math.max(trackEl.scrollWidth - viewportWidth, 0);
-      const scrollableHeight = section.offsetHeight - viewportHeight;
-      
-      const progress = clamp(-rect.top / Math.max(scrollableHeight, 1), 0, 1);
-
-      trackEl.style.transform = `translate3d(${-overflow * progress}px, 0, 0)`;
-    };
-
-    const schedule = () => {
-      if (frame !== 0) return;
-
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        syncTrackPosition();
+      const tween = gsap.to(track, {
+        x: () => -getOverflow(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: driver,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
       });
-    };
 
-    const track = trackRef.current;
-    const driver = scrollDriverRef.current;
-
-    if (!track || reducedMotion) {
-      if (track) {
-        track.style.transform = 'translate3d(0, 0, 0)';
-      }
-      return;
-    }
-
-    const resizeObserver = new ResizeObserver(schedule);
-    const viewport = window.visualViewport;
-
-    if (driver) {
-      resizeObserver.observe(driver);
-    }
-    if (track) {
-      resizeObserver.observe(track);
-    }
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    window.addEventListener('load', schedule);
-    viewport?.addEventListener('resize', schedule);
-    viewport?.addEventListener('scroll', schedule);
-
-    schedule();
-
-    return () => {
-      if (frame !== 0) {
-        window.cancelAnimationFrame(frame);
-      }
-
-      resizeObserver.disconnect();
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-      window.removeEventListener('load', schedule);
-      viewport?.removeEventListener('resize', schedule);
-      viewport?.removeEventListener('scroll', schedule);
-    };
-  }, [reducedMotion]);
+      return () => {
+        tween.scrollTrigger?.kill();
+        tween.kill();
+      };
+    },
+    { scope: scrollDriverRef, dependencies: [reducedMotion] },
+  );
 
   useEffect(() => {
     const track = mobileTrackRef.current;
