@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import StatementReveal from '@/components/shared/StatementReveal';
+import HeroCursorFx from '@/design/primitives/Hero/HeroCursorFx';
 import Eyebrow from '@/design/primitives/Eyebrow';
 import HeroMetaColumn from '@/design/ui/HeroMetaColumn';
 import { tracking } from '@/design/tokens/primitives/atmosphere';
@@ -57,8 +58,9 @@ export function Hero({
   );
 
   return (
-    <section
+    <HeroCursorFx
       id={id}
+      tone={tone}
       className={cx(
         'relative flex min-h-[auto] w-full pb-8 pt-14 md:min-h-svh md:pb-14 md:pt-32 lg:pb-16',
         align === 'center' && 'items-center',
@@ -140,6 +142,6 @@ export function Hero({
           ) : null}
         </div>
       </div>
-    </section>
+    </HeroCursorFx>
   );
 }
