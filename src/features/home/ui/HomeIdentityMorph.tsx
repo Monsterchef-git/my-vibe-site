@@ -157,34 +157,32 @@ export default function HomeIdentityMorph() {
 
     let scrollPaused = true;
     let pauseTimer: ReturnType<typeof setTimeout> | undefined;
+    // The cursor bus fires per pointermove (often several times per frame). We
+    // coalesce to one rAF tick and cache the sticky bounds so each frame costs at
+    // most one reflow + one WebGL render instead of one per event.
+    let frame = 0;
+    let pending: { x: number; y: number } | null = null;
+    let rect: DOMRect | null = null;
 
     const resetWord = () => {
       wordRef.current?.style.setProperty('--cursor-parallax-x', '0px');
       wordRef.current?.style.setProperty('--cursor-parallax-y', '0px');
     };
 
-    const handleScroll = () => {
-      scrollPaused = false;
-      clearTimeout(pauseTimer);
-      pauseTimer = setTimeout(() => {
-        scrollPaused = true;
-      }, 600);
-      resetWord();
-    };
-
-    const handleCursorMove = (event: Event) => {
-      if (!scrollPaused || !(event instanceof CustomEvent)) {
-        return;
-      }
-
+    const applyPointer = () => {
+      frame = 0;
+      const point = pending;
       const root = rootRef.current;
       const word = wordRef.current;
-      if (!root || !word) {
+      if (!point || !root || !word) {
         return;
       }
 
-      const { x, y } = event.detail as { x: number; y: number };
-      const rect = root.getBoundingClientRect();
+      if (!rect) {
+        rect = root.getBoundingClientRect();
+      }
+
+      const { x, y } = point;
       const inside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 
       if (!inside) {
@@ -206,12 +204,41 @@ export default function HomeIdentityMorph() {
       invalidateRef.current?.();
     };
 
+    const handleScroll = () => {
+      scrollPaused = false;
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(() => {
+        scrollPaused = true;
+      }, 600);
+      rect = null; // bounds shift while the page scrolls under the sticky track
+      resetWord();
+    };
+
+    const invalidateRect = () => {
+      rect = null;
+    };
+
+    const handleCursorMove = (event: Event) => {
+      if (!scrollPaused || !(event instanceof CustomEvent)) {
+        return;
+      }
+      pending = event.detail as { x: number; y: number };
+      if (frame === 0) {
+        frame = window.requestAnimationFrame(applyPointer);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', invalidateRect);
     window.addEventListener('magneticcursor:move', handleCursorMove);
 
     return () => {
       clearTimeout(pauseTimer);
+      if (frame !== 0) {
+        window.cancelAnimationFrame(frame);
+      }
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', invalidateRect);
       window.removeEventListener('magneticcursor:move', handleCursorMove);
     };
   }, [reducedMotion]);
