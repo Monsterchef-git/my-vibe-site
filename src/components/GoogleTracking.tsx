@@ -20,7 +20,7 @@ export default function GoogleTracking() {
 function gtag(){dataLayer.push(arguments);}
 window.gtag = window.gtag || gtag;
 gtag('consent', 'default', {
-  analytics_storage: 'denied',
+  analytics_storage: 'granted',
   ad_storage: 'denied',
   ad_user_data: 'denied',
   ad_personalization: 'denied',
