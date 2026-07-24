@@ -5,11 +5,11 @@ import type { NextConfig } from "next";
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const isDevelopment = process.env.NODE_ENV === 'development';
 const scriptSrc = isDevelopment
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://tagmanager.google.com https://www.google-analytics.com"
-  : "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://tagmanager.google.com https://www.google-analytics.com";
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googletagmanager.com https://tagmanager.google.com https://*.google-analytics.com"
+  : "script-src 'self' 'unsafe-inline' https://*.googletagmanager.com https://tagmanager.google.com https://*.google-analytics.com";
 const connectSrc = isDevelopment
-  ? "connect-src 'self' ws: wss: https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com"
-  : "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com";
+  ? "connect-src 'self' ws: wss: https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com"
+  : "connect-src 'self' https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com";
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -19,7 +19,7 @@ const contentSecurityPolicy = [
   "form-action 'self'",
   scriptSrc,
   "style-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://tagmanager.google.com https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com",
+  "img-src 'self' data: blob: https://*.googletagmanager.com https://*.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   connectSrc,
   "frame-src https://www.googletagmanager.com",
